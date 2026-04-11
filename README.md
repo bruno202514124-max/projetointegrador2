@@ -37,11 +37,11 @@ A solução consiste no desenvolvimento de um sistema web que permita:
 
 ## Estrutura do Projeto
 projeto-integrador-bulldog
-│
-├── README.md
-├── docs/
-├── sistema/
-├── evidencias/
+
+- README.md
+- docs/
+- sistema/
+- evidencias/
 
 ## Integrantes do Grupo
 - Alexandre Becker Filho  
