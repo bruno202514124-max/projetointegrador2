@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "target": "ES2020",
+    "moduleResolution": "node16",
+    "module": "node16",
+    "skipLibCheck": true,
+    "strictPropertyInitialization": false,
+    "outDir": "./out",
+    "exactOptionalPropertyTypes": true
+  }
+}
