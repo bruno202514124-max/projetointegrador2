@@ -44,3 +44,10 @@ next-env.d.ts
 
 # dependencies
 node_modules/
+
+node_modules/
+.prettierrc
+.env*
+prisma/db
+
+*.tsbuildinfo
