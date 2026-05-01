@@ -1,4 +1,4 @@
-# Projeto Integrador II- Bulldog Brewer
+# Projeto Integrador II - Bulldog Brewer
 
 ## Descrição do Projeto
 Este projeto tem como objetivo analisar e propor melhorias no processo de atendimento ao cliente da empresa **Bulldog Brewer**, localizada em Terra de Areia/RS.
