@@ -1,0 +1,25 @@
+#footer2 {
+  display: none;
+}
+
+.summary-box {
+  height: 332px;
+}
+
+option:checked {
+  background: #f4b942;
+}
+
+@media (max-width: 991px) {
+  #footer1 {
+    display: none;
+  }
+
+  #footer2 {
+    display: block;
+  }
+
+  .summary-box {
+    height: fit-content;
+  }
+}
