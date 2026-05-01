@@ -1,0 +1,88 @@
+.navbarCustom {
+  background-color: rgba(20, 20, 20, 0.97);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.logoImg {
+  width: 64px;
+  height: auto;
+  border-radius: 10px;
+  background-color: #fff;
+  padding: 4px;
+  margin-right: 12px;
+}
+
+.brandText strong {
+  display: block;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.brandText small {
+  display: block;
+  color: #d5d5d5;
+  font-size: 0.8rem;
+}
+
+.navLink {
+  color: #f1f1f1 !important;
+  font-weight: 600;
+}
+
+.navLink:hover {
+  color: #f4b942 !important;
+}
+
+.navLinkActive {
+  color: #f4b942 !important;
+  font-weight: 800;
+}
+
+.pageContainer {
+  padding: 24px;
+}
+
+.pageTitle {
+  color: #fff;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.pageSubtitle {
+  color: #dddddd;
+  margin-bottom: 24px;
+}
+
+.cardBase {
+  background-color: rgba(36, 36, 36, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+}
+
+.sectionTitle {
+  color: #f4b942;
+  font-size: 1rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.formLabel {
+  color: #ffffff;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.helpText {
+  color: #cfcfcf;
+}
+
+.statusPill {
+  display: inline-block;
+  background-color: #181818;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 8px 14px;
+  color: #f2f2f2;
+}
