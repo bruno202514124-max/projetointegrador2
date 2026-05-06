@@ -1,0 +1,255 @@
+
+    :root {
+      --bg-dark: #171717;
+      --bg-card: #242424;
+      --primary: #f4b942;
+      --primary-dark: #c98b17;
+      --text-light: #f8f9fa;
+      --text-muted-custom: #cfcfcf;
+      --border-soft: rgba(255, 255, 255, 0.12);
+    }
+
+    body {
+      background: linear-gradient(135deg, #111 0%, #222 55%, #3a2600 100%);
+      min-height: 100vh;
+      color: var(--text-light);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .navbar-custom {
+      background-color: rgba(20, 20, 20, 0.97);
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .logo-img {
+      width: 70px;
+      height: auto;
+      border-radius: 10px;
+      background: #fff;
+      padding: 4px;
+      margin-right: 12px;
+    }
+
+    .page-title {
+      font-weight: 800;
+      letter-spacing: 0.4px;
+    }
+
+    .subtitle {
+      color: #dddddd;
+      font-size: 0.95rem;
+    }
+
+    .card-custom {
+      background-color: rgba(36, 36, 36, 0.97);
+      border: 1px solid var(--border-soft);
+      border-radius: 18px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+    }
+
+    .section-title {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 1rem;
+      margin-bottom: 14px;
+    }
+
+    /* MELHORIA DA LEITURA DOS LABELS */
+    .form-label {
+      color: #ffffff;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .form-control,
+    .form-select {
+      background-color: #181818;
+      border: 1px solid #4b4b4b;
+      color: #fff;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      background-color: #181818;
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.2rem rgba(244, 185, 66, 0.2);
+    }
+
+    .form-control::placeholder {
+      color: #9d9d9d;
+    }
+
+    .product-card {
+      background-color: #1d1d1d;
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 14px;
+      height: 100%;
+      transition: 0.2s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+    }
+
+    .product-name {
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+
+    .product-type {
+      color: #d0d0d0;
+      font-size: 0.85rem;
+    }
+
+    .product-price {
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .btn-yellow {
+      background-color: var(--primary);
+      border: none;
+      color: #171717;
+      font-weight: 700;
+    }
+
+    .btn-yellow:hover {
+      background-color: var(--primary-dark);
+      color: #fff;
+    }
+
+    .btn-outline-yellow {
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .btn-outline-yellow:hover {
+      background-color: var(--primary);
+      color: #111;
+    }
+
+    .table-dark-custom {
+      --bs-table-bg: transparent;
+      --bs-table-color: #fff;
+      --bs-table-border-color: rgba(255,255,255,0.1);
+    }
+
+    .summary-box {
+      background: #181818;
+      border-radius: 14px;
+      padding: 15px;
+      border: 1px solid var(--border-soft);
+      color: #fff;
+    }
+
+    .total-value {
+      color: var(--primary);
+      font-size: 1.7rem;
+      font-weight: 900;
+    }
+
+    .badge-kitchen {
+      background-color: #dc3545;
+    }
+
+    .badge-bar {
+      background-color: #0d6efd;
+    }
+
+    .badge-open {
+      background-color: #198754;
+    }
+
+    .empty-message {
+      color: #ddd;
+      text-align: center;
+      padding: 28px 10px;
+      border: 1px dashed rgba(255,255,255,0.2);
+      border-radius: 14px;
+    }
+
+    .nav-pills .nav-link {
+      color: #f1f1f1;
+      border: 1px solid transparent;
+    }
+
+    .nav-pills .nav-link.active {
+      background-color: var(--primary);
+      color: #111;
+      font-weight: 700;
+    }
+
+    .nav-pills .nav-link:hover {
+      border-color: var(--primary);
+    }
+
+    .order-header-pill {
+      background-color: #181818;
+      border: 1px solid var(--border-soft);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      color: #f2f2f2;
+    }
+
+    .remove-btn {
+      border: none;
+      background: transparent;
+      color: #ff6b6b;
+      font-size: 1rem;
+    }
+
+    .remove-btn:hover {
+      color: #ff3030;
+    }
+
+    .footer-note {
+      color: #c0c0c0;
+      font-size: 0.85rem;
+    }
+
+    .navbar-brand-text strong {
+      color: #fff;
+      font-size: 1.1rem;
+    }
+
+    .navbar-brand-text small {
+      color: #d5d5d5;
+      display: block;
+      margin-top: 2px;
+    }
+
+.nav-pills {
+  gap: 10px;
+}
+
+.nav-pills .nav-link {
+  color: #ffffff !important;
+  background-color: #181818;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-weight: 700;
+  padding: 10px 24px;
+  border-radius: 12px;
+}
+
+.nav-pills .nav-link.active {
+  background-color: var(--primary) !important;
+  color: #111111 !important;
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(244, 185, 66, 0.25);
+}
+
+.nav-pills .nav-link:hover {
+  border-color: var(--primary);
+  color: var(--primary) !important;
+}
+
+.nav-pills .nav-link.active:hover {
+  color: #111111 !important;
+}
