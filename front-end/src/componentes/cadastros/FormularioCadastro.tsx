@@ -1,6 +1,6 @@
 import estiloCadastros from '@/css/cadastros.module.css';
 import { AbasCadastros } from '@/pages/cadastros';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Swal from 'sweetalert2';
 
 interface FormularioCadastroProps {
@@ -85,7 +85,7 @@ export default function FormularioCadastro({ abaSelecionada, titulo }: Formulari
 
   return (
     <div className="card-body">
-      <h5 className="section-title">{titulo}</h5>
+      <h5>{titulo}</h5>
 
       {abaSelecionada == 'Mesas' && (
         <div className={`mb-3 d-flex flex-column gap-2`}>
@@ -111,6 +111,7 @@ export default function FormularioCadastro({ abaSelecionada, titulo }: Formulari
               value={numCart}
               onChange={e => setNumCart(Number(e.currentTarget.value))}
               type="number"
+              min={0}
               className="form-control"
               placeholder="Número do cartão"
             />
