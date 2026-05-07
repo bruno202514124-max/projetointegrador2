@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import styles from '@/css/base.module.css';
 
 const links = [
-  { href: '/', label: 'Principal' },
+  { href: '/mesas', label: 'Mesas' },
   { href: '/cadastro-pedidos', label: 'Pedidos' },
   { href: '/cadastros', label: 'Cadastros' },
   { href: '/dashboard', label: 'Dashboard' },

@@ -1,12 +1,51 @@
+import FormularioCadastro from '@/componentes/cadastros/FormularioCadastro';
+import Lista from '@/componentes/cadastros/Lista';
 import LayoutBase from '@/componentes/LayoutBase';
-import styles from '@/css/base.module.css';
+import estiloBase from '@/css/base.module.css';
+import { useState } from 'react';
+
+export type AbasCadastros = 'Mesas' | 'Cartões' | 'Comidas/Bebidas' | 'Usuários';
+const abas: AbasCadastros[] = ['Mesas', 'Cartões', 'Comidas/Bebidas', 'Usuários'];
 
 export default function Cadastros() {
+  const [abaSelecionada, setAbaSelecionada] = useState<AbasCadastros>('Mesas');
+
   return (
-    <LayoutBase titulo="Cadastros" subtitulo="Base para cadastros do sistema.">
-      <div className={styles.cardBase}>
-        <h2 className={styles.sectionTitle}>Central de cadastros</h2>
-        <p className={styles.helpText}>Aqui podem entrar cadastros de mesas, cartões, produtos, preços e usuários.</p>
+    <LayoutBase
+      titulo="Central de Cadastros"
+      subtitulo="Cadastro de mesas, cartão, comidas/bebidas e usuários."
+    >
+      <div>
+        <div className="mb-2 d-flex flex-row flex-wrap">
+          {abas.map((aba, index) => {
+            return (
+              <button
+                key={index}
+                className={`btn ${estiloBase.navLink} ${aba == abaSelecionada ? estiloBase.navLinkActive : ''}`}
+                onClick={() => {
+                  setAbaSelecionada(aba);
+                }}
+              >
+                {aba}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className={`card card-custom d-flex flex-lg-row gap-2 ${estiloBase.cardBase}`}>
+          {abaSelecionada == 'Mesas' && <FormularioCadastro abaSelecionada="Mesas" titulo="Nova mesa" />}
+          {abaSelecionada == 'Cartões' && (
+            <FormularioCadastro abaSelecionada="Cartões" titulo="Novo cartão" />
+          )}
+          {abaSelecionada == 'Comidas/Bebidas' && (
+            <FormularioCadastro abaSelecionada="Comidas/Bebidas" titulo="Novo item" />
+          )}
+          {abaSelecionada == 'Usuários' && (
+            <FormularioCadastro abaSelecionada="Usuários" titulo="Novo usuário" />
+          )}
+
+          <Lista abaSelecionada={abaSelecionada} />
+        </div>
       </div>
     </LayoutBase>
   );
