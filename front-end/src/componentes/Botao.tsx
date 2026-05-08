@@ -1,12 +1,26 @@
 interface PropriedadesBotao {
   onClick(): void;
-  textoInterno: string;
+  children: React.ReactNode;
+  className?: string;
 }
 
-export default function Botao({ onClick, textoInterno }: PropriedadesBotao) {
+export default function Botao({
+  onClick,
+  children,
+  className = '',
+}: PropriedadesBotao) {
   return (
-    <button type="button" className="btn btn-primary" onClick={onClick}>
-      {textoInterno}
+    <button
+      type="button"
+      onClick={onClick}
+      className={className}
+      style={{
+        background: 'transparent',
+        border: 'none',
+        padding: 0,
+      }}
+    >
+      {children}
     </button>
   );
 }
