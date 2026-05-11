@@ -4,11 +4,12 @@ import LayoutBase from '@/componentes/LayoutBase';
 import estiloBase from '@/css/base.module.css';
 import { useState } from 'react';
 
-export type AbasCadastros = 'Mesas' | 'Cartões' | 'Comidas/Bebidas' | 'Usuários';
+export type AbasCadastros = 'Mesas' | 'Cartões' | 'Comidas/Bebidas' | 'Usuários' | '';
 const abas: AbasCadastros[] = ['Mesas', 'Cartões', 'Comidas/Bebidas', 'Usuários'];
 
 export default function Cadastros() {
   const [abaSelecionada, setAbaSelecionada] = useState<AbasCadastros>('Mesas');
+  const [renderLista, setRenderLista] = useState(false);
 
   return (
     <LayoutBase
@@ -32,19 +33,41 @@ export default function Cadastros() {
           })}
         </div>
 
-        <div className={`card card-custom d-flex flex-lg-row gap-2 ${estiloBase.cardBase}`}>
-          {abaSelecionada == 'Mesas' && <FormularioCadastro abaSelecionada="Mesas" titulo="Nova mesa" />}
+        <div className={`card d-flex flex-lg-row gap-2 ${estiloBase.cardBase}`}>
+          {abaSelecionada == 'Mesas' && (
+            <FormularioCadastro
+              abaSelecionada="Mesas"
+              setRenderLista={setRenderLista}
+              titulo="Nova mesa"
+            />
+          )}
           {abaSelecionada == 'Cartões' && (
-            <FormularioCadastro abaSelecionada="Cartões" titulo="Novo cartão" />
+            <FormularioCadastro
+              abaSelecionada="Cartões"
+              setRenderLista={setRenderLista}
+              titulo="Novo cartão"
+            />
           )}
           {abaSelecionada == 'Comidas/Bebidas' && (
-            <FormularioCadastro abaSelecionada="Comidas/Bebidas" titulo="Novo item" />
+            <FormularioCadastro
+              abaSelecionada="Comidas/Bebidas"
+              setRenderLista={setRenderLista}
+              titulo="Novo item"
+            />
           )}
           {abaSelecionada == 'Usuários' && (
-            <FormularioCadastro abaSelecionada="Usuários" titulo="Novo usuário" />
+            <FormularioCadastro
+              abaSelecionada="Usuários"
+              setRenderLista={setRenderLista}
+              titulo="Novo usuário"
+            />
           )}
 
-          <Lista abaSelecionada={abaSelecionada} />
+          <Lista
+            abaSelecionada={abaSelecionada}
+            renderLista={renderLista}
+            setRenderLista={setRenderLista}
+          />
         </div>
       </div>
     </LayoutBase>

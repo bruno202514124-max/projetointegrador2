@@ -17,6 +17,16 @@ option:checked {
   max-height: 360px;
 }
 
+.containerLista {
+  max-width: 50%;
+}
+
 .pointer {
   cursor: pointer;
+}
+
+@media screen and (max-width: 991px) {
+  .containerLista {
+    max-width: 100%;
+  }
 }

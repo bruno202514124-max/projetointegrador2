@@ -9,7 +9,6 @@ export function validarDados(validator: z.ZodObject, data: unknown) {
     const mensagemDeErroFormatada = error.charAt(0).toUpperCase() + error.slice(1);
 
     console.log('erro => ', mensagemDeErroFormatada);
-    console.log('data => ', data);
 
     throw new EmitirMensagemErro(mensagemDeErroFormatada);
   }

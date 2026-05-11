@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export const baseURL = 'http://localhost:2000/';
 
@@ -7,21 +8,21 @@ export const api = axios.create({
 });
 
 // api.interceptors.request.use(config => {
-//    const token = localStorage.getItem('token');
+//   const token = localStorage.getItem('token');
 
-//    if (token) {
-//       if (config.headers) config.headers.Authorization = 'Bearer ' + token;
-//    }
+//   if (token) {
+//     if (config.headers) config.headers.Authorization = 'Bearer ' + token;
+//   }
 
-//    return config;
+//   return config;
 // });
 
-// export const routerUrlObject = {
-//    pathname: '/',
-//    query: { auth: false },
-// };
+export const routerUrlObject = {
+  pathname: '/',
+  query: { auth: false },
+};
 
-// export function showErrorMessage(errorMessage: string) {
-//    console.log(errorMessage);
-//    Swal.fire('Algo deu errado...', errorMessage, 'error');
-// }
+export function exibirMensagemDeErro(mensagemDeErro: string) {
+  console.log(mensagemDeErro);
+  Swal.fire('Algo deu errado...', mensagemDeErro, 'error');
+}
