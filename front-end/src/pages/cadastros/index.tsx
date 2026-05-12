@@ -4,7 +4,7 @@ import LayoutBase from '@/componentes/LayoutBase';
 import estiloBase from '@/css/base.module.css';
 import { useState } from 'react';
 
-export type AbasCadastros = 'Mesas' | 'Cartões' | 'Comidas/Bebidas' | 'Usuários' | '';
+export type AbasCadastros = 'Mesas' | 'Cartões' | 'Comidas/Bebidas' | 'Usuários';
 const abas: AbasCadastros[] = ['Mesas', 'Cartões', 'Comidas/Bebidas', 'Usuários'];
 
 export default function Cadastros() {
