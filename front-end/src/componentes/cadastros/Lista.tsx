@@ -18,6 +18,8 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
   const router = useRouter();
   const [itens, setItens] = useState<{ id: string; nome: string; permissao?: string }[]>([]);
   const [abrirModal, setabrirModal] = useState(false);
+  const [appElement, setAppElement] = useState<NodeListOf<Element>>();
+  const [idEditar, setIdEditar] = useState('');
 
   function preencherMesas() {
     setItens([
@@ -75,7 +77,8 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
       });
   }
 
-  async function editar() {
+  async function editar(id: string) {
+    setIdEditar(id);
     setabrirModal(true);
   }
 
@@ -110,6 +113,10 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
   }
 
   useEffect(() => {
+    setAppElement(document.querySelectorAll('.container'));
+  }, []);
+
+  useEffect(() => {
     if (abaSelecionada == 'Mesas') preencherMesas();
     if (abaSelecionada == 'Cartões') preencherCartoes();
     if (abaSelecionada == 'Comidas/Bebidas') preencherItens();
@@ -127,8 +134,8 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
               className="d-flex justify-content-between align-items-center rounded-1 px-3 py-2 "
               style={{ backgroundColor: 'gray' }}
             >
-              <div className="d-flex w-50">
-                <p className="w-25">
+              <div className="d-flex flex-column w-50 gap-2">
+                <p>
                   {abaSelecionada == 'Mesas' && 'Mesa'} {abaSelecionada == 'Cartões' && 'Cartão'}{' '}
                   {item.nome}
                 </p>
@@ -137,7 +144,7 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
               </div>
 
               <div className="d-flex gap-4">
-                <button className="py-1 px-2 btn btn-warning" onClick={editar}>
+                <button className="py-1 px-2 btn btn-warning" onClick={() => editar(item.id)}>
                   Editar
                 </button>
                 <p className="py-1 px-2 btn btn-danger" onClick={() => deletar(item)}>
@@ -150,6 +157,7 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
       </div>
 
       <ReactModal
+        appElement={appElement}
         isOpen={abrirModal}
         shouldCloseOnOverlayClick={true}
         shouldCloseOnEsc={true}
@@ -167,8 +175,11 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
           titulo="Editar usuário"
           setRenderLista={setRenderLista}
           editar={true}
+          id={idEditar}
         />
-        <button onClick={() => setabrirModal(false)}>fechar</button>
+        <button className="btn btn-danger w-100" onClick={() => setabrirModal(false)}>
+          Fechar
+        </button>
       </ReactModal>
     </div>
   );
