@@ -11,7 +11,7 @@ class CasoDeUsoCriarUsuario {
   async executar({ nome, senha, permissao }: ILogarUsuario): Promise<Usuario> {
     validarDados(ValidacaoCriarUsuario, { nome, senha, permissao });
 
-    const usuarioAntigo = await this.repositorioUsuarios.encontrarPorNome(nome);
+    const usuarioAntigo = await this.repositorioUsuarios.pesquisarPorNome(nome);
 
     if (usuarioAntigo) {
       throw new EmitirMensagemErro('Já existe um usuário com esse nome.');
