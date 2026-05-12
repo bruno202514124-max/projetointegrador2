@@ -1,14 +1,26 @@
+import { api, exibirMensagemDeErro, routerUrlObject } from '@/api';
 import estiloCadastros from '@/css/cadastros.module.css';
 import { AbasCadastros } from '@/pages/cadastros';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { Dispatch, SetStateAction, useState } from 'react';
 import Swal from 'sweetalert2';
 
 interface FormularioCadastroProps {
   abaSelecionada: AbasCadastros;
+  setRenderLista: Dispatch<SetStateAction<boolean>>;
   titulo: string;
+  editar?: boolean;
+  id?: string;
 }
 
-export default function FormularioCadastro({ abaSelecionada, titulo }: FormularioCadastroProps) {
+export default function FormularioCadastro({
+  abaSelecionada,
+  setRenderLista,
+  titulo,
+  editar = false,
+  id = '',
+}: FormularioCadastroProps) {
+  const router = useRouter();
   const [numMesa, setNumMesa] = useState(0);
   const [numCart, setNumCart] = useState(0);
   const [nomeItem, setNomeItem] = useState('');
@@ -17,6 +29,51 @@ export default function FormularioCadastro({ abaSelecionada, titulo }: Formulari
   const [permissao, setPermissao] = useState('Frente');
   const [senha, setSenha] = useState('');
   const [confirmaSenha, setConfirmaSenha] = useState('');
+
+  function lidarComErro(error: any) {
+    if (error.message) {
+      exibirMensagemDeErro(error.message);
+    } else if (error.response.data.auth === false) {
+      localStorage.clear();
+      router.push(routerUrlObject, '/');
+    } else if (error.response.data) {
+      exibirMensagemDeErro(error.response.data.erro);
+    } else {
+      console.log('erro => ', error);
+    }
+  }
+
+  function criarUsuario(novoUsuario: { nome: string; permissao: string; senha: string }) {
+    api
+      .post('/usuarios/criar', novoUsuario)
+      .then(res => {
+        if (res.data.codigo == 400) throw new Error(res.data.mensagem);
+
+        limparCampos();
+        setRenderLista(prev => !prev);
+
+        Swal.fire('Informações salvas com sucesso!', '', 'success');
+      })
+      .catch(error => {
+        lidarComErro(error);
+      });
+  }
+
+  function editarUsuario(novosDados: { id: string; nome: string; permissao: string; senha: string }) {
+    api
+      .patch('/usuarios/atualizar', novosDados)
+      .then(res => {
+        if (res.data.codigo == 400) throw new Error(res.data.mensagem);
+
+        limparCampos();
+        setRenderLista(prev => !prev);
+
+        Swal.fire('Informações salvas com sucesso!', '', 'success');
+      })
+      .catch(error => {
+        lidarComErro(error);
+      });
+  }
 
   function salvar() {
     if (abaSelecionada == 'Mesas' && numMesa <= 0) {
@@ -44,18 +101,23 @@ export default function FormularioCadastro({ abaSelecionada, titulo }: Formulari
 
     if (
       abaSelecionada == 'Usuários' &&
+      editar == false &&
       (nomeUsuario == '' || permissao == '' || senha == '' || confirmaSenha == '')
     ) {
       Swal.fire('Preencha todos os campos.', '', 'error');
     } else if (abaSelecionada == 'Usuários' && senha == confirmaSenha) {
-      const dados = {
+      const novosDados = {
+        id: id,
         nome: nomeUsuario,
         permissao: permissao,
         senha: senha,
-        confirmaSenha: confirmaSenha,
       };
 
-      alert(dados.nome + ', ' + dados.permissao + ', ' + dados.senha + ', ' + dados.confirmaSenha);
+      if (editar && id != '') {
+        editarUsuario(novosDados);
+      } else {
+        criarUsuario(novosDados);
+      }
     } else if (abaSelecionada == 'Usuários') {
       Swal.fire('As senhas precisam ser iguais.', '', 'error');
     }
@@ -192,7 +254,7 @@ export default function FormularioCadastro({ abaSelecionada, titulo }: Formulari
         </div>
       )}
 
-      <div className="mt-4 d-grid gap-2">
+      <div className="d-grid gap-2">
         <button className="btn btn-warning fw-bold mt-4" onClick={salvar}>
           Salvar
         </button>

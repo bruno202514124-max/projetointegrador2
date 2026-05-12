@@ -24,11 +24,10 @@ export default function LayoutBase({ titulo, subtitulo, children }: LayoutBasePr
 
           <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-4 gap-3">
             <div className="d-flex gap-2 flex-wrap">
-              <span className="order-header-pill">
+              <span>
                 Status: <span className="badge badge-open">{status}</span>
               </span>
-              <span className="order-header-pill">Atendente: {usuario}</span>
-              <span className="order-header-pill" id="dataHora"></span>
+              <span>Atendente: {usuario}</span>
             </div>
           </div>
         </div>
