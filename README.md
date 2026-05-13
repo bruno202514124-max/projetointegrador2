@@ -82,7 +82,7 @@ Para rodar o backend, faça o seguinte:
 - Rode "npm i" para instalar as dependências do projeto.
 - Rode "npm run dev" para iniciar o backend no port 2000.
 
-Pronto! O back está rodando! Agora é só fazer as chamadas!
+Pronto! O back está rodando! Agora é só fazer as requisições!
 
 ## Endereços do back
 
