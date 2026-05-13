@@ -80,6 +80,7 @@ Para rodar o backend, faça o seguinte:
 
 - Vá até a pasta do back e abra um terminal.
 - Rode "npm i" para instalar as dependências do projeto.
+- Rode "npm run migrate" e "npm run generate" para cria o banco de dados e a conexão com ele
 - Rode "npm run dev" para iniciar o backend no port 2000.
 
 Pronto! O back está rodando! Agora é só fazer as requisições!
