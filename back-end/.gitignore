@@ -2,5 +2,6 @@ node_modules/
 .prettierrc
 .env*
 prisma/db
+prisma/generated
 
 *.tsbuildinfo
