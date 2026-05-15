@@ -10,6 +10,11 @@ class CasoDeUsoAtualizarUsuario {
 
   async executar({ id, nome, senha, permissao }: IAtualizarUsuario): Promise<Usuario> {
     const usuario = await this.repositorioUsuarios.pesquisarPorId(id);
+
+    if (!usuario) {
+      throw new EmitirMensagemErro('Usuário não existe.');
+    }
+
     let usuarioAtualizado: Usuario | null = null;
 
     if (usuario) {

@@ -1,0 +1,5 @@
+model Mesas {
+    id      String    @id @default(uuid())
+    numero  String
+    cartoes Cartoes[]
+}

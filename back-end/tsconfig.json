@@ -10,7 +10,6 @@
     "module": "node16",
     "skipLibCheck": true,
     "strictPropertyInitialization": false,
-    "outDir": "./out",
     "exactOptionalPropertyTypes": true
   }
 }

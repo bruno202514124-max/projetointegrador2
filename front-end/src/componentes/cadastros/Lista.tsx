@@ -2,6 +2,7 @@ import { api, exibirMensagemDeErro, routerUrlObject } from '@/api';
 import estiloBase from '@/css/base.module.css';
 import estiloCadastros from '@/css/cadastros.module.css';
 import { AbasCadastros } from '@/pages/cadastros';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import ReactModal from 'react-modal';
@@ -59,15 +60,21 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
   }
 
   function preencherLista() {
+    setItens([]);
     let url = '';
 
     if (abaSelecionada == 'Usuários') url = 'usuarios/';
 
     api
       .get(url)
-      .then(res => setItens(res.data))
+      .then(res => {
+        setItens(res.data);
+      })
       .catch(error => {
-        if (error.response.data.auth === false) {
+        if (error instanceof AxiosError) {
+          setItens([]);
+          exibirMensagemDeErro(error.message);
+        } else if (error.response.data.auth === false) {
           localStorage.clear();
           router.push(routerUrlObject, '/');
         } else {

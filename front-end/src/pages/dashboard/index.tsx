@@ -1,10 +1,9 @@
+import Botao from '@/componentes/Botao';
 import LayoutBase from '@/componentes/LayoutBase';
 import Card from '@/componentes/dashborad/Cards';
-import GraficoVendasSemana from '@/componentes/dashborad/GraficoVendasSemana';
 import GraficoLucroMensal from '@/componentes/dashborad/GraficoLucroMensal';
+import GraficoVendasSemana from '@/componentes/dashborad/GraficoVendasSemana';
 import ProdutosMaisVendidos from '@/componentes/dashborad/ProdutosMaisVendidos';
-import Botao from '@/componentes/Botao';
-import styles from '@/css/base.module.css';
 import { useRef, useState } from 'react';
 
 export default function Dashboard() {
@@ -37,38 +36,34 @@ export default function Dashboard() {
   };
 
   return (
-    <LayoutBase
-      titulo="Dashboard"
-      subtitulo="Visão geral do sistema"
-    >
+    <LayoutBase titulo="Dashboard" subtitulo="Visão geral do sistema">
       {/* TOPO */}
       <div className="d-flex justify-content-between align-items-center mb-4 gap-3">
-  
-      {/* ESQUERDA */}
-      <div>
-        <h3
-          style={{
-            fontWeight: 800,
-            marginBottom: '4px',
-            fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
-          }}
-        >
-          Bulldog Brewer
-        </h3>
+        {/* ESQUERDA */}
+        <div>
+          <h3
+            style={{
+              fontWeight: 800,
+              marginBottom: '4px',
+              fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
+            }}
+          >
+            Bulldog Brewer
+          </h3>
 
-        <p
-          style={{
-            color: '#bdbdbd',
-            marginBottom: 0,
-            fontSize: 'clamp(0.8rem, 2vw, 1rem)',
-          }}
-        >
-          Dados referentes a {dataFormatada}
-        </p>
-      </div>
+          <p
+            style={{
+              color: '#bdbdbd',
+              marginBottom: 0,
+              fontSize: 'clamp(0.8rem, 2vw, 1rem)',
+            }}
+          >
+            Dados referentes a {dataFormatada}
+          </p>
+        </div>
 
-      {/* DIREITA */}
-      <Botao
+        {/* DIREITA */}
+        <Botao
           onClick={() => inputDataRef.current?.showPicker()}
           className="d-flex align-items-center gap-3"
         >
@@ -84,18 +79,13 @@ export default function Dashboard() {
               alignItems: 'center',
               justifyContent: 'space-between',
               gap: '12px',
-              cursor: 'pointer',
+              // cursor: 'pointer',     nao precisa de cursor pointer se a div ta dentro de um botao
               minWidth: '190px',
               flexShrink: 0,
               position: 'relative',
             }}
           >
-            <span>
-              {dataSelecionada
-                .split('-')
-                .reverse()
-                .join('/')}
-            </span>
+            <span>{dataSelecionada.split('-').reverse().join('/')}</span>
 
             <span>📅</span>
 
@@ -103,9 +93,7 @@ export default function Dashboard() {
               ref={inputDataRef}
               type="date"
               value={dataSelecionada}
-              onChange={(e) =>
-                setDataSelecionada(e.target.value)
-              }
+              onChange={e => setDataSelecionada(e.target.value)}
               style={{
                 position: 'absolute',
                 opacity: 0,
@@ -115,12 +103,11 @@ export default function Dashboard() {
           </div>
         </Botao>
       </div>
-      
+
       {/* CARDS */}
       <div className="row g-4">
-
-  <div className="col-md-3">
-    <Card
+        <div className="col-md-3">
+          <Card
             titulo="Lucro Mensal"
             valor={`R$ ${dados.lucroMensal.toLocaleString('pt-BR')}`}
             cor="text-success"
@@ -144,10 +131,7 @@ export default function Dashboard() {
         </div>
 
         <div className="col-md-3">
-          <Card
-            titulo="Vendas"
-            valor={`${dados.vendas}`}
-          />
+          <Card titulo="Vendas" valor={`${dados.vendas}`} />
         </div>
       </div>
 
@@ -162,13 +146,12 @@ export default function Dashboard() {
         </div>
       </div>
 
-       {/* PRODUTOS MAIS VENDIDOS */}
+      {/* PRODUTOS MAIS VENDIDOS */}
       <div className="row mt-5">
         <div className="col-md-12">
           <ProdutosMaisVendidos />
         </div>
       </div>
-      
     </LayoutBase>
   );
 }

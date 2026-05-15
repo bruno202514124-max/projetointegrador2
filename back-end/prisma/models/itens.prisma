@@ -1,0 +1,7 @@
+model Itens {
+    id      String    @id @default(uuid())
+    nome    String
+    preco   Float
+    bebida  Boolean   @default(false)
+    pedidos Pedidos[]
+}

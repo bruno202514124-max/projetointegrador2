@@ -1,16 +1,9 @@
 generator client {
   provider        = "prisma-client"
-  output          = "../node_modules/.prisma/client"
+  output          = "../prisma/generated/prisma"
   previewFeatures = ["strictUndefinedChecks"]
 }
 
 datasource db {
   provider = "sqlite"
-}
-
-model Usuario {
-  id        String @id @default(uuid())
-  nome      String
-  senha     String
-  permissao String
 }

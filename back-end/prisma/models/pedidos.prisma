@@ -1,0 +1,10 @@
+model Pedidos {
+    id          String   @id @default(uuid())
+    cliente     String
+    dataCriacao DateTime @default(now())
+    ativo       Boolean  @default(true)
+    valorFinal  Float
+    itens       Itens[]
+    cartao      Cartoes  @relation(fields: [cartaoId], references: [id])
+    cartaoId    String
+}
