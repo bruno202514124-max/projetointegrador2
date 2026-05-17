@@ -1,4 +1,4 @@
-import { Usuario } from '../Tipagens/TipagemUsuario';
+import { Usuario } from '../Interfaces/InterfaceUsuario';
 
 interface IRepositorioUsuarios {
   pesquisarPorId(id: string): Promise<Usuario | null>;

@@ -2,6 +2,6 @@ model Cartoes {
     id      String    @id @default(uuid())
     numero  String
     pedidos Pedidos[]
-    mesa    Mesas     @relation(fields: [mesaId], references: [id])
+    mesa    Mesas?    @relation(fields: [mesaId], references: [id])
     mesaId  String
 }

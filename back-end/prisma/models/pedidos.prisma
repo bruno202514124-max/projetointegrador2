@@ -5,6 +5,6 @@ model Pedidos {
     ativo       Boolean  @default(true)
     valorFinal  Float
     itens       Itens[]
-    cartao      Cartoes  @relation(fields: [cartaoId], references: [id])
-    cartaoId    String
+    cartao      Cartoes? @relation(fields: [cartaoId], references: [id])
+    cartaoId    String?
 }
