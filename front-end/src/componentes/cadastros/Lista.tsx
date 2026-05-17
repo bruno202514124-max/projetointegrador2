@@ -119,6 +119,14 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
     });
   }
 
+  function mascOuFem(abaSelecionada: AbasCadastros) {
+    if (abaSelecionada == 'Mesas' || abaSelecionada == 'Comidas/Bebidas') {
+      return 'a';
+    } else {
+      return 'o';
+    }
+  }
+
   useEffect(() => {
     setAppElement(document.querySelectorAll('.container'));
   }, []);
@@ -132,7 +140,9 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
 
   return (
     <div className={`card-body ${estiloCadastros.containerLista}`}>
-      <h5 className="mb-4">{abaSelecionada} Cadastrados(as)</h5>
+      <h5 className="mb-4">
+        {abaSelecionada} Cadastrad{mascOuFem(abaSelecionada)}s
+      </h5>
       <div className={`mb-3 d-flex flex-column gap-4 overflow-y-auto ${estiloCadastros.lista}`}>
         {itens.map((item, index) => {
           return (
