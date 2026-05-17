@@ -89,5 +89,5 @@ Pronto! O back está rodando! Agora é só fazer as requisições!
 - Itens
   - GET /itens/ - retorna todos os itens.
   - POST /itens/criar { nome: string, preco: number, bebida: boolean } - cria o usuário e retorna os dados do usuário criado.
-  - PATCH /itens/atualizar {id: string, nome: string, preco: number, bebida: boolean } - atualiza os dados do usuário e retorna os dados atualizados.
+  - PATCH /itens/atualizar { id: string, nome: string, preco: number, bebida: boolean } - atualiza os dados do usuário e retorna os dados atualizados.
   - DELETE /itens/deletar/:id - apaga o usuário.
