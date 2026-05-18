@@ -5,19 +5,31 @@ export interface Pedido {
   cliente: string;
   dataCriacao: Date;
   ativo: boolean;
-  valorFinal: number;
-  itens: Item[];
-  //   cartao?: Cartao;
+  // itens: Item[];
+  // cartao?: Cartao;
+}
+
+export interface PedidoComItens {
+  cliente: string;
+  pessoas: number;
+  id: string;
+  dataCriacao: Date;
+  ativo: boolean;
+  cartaoId: string | null;
+  itens: {
+    pedidoId: string;
+    itemId: string;
+    valorItem: number;
+    qtdItem: number;
+  }[];
 }
 
 export interface CriarPedido {
   cliente: string;
-  valorFinal: number;
-  itens: Item[];
-}
-
-export interface RequisicaoCriarPedido {
-  cliente: string;
-  itens: Item[];
-  cartao: string;
+  pessoas: number;
+  itens: {
+    id: string;
+    qtd: number;
+  }[];
+  idCartao: string;
 }

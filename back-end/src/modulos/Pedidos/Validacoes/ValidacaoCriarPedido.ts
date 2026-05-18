@@ -5,9 +5,10 @@ export const ValidacaoCriarPedido = z.object({
   itens: z
     .object({
       id: z.string({ message: 'é obrigatório.' }),
-      preco: z.number({ message: 'é obrigatório.' }),
+      qtd: z.number({ message: 'é obrigatório.' }),
     })
     .array()
     .min(1),
-  cartao: z.string({ message: 'é obrigatório.' }),
+  idCartao: z.string({ message: 'é obrigatório.' }),
+  pessoas: z.number({ message: 'é obrigatório.' }),
 });

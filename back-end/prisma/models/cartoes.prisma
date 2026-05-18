@@ -3,5 +3,5 @@ model Cartoes {
     numero  String
     pedidos Pedidos[]
     mesa    Mesas?    @relation(fields: [mesaId], references: [id])
-    mesaId  String
+    mesaId  String?
 }

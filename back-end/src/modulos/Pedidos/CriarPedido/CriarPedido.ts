@@ -1,24 +1,26 @@
 import { Request, Response } from 'express';
 import { EmitirMensagemErro } from '../../../erros/EmitirMensagemErro';
 import { validarDados } from '../../../utils/validarDados';
-import { CriarPedido, RequisicaoCriarPedido } from '../Interfaces/InterfacePedido';
+import { CriarPedido } from '../Interfaces/InterfacePedido';
 import { RepositorioPedidos } from '../Repositorio/RepositorioPedidos';
 import { ValidacaoCriarPedido } from '../Validacoes/ValidacaoCriarPedido';
 
 export async function CriarPedido(req: Request, res: Response): Promise<Response> {
-  const { cliente, itens, cartao }: RequisicaoCriarPedido = req.body;
+  const { cliente, itens, idCartao, pessoas }: CriarPedido = req.body;
 
   const repositorioPedidos = new RepositorioPedidos();
 
   try {
-    validarDados(ValidacaoCriarPedido, { cliente, itens, cartao });
+    validarDados(ValidacaoCriarPedido, { cliente, itens, idCartao, pessoas });
 
     const dadosPedido: CriarPedido = {
       cliente,
-      valorFinal: itens.reduce((acc, item) => {
-        return acc + item.preco;
-      }, 0),
       itens,
+      idCartao,
+      pessoas,
+      // valorFinal: itens.reduce((acc, item) => {
+      //   return acc + item.preco;
+      // }, 0),
     };
 
     const novoPedido = await repositorioPedidos.criarPedido(dadosPedido);
