@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { autent } from '../middleware/autent';
 import { CriarPedido } from '../../modulos/Pedidos/CriarPedido/CriarPedido';
-import { TrazerPedidos } from '../../modulos/Pedidos/TrazerPedidos/TrazerPedidos';
+import { PesquisarTodosPedidos } from '../../modulos/Pedidos/PesquisarTodosPedidos/PesquisarTodosPedidos';
+import { autent } from '../middleware/autent';
 
 const rotasPedidos = Router();
 
 rotasPedidos.post('/criar', autent, CriarPedido);
-rotasPedidos.get('/', autent, TrazerPedidos);
+rotasPedidos.get('/', autent, PesquisarTodosPedidos);
 
 export { rotasPedidos };

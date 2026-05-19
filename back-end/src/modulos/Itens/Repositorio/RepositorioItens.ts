@@ -12,13 +12,17 @@ class RepositorioItens {
     });
   }
 
-  async pesquisarPorNome(nome: string): Promise<Item | null> {
+  async pesquisarPorNome(texto: string): Promise<Item | null> {
     return await prisma.itens.findFirst({
-      where: { nome },
+      where: {
+        nome: {
+          contains: texto,
+        },
+      },
     });
   }
 
-  async pesquisarItens(): Promise<Item[]> {
+  async pesquisarTodos(): Promise<Item[]> {
     const itens = prisma.itens.findMany({
       orderBy: {
         nome: 'asc',

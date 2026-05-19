@@ -1,14 +1,18 @@
 import z from 'zod';
 
 export const ValidacaoCriarPedido = z.object({
-  cliente: z.string({ message: 'é obrigatório.' }),
+  idMesa: z.string('campo obrigatório.'),
+  idCartao: z.string('campo obrigatório.'),
+  cliente: z.string('campo obrigatório.'),
+  pessoas: z
+    .number('campo obrigatório.')
+    .min(1, { message: 'É preciso ter ao menos 1 pessoa no pedido' }),
   itens: z
-    .object({
-      id: z.string({ message: 'é obrigatório.' }),
-      qtd: z.number({ message: 'é obrigatório.' }),
-    })
-    .array()
-    .min(1),
-  idCartao: z.string({ message: 'é obrigatório.' }),
-  pessoas: z.number({ message: 'é obrigatório.' }),
+    .array(
+      z.object({
+        id: z.string('campo obrigatório.'),
+        qtd: z.number('campo obrigatório.'),
+      })
+    )
+    .min(1, 'O pedido precisa ter pelo menos 1 item.'),
 });

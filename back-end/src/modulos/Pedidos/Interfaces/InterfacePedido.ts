@@ -15,13 +15,16 @@ export interface PedidoComItens {
   id: string;
   dataCriacao: Date;
   ativo: boolean;
-  cartaoId: string | null;
   itens: {
-    pedidoId: string;
-    itemId: string;
     valorItem: number;
     qtdItem: number;
+    item: Item;
   }[];
+  cartao: {
+    id: string;
+    numero: string;
+    mesa: { id: string; numero: string } | null;
+  } | null;
 }
 
 export interface CriarPedido {
@@ -32,4 +35,5 @@ export interface CriarPedido {
     qtd: number;
   }[];
   idCartao: string;
+  idMesa: string;
 }

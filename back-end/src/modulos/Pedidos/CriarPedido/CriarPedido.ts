@@ -6,18 +6,19 @@ import { RepositorioPedidos } from '../Repositorio/RepositorioPedidos';
 import { ValidacaoCriarPedido } from '../Validacoes/ValidacaoCriarPedido';
 
 export async function CriarPedido(req: Request, res: Response): Promise<Response> {
-  const { cliente, itens, idCartao, pessoas }: CriarPedido = req.body;
+  const { idMesa, idCartao, cliente, pessoas, itens }: CriarPedido = req.body;
 
   const repositorioPedidos = new RepositorioPedidos();
 
   try {
-    validarDados(ValidacaoCriarPedido, { cliente, itens, idCartao, pessoas });
+    validarDados(ValidacaoCriarPedido, { idMesa, idCartao, cliente, pessoas, itens });
 
     const dadosPedido: CriarPedido = {
-      cliente,
-      itens,
+      idMesa,
       idCartao,
+      cliente,
       pessoas,
+      itens,
       // valorFinal: itens.reduce((acc, item) => {
       //   return acc + item.preco;
       // }, 0),
