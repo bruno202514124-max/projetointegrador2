@@ -5,3 +5,9 @@ export interface Item {
   bebida: boolean;
   //   pedidos?: Pedido[]
 }
+
+export interface CriarItem {
+  nome: string;
+  preco: number;
+  bebida: boolean;
+}

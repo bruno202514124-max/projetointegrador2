@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import { RepositorioItens } from '../Repositorio/RepositorioItens.js';
 
-export async function PesquisarItens(req: Request, res: Response): Promise<Response> {
+export async function PesquisarPorNome(req: Request, res: Response): Promise<Response> {
+  const { texto } = req.body;
   const repositorioItens = new RepositorioItens();
 
   try {
-    const itens = await repositorioItens.pesquisarItens();
-    return res.json(itens);
+    const item = await repositorioItens.pesquisarPorNome(texto);
+    return res.json(item);
   } catch (err) {
     return res.json(err);
   }

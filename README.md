@@ -88,6 +88,10 @@ Pronto! O back está rodando! Agora é só fazer as requisições!
 
 - Itens
   - GET /itens/ - retorna todos os itens.
-  - POST /itens/criar { nome: string, preco: number, bebida: boolean } - cria o usuário e retorna os dados do usuário criado.
-  - PATCH /itens/atualizar { id: string, nome: string, preco: number, bebida: boolean } - atualiza os dados do usuário e retorna os dados atualizados.
-  - DELETE /itens/deletar/:id - apaga o usuário.
+  - POST /itens/criar { nome: string, preco: number, bebida: boolean } - cria o item e retorna os dados do item criado.
+  - PATCH /itens/atualizar { id: string, nome: string, preco: number, bebida: boolean } - atualiza os dados do item e retorna os dados atualizados.
+  - DELETE /itens/deletar/:id - apaga o item.
+
+- Pedidos
+  - GET /pedidos/ - retorna todos os pedidos, cada pedido já é retornado com seus itens.
+  - POST /pedidos/criar { cliente: string, pessoas: number, itens: { id: string, qtd: number }[], idCartao: string} - cria o pedido e retorna os dados do pedido criado.
