@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { EmitirMensagemErro } from '../../../erros/EmitirMensagemErro';
 import { validarDados } from '../../../utils/validarDados';
-import { Item } from '../../Usuarios/Tipagens/TipagemItens';
-import { ValidacaoCriarItem } from '../Validacoes/ValidacaoCriarItem';
+import { Item } from '../Interfaces/InterfaceItens';
 import { RepositorioItens } from '../Repositorio/RepositorioItens';
+import { ValidacaoCriarItem } from '../Validacoes/ValidacaoCriarItem';
 
 export async function AtualizarItem(req: Request, res: Response): Promise<Response> {
   const { id, nome, preco, bebida }: Item = req.body;
@@ -36,7 +36,12 @@ export async function AtualizarItem(req: Request, res: Response): Promise<Respon
 
       validarDados(ValidacaoCriarItem, { nome: novoNome, preco: novoPreco });
 
-      itemAtualizado = await repositorioItens.atualizarItem(id, novoNome, novoPreco, novaBebida);
+      itemAtualizado = await repositorioItens.atualizarItem({
+        id,
+        nome: novoNome,
+        preco: novoPreco,
+        bebida: novaBebida,
+      });
     }
 
     if (!itemAtualizado) {

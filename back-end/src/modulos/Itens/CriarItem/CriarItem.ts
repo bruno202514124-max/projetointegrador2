@@ -17,7 +17,7 @@ export async function CriarItem(req: Request, res: Response): Promise<Response> 
       throw new EmitirMensagemErro('Já existe um item com esse nome.');
     }
 
-    const novoItem = await repositorioItens.criarItem(nome, preco, bebida);
+    const novoItem = await repositorioItens.criarItem({ nome, preco, bebida });
 
     if (!novoItem) {
       throw new EmitirMensagemErro('Erro ao criar item.');

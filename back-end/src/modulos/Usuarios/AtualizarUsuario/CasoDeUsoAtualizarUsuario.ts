@@ -1,8 +1,8 @@
 import { EmitirMensagemErro } from '../../../erros/EmitirMensagemErro';
 import { validarDados } from '../../../utils/validarDados';
 import { IRepositorioUsuarios } from '../Repositorio/IRepositorioUsuarios';
-import { IAtualizarUsuario } from '../Tipagens/OperacoesDeUsuario';
-import { Usuario } from '../Tipagens/TipagemUsuario';
+import { IAtualizarUsuario } from '../Interfaces/OperacoesDeUsuario';
+import { Usuario } from '../Interfaces/InterfaceUsuario';
 import { ValidacaoCriarUsuario } from '../Validacoes/ValidacaoCriarUsuario';
 
 class CasoDeUsoAtualizarUsuario {

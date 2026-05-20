@@ -1,0 +1,10 @@
+model PedidosItens {
+    pedido    Pedidos @relation(fields: [pedidoId], references: [id])
+    pedidoId  String
+    item      Itens   @relation(fields: [itemId], references: [id])
+    itemId    String
+    valorItem Float
+    qtdItem   Int
+
+    @@id([pedidoId, itemId])
+}

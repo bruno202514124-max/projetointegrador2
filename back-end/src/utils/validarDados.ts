@@ -5,11 +5,10 @@ export function validarDados(validator: z.ZodObject, data: unknown) {
   try {
     validator.parse(data);
   } catch (err) {
-    const error = `${String((err as ZodError).issues[0].path[0])} ${(err as ZodError).issues[0].message}`;
-    const mensagemDeErroFormatada = error.charAt(0).toUpperCase() + error.slice(1);
+    const mensagemDeErro = `${String((err as ZodError).issues[0].path[0])}: ${(err as ZodError).issues[0].message}`;
 
-    console.log('erro => ', mensagemDeErroFormatada);
+    console.log('erro => ', mensagemDeErro);
 
-    throw new EmitirMensagemErro(mensagemDeErroFormatada);
+    throw new EmitirMensagemErro(mensagemDeErro);
   }
 }
