@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { EmitirMensagemErro } from '../../../erros/EmitirMensagemErro';
+import { tratarErro } from '../../../erros/TratarErro';
 import { validarDados } from '../../../utils/validarDados';
 import { CriarPedido } from '../Interfaces/InterfacePedido';
 import { RepositorioPedidos } from '../Repositorio/RepositorioPedidos';
@@ -32,6 +33,7 @@ export async function CriarPedido(req: Request, res: Response): Promise<Response
 
     return res.json(novoPedido);
   } catch (err) {
-    return res.json(err);
+    const resposta = tratarErro({ res, err });
+    return resposta;
   }
 }

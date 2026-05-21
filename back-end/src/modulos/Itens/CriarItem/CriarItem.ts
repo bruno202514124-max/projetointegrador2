@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
+import { EmitirMensagemErro } from '../../../erros/EmitirMensagemErro';
+import { tratarErro } from '../../../erros/TratarErro';
+import { validarDados } from '../../../utils/validarDados';
 import { RepositorioItens } from '../Repositorio/RepositorioItens';
 import { ValidacaoCriarItem } from '../Validacoes/ValidacaoCriarItem';
-import { validarDados } from '../../../utils/validarDados';
-import { EmitirMensagemErro } from '../../../erros/EmitirMensagemErro';
 
 export async function CriarItem(req: Request, res: Response): Promise<Response> {
   const { nome, preco, bebida } = req.body;
@@ -25,6 +26,7 @@ export async function CriarItem(req: Request, res: Response): Promise<Response> 
 
     return res.json(novoItem);
   } catch (err) {
-    return res.json(err);
+    const resposta = tratarErro({ res, err });
+    return resposta;
   }
 }

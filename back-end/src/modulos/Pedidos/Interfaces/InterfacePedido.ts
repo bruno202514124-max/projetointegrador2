@@ -5,8 +5,6 @@ export interface Pedido {
   cliente: string;
   dataCriacao: Date;
   ativo: boolean;
-  // itens: Item[];
-  // cartao?: Cartao;
 }
 
 export interface PedidoComItens {

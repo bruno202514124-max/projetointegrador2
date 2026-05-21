@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { tratarErro } from '../../../erros/TratarErro.js';
 import { RepositorioItens } from '../Repositorio/RepositorioItens.js';
 
 export async function PesquisarTodosItens(req: Request, res: Response): Promise<Response> {
@@ -8,6 +9,7 @@ export async function PesquisarTodosItens(req: Request, res: Response): Promise<
     const itens = await repositorioItens.pesquisarTodos();
     return res.json(itens);
   } catch (err) {
-    return res.json(err);
+    const resposta = tratarErro({ res, err });
+    return resposta;
   }
 }

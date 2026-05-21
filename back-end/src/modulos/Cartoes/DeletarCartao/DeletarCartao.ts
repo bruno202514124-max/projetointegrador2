@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { EmitirMensagemErro } from '../../../erros/EmitirMensagemErro';
 import { tratarErro } from '../../../erros/TratarErro';
-import { RepositorioItens } from '../Repositorio/RepositorioItens';
+import { RepositorioCartoes } from '../Repositorio/RepositorioCartoes';
 
-export async function DeletarItem(req: Request, res: Response): Promise<Response> {
+export async function DeletarCartao(req: Request, res: Response): Promise<Response> {
   const reqId = req.params.id;
   let id = '';
 
@@ -13,18 +13,18 @@ export async function DeletarItem(req: Request, res: Response): Promise<Response
     id = reqId;
   }
 
-  const repositorioItens = new RepositorioItens();
+  const repositorioCartoes = new RepositorioCartoes();
 
   try {
-    const usuario = await repositorioItens.pesquisarPorId(id);
+    const usuario = await repositorioCartoes.pesquisarPorId(id);
 
     if (!usuario) {
-      throw new EmitirMensagemErro('Item não encontrado.');
+      throw new EmitirMensagemErro('Cartao não encontrado.');
     }
 
-    await repositorioItens.apagarItem(id);
+    await repositorioCartoes.apagarCartao(id);
 
-    return res.json('Item deletado.');
+    return res.json('Cartao deletado.');
   } catch (err) {
     const resposta = tratarErro({ res, err });
     return resposta;
