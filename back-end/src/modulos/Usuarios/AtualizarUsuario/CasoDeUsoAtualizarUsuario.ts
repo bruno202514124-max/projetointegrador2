@@ -1,14 +1,17 @@
 import { EmitirMensagemErro } from '../../../erros/EmitirMensagemErro';
 import { validarDados } from '../../../utils/validarDados';
-import { IRepositorioUsuarios } from '../Repositorio/IRepositorioUsuarios';
-import { IAtualizarUsuario } from '../Interfaces/OperacoesDeUsuario';
+import { ValidacaoId } from '../../ValidacaoId';
 import { Usuario } from '../Interfaces/InterfaceUsuario';
+import { IAtualizarUsuario } from '../Interfaces/OperacoesDeUsuario';
+import { IRepositorioUsuarios } from '../Repositorio/IRepositorioUsuarios';
 import { ValidacaoCriarUsuario } from '../Validacoes/ValidacaoCriarUsuario';
 
 class CasoDeUsoAtualizarUsuario {
   constructor(private repositorioUsuarios: IRepositorioUsuarios) {}
 
   async executar({ id, nome, senha, permissao }: IAtualizarUsuario): Promise<Usuario> {
+    validarDados(ValidacaoId, { id });
+
     const usuario = await this.repositorioUsuarios.pesquisarPorId(id);
 
     if (!usuario) {

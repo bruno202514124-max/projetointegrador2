@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { tratarErro } from '../../../erros/TratarErro';
 import { RepositorioUsuarios } from '../Repositorio/RepositorioUsuarios';
 import { CasoDeUsoDeletarUsuario } from './CasoDeUsoDeletarUsuario';
 
@@ -20,7 +21,8 @@ class ControladorDeletarUsuario {
       await casoDeUsoDeletarUsuario.executar(id);
       return res.json('Usuário deletado.');
     } catch (err) {
-      return res.json(err);
+      const resposta = tratarErro({ res, err });
+      return resposta;
     }
   }
 }

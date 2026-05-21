@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
-import { RepositorioCartoes } from '../Repositorio/RepositorioCartoes';
-import { validarDados } from '../../../utils/validarDados';
-import { ValidacaoCriarCartao } from '../Validacoes/ValidacaoCriarCartao';
 import { EmitirMensagemErro } from '../../../erros/EmitirMensagemErro';
+import { tratarErro } from '../../../erros/TratarErro';
+import { validarDados } from '../../../utils/validarDados';
+import { RepositorioCartoes } from '../Repositorio/RepositorioCartoes';
+import { ValidacaoCriarCartao } from '../Validacoes/ValidacaoCriarCartao';
 
 export async function CriarCartao(req: Request, res: Response): Promise<Response> {
   const { numero } = req.body;
@@ -10,7 +11,7 @@ export async function CriarCartao(req: Request, res: Response): Promise<Response
   const repositorioCartoes = new RepositorioCartoes();
 
   try {
-    validarDados(ValidacaoCriarCartao, numero);
+    validarDados(ValidacaoCriarCartao, { numero });
 
     const cartaoAntigo = await repositorioCartoes.pesquisarPorNumero(numero);
 
@@ -26,6 +27,7 @@ export async function CriarCartao(req: Request, res: Response): Promise<Response
 
     return res.json(novoCartao);
   } catch (err) {
-    return res.json(err);
+    const resposta = tratarErro({ res, err });
+    return resposta;
   }
 }
