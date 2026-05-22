@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { EmitirMensagemErro } from '../../../erros/EmitirMensagemErro';
 import { tratarErro } from '../../../erros/TratarErro';
-import { RepositorioItens } from '../Repositorio/RepositorioItens';
+import { RepositorioMesas } from '../Repositorio/RepositorioMesas';
 
-export async function DeletarItem(req: Request, res: Response): Promise<Response> {
+export async function DeletarMesa(req: Request, res: Response): Promise<Response> {
   try {
     const reqId = req.params.id;
     let id = '';
@@ -14,16 +14,16 @@ export async function DeletarItem(req: Request, res: Response): Promise<Response
       id = reqId;
     }
 
-    const repositorioItens = new RepositorioItens();
-    const item = await repositorioItens.pesquisarPorId(id);
+    const repositorioMesas = new RepositorioMesas();
+    const mesa = await repositorioMesas.pesquisarPorId(id);
 
-    if (!item) {
-      throw new EmitirMensagemErro('Item não encontrado.');
+    if (!mesa) {
+      throw new EmitirMensagemErro('Mesa não encontrada.');
     }
 
-    await repositorioItens.apagarItem(id);
+    await repositorioMesas.apagarMesa(id);
 
-    return res.json('Item deletado.');
+    return res.json('Mesa deletada.');
   } catch (err) {
     const resposta = tratarErro({ res, err });
     return resposta;

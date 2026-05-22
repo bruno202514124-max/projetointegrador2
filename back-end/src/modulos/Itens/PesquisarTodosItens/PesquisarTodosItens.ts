@@ -3,9 +3,8 @@ import { tratarErro } from '../../../erros/TratarErro.js';
 import { RepositorioItens } from '../Repositorio/RepositorioItens.js';
 
 export async function PesquisarTodosItens(req: Request, res: Response): Promise<Response> {
-  const repositorioItens = new RepositorioItens();
-
   try {
+    const repositorioItens = new RepositorioItens();
     const itens = await repositorioItens.pesquisarTodos();
     return res.json(itens);
   } catch (err) {

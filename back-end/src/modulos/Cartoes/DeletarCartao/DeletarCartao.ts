@@ -4,21 +4,20 @@ import { tratarErro } from '../../../erros/TratarErro';
 import { RepositorioCartoes } from '../Repositorio/RepositorioCartoes';
 
 export async function DeletarCartao(req: Request, res: Response): Promise<Response> {
-  const reqId = req.params.id;
-  let id = '';
-
-  if (Array.isArray(reqId)) {
-    id = reqId[reqId.length - 1];
-  } else {
-    id = reqId;
-  }
-
-  const repositorioCartoes = new RepositorioCartoes();
-
   try {
-    const usuario = await repositorioCartoes.pesquisarPorId(id);
+    const reqId = req.params.id;
+    let id = '';
 
-    if (!usuario) {
+    if (Array.isArray(reqId)) {
+      id = reqId[reqId.length - 1];
+    } else {
+      id = reqId;
+    }
+
+    const repositorioCartoes = new RepositorioCartoes();
+    const cartao = await repositorioCartoes.pesquisarPorId(id);
+
+    if (!cartao) {
       throw new EmitirMensagemErro('Cartao não encontrado.');
     }
 

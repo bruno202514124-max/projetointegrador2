@@ -7,11 +7,10 @@ import { RepositorioPedidos } from '../Repositorio/RepositorioPedidos';
 import { ValidacaoCriarPedido } from '../Validacoes/ValidacaoCriarPedido';
 
 export async function CriarPedido(req: Request, res: Response): Promise<Response> {
-  const { idMesa, idCartao, cliente, pessoas, itens }: CriarPedido = req.body;
-
-  const repositorioPedidos = new RepositorioPedidos();
-
   try {
+    const { idMesa, idCartao, cliente, pessoas, itens }: CriarPedido = req.body;
+
+    const repositorioPedidos = new RepositorioPedidos();
     validarDados(ValidacaoCriarPedido, { idMesa, idCartao, cliente, pessoas, itens });
 
     const dadosPedido: CriarPedido = {

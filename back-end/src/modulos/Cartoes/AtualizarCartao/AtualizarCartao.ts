@@ -8,9 +8,9 @@ import { RepositorioCartoes } from '../Repositorio/RepositorioCartoes';
 import { ValidacaoCriarCartao } from '../Validacoes/ValidacaoCriarCartao';
 
 export async function AtualizarCartao(req: Request, res: Response): Promise<Response> {
-  const { id, numero }: Cartao = req.body;
-
   try {
+    const { id, numero }: Cartao = req.body;
+
     validarDados(ValidacaoId, { id });
 
     const repositorioCartoes = new RepositorioCartoes();
@@ -38,7 +38,7 @@ export async function AtualizarCartao(req: Request, res: Response): Promise<Resp
     }
 
     if (!cartaoAtualizado) {
-      throw new EmitirMensagemErro('Erro ao criar cartão.');
+      throw new EmitirMensagemErro('Erro ao atualizar cartão.');
     }
 
     return res.json(cartaoAtualizado);
