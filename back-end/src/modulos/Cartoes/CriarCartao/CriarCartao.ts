@@ -6,11 +6,10 @@ import { RepositorioCartoes } from '../Repositorio/RepositorioCartoes';
 import { ValidacaoCriarCartao } from '../Validacoes/ValidacaoCriarCartao';
 
 export async function CriarCartao(req: Request, res: Response): Promise<Response> {
-  const { numero } = req.body;
-
-  const repositorioCartoes = new RepositorioCartoes();
-
   try {
+    const { numero } = req.body;
+
+    const repositorioCartoes = new RepositorioCartoes();
     validarDados(ValidacaoCriarCartao, { numero });
 
     const cartaoAntigo = await repositorioCartoes.pesquisarPorNumero(numero);

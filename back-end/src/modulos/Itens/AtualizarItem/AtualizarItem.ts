@@ -8,11 +8,10 @@ import { RepositorioItens } from '../Repositorio/RepositorioItens';
 import { ValidacaoCriarItem } from '../Validacoes/ValidacaoCriarItem';
 
 export async function AtualizarItem(req: Request, res: Response): Promise<Response> {
-  const { id, nome, preco, bebida }: Item = req.body;
-
-  const repositorioItens = new RepositorioItens();
-
   try {
+    const { id, nome, preco, bebida }: Item = req.body;
+    const repositorioItens = new RepositorioItens();
+
     validarDados(ValidacaoId, { id });
 
     const item = await repositorioItens.pesquisarPorId(id);

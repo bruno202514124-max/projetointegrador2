@@ -6,10 +6,10 @@ import { RepositorioItens } from '../Repositorio/RepositorioItens';
 import { ValidacaoCriarItem } from '../Validacoes/ValidacaoCriarItem';
 
 export async function CriarItem(req: Request, res: Response): Promise<Response> {
-  const { nome, preco, bebida } = req.body;
-  const repositorioItens = new RepositorioItens();
-
   try {
+    const { nome, preco, bebida } = req.body;
+    const repositorioItens = new RepositorioItens();
+
     validarDados(ValidacaoCriarItem, { nome, preco });
 
     const antigoItem = await repositorioItens.pesquisarPorNome(nome);

@@ -95,3 +95,15 @@ Pronto! O back está rodando! Agora é só fazer as requisições!
 - Pedidos
   - GET /pedidos/ - retorna todos os pedidos, cada pedido já é retornado com seus itens.
   - POST /pedidos/criar { cliente: string, pessoas: number, itens: { id: string, qtd: number }[], idCartao: string} - cria o pedido e retorna os dados do pedido criado.
+
+- Cartões
+  - GET /cartoes/ - retorna todos os cartões.
+  - POST /cartoes/criar { numero: string } - cria o cartão e retorna os dados do cartão criado.
+  - PATCH /cartoes/atualizar { id: string, nome: string } - atualiza os dados do cartão e retorna os dados atualizados.
+  - DELETE /cartoes/deletar/:id - apaga o cartão.
+
+- Mesas
+  - GET /mesas/ - retorna todas as mesas.
+  - POST /mesas/criar { numero: string } - cria a mesa e retorna os dados da mesa criado.
+  - PATCH /mesas/atualizar { id: string, nome: string } - atualiza os dados da mesa e retorna os dados atualizados.
+  - DELETE /mesas/deletar/:id - apaga a mesa.
