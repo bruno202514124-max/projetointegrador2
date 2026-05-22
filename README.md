@@ -72,7 +72,7 @@ Para rodar o backend, faça o seguinte:
 
 - Vá até a pasta do back e abra um terminal.
 - Rode "npm i" para instalar as dependências do projeto.
-- Rode "npm run migrate" e "npm run generate" para cria o banco de dados e a conexão com ele
+- Rode "npm run migrate" e "npm run generate" para criar o banco de dados e a conexão com ele.
 - Rode "npm run dev" para iniciar o backend no port 2000.
 
 Pronto! O back está rodando! Agora é só fazer as requisições!
@@ -104,6 +104,6 @@ Pronto! O back está rodando! Agora é só fazer as requisições!
 
 - Mesas
   - GET /mesas/ - retorna todas as mesas.
-  - POST /mesas/criar { numero: string } - cria a mesa e retorna os dados da mesa criado.
+  - POST /mesas/criar { numero: string } - cria a mesa e retorna os dados da mesa criada.
   - PATCH /mesas/atualizar { id: string, nome: string } - atualiza os dados da mesa e retorna os dados atualizados.
   - DELETE /mesas/deletar/:id - apaga a mesa.
