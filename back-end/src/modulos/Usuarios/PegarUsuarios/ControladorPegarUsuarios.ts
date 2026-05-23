@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { tratarErro } from '../../../erros/TratarErro';
 import { RepositorioUsuarios } from '../Repositorio/RepositorioUsuarios';
 import { CasoDeUsoPegarUsuarios } from './CasoDeUsoPegarUsuarios';
 
@@ -11,7 +12,8 @@ class ControladorPegarUsuarios {
       const usuarios = await casoDeUsoPegarUsuarios.executar();
       return res.status(201).json(usuarios);
     } catch (err) {
-      return res.json(err);
+      const resposta = tratarErro({ res, err });
+      return resposta;
     }
   }
 }

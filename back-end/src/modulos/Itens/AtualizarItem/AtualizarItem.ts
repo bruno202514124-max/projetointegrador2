@@ -1,16 +1,19 @@
 import { Request, Response } from 'express';
 import { EmitirMensagemErro } from '../../../erros/EmitirMensagemErro';
+import { tratarErro } from '../../../erros/TratarErro';
 import { validarDados } from '../../../utils/validarDados';
-import { Item } from '../../Usuarios/Tipagens/TipagemItens';
-import { ValidacaoCriarItem } from '../Validacoes/ValidacaoCriarItem';
+import { ValidacaoId } from '../../ValidacaoId';
+import { Item } from '../Interfaces/InterfaceItens';
 import { RepositorioItens } from '../Repositorio/RepositorioItens';
+import { ValidacaoCriarItem } from '../Validacoes/ValidacaoCriarItem';
 
 export async function AtualizarItem(req: Request, res: Response): Promise<Response> {
-  const { id, nome, preco, bebida }: Item = req.body;
-
-  const repositorioItens = new RepositorioItens();
-
   try {
+    const { id, nome, preco, bebida }: Item = req.body;
+    const repositorioItens = new RepositorioItens();
+
+    validarDados(ValidacaoId, { id });
+
     const item = await repositorioItens.pesquisarPorId(id);
 
     if (!item) {
@@ -36,15 +39,21 @@ export async function AtualizarItem(req: Request, res: Response): Promise<Respon
 
       validarDados(ValidacaoCriarItem, { nome: novoNome, preco: novoPreco });
 
-      itemAtualizado = await repositorioItens.atualizarItem(id, novoNome, novoPreco, novaBebida);
+      itemAtualizado = await repositorioItens.atualizarItem({
+        id,
+        nome: novoNome,
+        preco: novoPreco,
+        bebida: novaBebida,
+      });
     }
 
     if (!itemAtualizado) {
-      throw new EmitirMensagemErro('Item não existe.');
+      throw new EmitirMensagemErro('Erro ao criar item.');
     }
 
     return res.json(itemAtualizado);
   } catch (err) {
-    return res.json(err);
+    const resposta = tratarErro({ res, err });
+    return resposta;
   }
 }

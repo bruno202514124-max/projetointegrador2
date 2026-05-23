@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { api, exibirMensagemDeErro, routerUrlObject } from '@/api';
 import estiloBase from '@/css/base.module.css';
 import estiloCadastros from '@/css/cadastros.module.css';
@@ -15,55 +17,67 @@ interface ListaProps {
   setRenderLista: Dispatch<SetStateAction<boolean>>;
 }
 
+interface Item {
+  id: string;
+  nome?: string;
+  numero?: string;
+  preco?: number;
+  permissao?: string;
+}
+
 export default function Lista({ abaSelecionada, renderLista, setRenderLista }: ListaProps) {
   const router = useRouter();
-  const [itens, setItens] = useState<{ id: string; nome: string; permissao?: string }[]>([]);
+  const formatarReal = Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  });
+  const [itens, setItens] = useState<Item[]>([]);
   const [abrirModal, setabrirModal] = useState(false);
   const [appElement, setAppElement] = useState<NodeListOf<Element>>();
   const [idEditar, setIdEditar] = useState('');
+  const [titulo, setTitulo] = useState('Editar mesa');
 
-  function preencherMesas() {
-    setItens([
-      { id: 'ajsduishdi', nome: '1' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-      { id: '12315616516araf', nome: '2' },
-    ]);
-  }
+  useEffect(() => {
+    switch (abaSelecionada) {
+      case 'Mesas':
+        setTitulo('Editar mesa');
+        break;
+      case 'Cartões':
+        setTitulo('Editar cartão');
+        break;
+      case 'Comidas/Bebidas':
+        setTitulo('Editar item');
+        break;
+      case 'Usuários':
+        setTitulo('Editar usuário');
+        break;
 
-  function preencherCartoes() {
-    setItens([
-      { id: 'ajsduishdi', nome: '1' },
-      { id: '12315616516araf', nome: '2' },
-    ]);
-  }
-
-  function preencherItens() {
-    setItens([
-      { id: 'ajsduishdi', nome: 'coquinha' },
-      { id: '12315616516araf', nome: 'burgaum' },
-    ]);
-  }
+      default:
+        break;
+    }
+  }, [abaSelecionada]);
 
   function preencherLista() {
     setItens([]);
     let url = '';
 
-    if (abaSelecionada == 'Usuários') url = 'usuarios/';
+    switch (abaSelecionada) {
+      case 'Mesas':
+        url = 'mesas/';
+        break;
+      case 'Cartões':
+        url = 'cartoes/';
+        break;
+      case 'Comidas/Bebidas':
+        url = 'itens/';
+        break;
+      case 'Usuários':
+        url = 'usuarios/';
+        break;
+
+      default:
+        return;
+    }
 
     api
       .get(url)
@@ -89,14 +103,35 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
     setabrirModal(true);
   }
 
-  function deletar(item: { id: string; nome: string }) {
+  function deletar(item: Item) {
     const urlDeletar = '/deletar/';
     let url = '';
+    let mesaOuCartao = '';
 
-    if (abaSelecionada == 'Usuários') url = 'usuarios' + urlDeletar;
+    switch (abaSelecionada) {
+      case 'Mesas':
+        url = 'mesas';
+        mesaOuCartao = 'Mesa';
+        break;
+      case 'Cartões':
+        url = 'cartoes';
+        mesaOuCartao = 'Cartão';
+        break;
+      case 'Comidas/Bebidas':
+        url = 'itens';
+        break;
+      case 'Usuários':
+        url = 'usuarios';
+        break;
+
+      default:
+        return;
+    }
+
+    url.concat(urlDeletar);
 
     Swal.fire({
-      title: `Apagar ${item.nome}?`,
+      title: `Apagar ${item.nome || mesaOuCartao + ' ' + item.numero}?`,
       showCancelButton: true,
       confirmButtonText: 'Apagar',
       cancelButtonText: 'Cancelar',
@@ -132,10 +167,7 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
   }, []);
 
   useEffect(() => {
-    if (abaSelecionada == 'Mesas') preencherMesas();
-    if (abaSelecionada == 'Cartões') preencherCartoes();
-    if (abaSelecionada == 'Comidas/Bebidas') preencherItens();
-    if (abaSelecionada == 'Usuários') preencherLista();
+    preencherLista();
   }, [abaSelecionada, renderLista]);
 
   return (
@@ -154,9 +186,11 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
               <div className="d-flex flex-column w-50 gap-2">
                 <p>
                   {abaSelecionada == 'Mesas' && 'Mesa'} {abaSelecionada == 'Cartões' && 'Cartão'}{' '}
-                  {item.nome}
+                  {item.nome && item.nome}
+                  {item.numero && item.numero}
                 </p>
 
+                {item.preco && <p>Preço: {formatarReal.format(item.preco)}</p>}
                 {item.permissao && <p>Permissão: {item.permissao}</p>}
               </div>
 
@@ -188,8 +222,8 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
         className={`d-flex flex-column gap-2 align-items-center justify-content-center ${estiloBase.cardBase}`}
       >
         <FormularioCadastro
-          abaSelecionada="Usuários"
-          titulo="Editar usuário"
+          abaSelecionada={abaSelecionada}
+          titulo={titulo}
           setRenderLista={setRenderLista}
           editar={true}
           id={idEditar}
