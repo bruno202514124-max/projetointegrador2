@@ -1,6 +1,7 @@
 import { api, exibirMensagemDeErro, routerUrlObject } from '@/api';
 import estiloCadastros from '@/css/cadastros.module.css';
 import { AbasCadastros } from '@/pages/cadastros';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useState } from 'react';
 import Swal from 'sweetalert2';
@@ -24,14 +25,16 @@ export default function FormularioCadastro({
   const [numMesa, setNumMesa] = useState(0);
   const [numCart, setNumCart] = useState(0);
   const [nomeItem, setNomeItem] = useState('');
+  const [precoItem, setPrecoItem] = useState(0);
   const [bebidaSimOuNao, setBebidaSimOuNao] = useState(false);
   const [nomeUsuario, setNomeUsuario] = useState('');
   const [permissao, setPermissao] = useState('Frente');
   const [senha, setSenha] = useState('');
   const [confirmaSenha, setConfirmaSenha] = useState('');
 
-  function lidarComErro(error: any) {
-    if (error.message) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function tratarErro(error: any) {
+    if (error instanceof AxiosError) {
       exibirMensagemDeErro(error.message);
     } else if (error.response.data.auth === false) {
       localStorage.clear();
@@ -41,6 +44,102 @@ export default function FormularioCadastro({
     } else {
       console.log('erro => ', error);
     }
+  }
+
+  function criarMesa(novaMesa: { numero: string }) {
+    api
+      .post('/mesas/criar', novaMesa)
+      .then(res => {
+        if (res.data.codigo == 400) throw new Error(res.data.mensagem);
+
+        limparCampos();
+        setRenderLista(prev => !prev);
+
+        Swal.fire('Informações salvas com sucesso!', '', 'success');
+      })
+      .catch(error => {
+        tratarErro(error);
+      });
+  }
+
+  function editarMesa(novaMesa: { id: string; numero: string }) {
+    api
+      .patch('/mesas/atualizar', novaMesa)
+      .then(res => {
+        if (res.data.codigo == 400) throw new Error(res.data.mensagem);
+
+        limparCampos();
+        setRenderLista(prev => !prev);
+
+        Swal.fire('Informações salvas com sucesso!', '', 'success');
+      })
+      .catch(error => {
+        tratarErro(error);
+      });
+  }
+
+  function criarCartao(novoCartao: { numero: string }) {
+    api
+      .post('/cartoes/criar', novoCartao)
+      .then(res => {
+        if (res.data.codigo == 400) throw new Error(res.data.mensagem);
+
+        limparCampos();
+        setRenderLista(prev => !prev);
+
+        Swal.fire('Informações salvas com sucesso!', '', 'success');
+      })
+      .catch(error => {
+        tratarErro(error);
+      });
+  }
+
+  function editarCartao(novoCartao: { id: string; numero: string }) {
+    api
+      .patch('/cartoes/atualizar', novoCartao)
+      .then(res => {
+        if (res.data.codigo == 400) throw new Error(res.data.mensagem);
+
+        limparCampos();
+        setRenderLista(prev => !prev);
+
+        Swal.fire('Informações salvas com sucesso!', '', 'success');
+      })
+      .catch(error => {
+        tratarErro(error);
+      });
+  }
+
+  function criarItem(novoItem: { nome: string; preco: number; bebida: boolean }) {
+    api
+      .post('/itens/criar', novoItem)
+      .then(res => {
+        if (res.data.codigo == 400) throw new Error(res.data.mensagem);
+
+        limparCampos();
+        setRenderLista(prev => !prev);
+
+        Swal.fire('Informações salvas com sucesso!', '', 'success');
+      })
+      .catch(error => {
+        tratarErro(error);
+      });
+  }
+
+  function editarItem(novoItem: { id: string; nome: string; preco: number; bebida: boolean }) {
+    api
+      .patch('/itens/atualizar', novoItem)
+      .then(res => {
+        if (res.data.codigo == 400) throw new Error(res.data.mensagem);
+
+        limparCampos();
+        setRenderLista(prev => !prev);
+
+        Swal.fire('Informações salvas com sucesso!', '', 'success');
+      })
+      .catch(error => {
+        tratarErro(error);
+      });
   }
 
   function criarUsuario(novoUsuario: { nome: string; permissao: string; senha: string }) {
@@ -55,7 +154,7 @@ export default function FormularioCadastro({
         Swal.fire('Informações salvas com sucesso!', '', 'success');
       })
       .catch(error => {
-        lidarComErro(error);
+        tratarErro(error);
       });
   }
 
@@ -71,53 +170,82 @@ export default function FormularioCadastro({
         Swal.fire('Informações salvas com sucesso!', '', 'success');
       })
       .catch(error => {
-        lidarComErro(error);
+        tratarErro(error);
       });
   }
 
   function salvar() {
-    if (abaSelecionada == 'Mesas' && numMesa <= 0) {
+    if (abaSelecionada == 'Mesas' && editar && id != '') {
+      const dados = {
+        id,
+        numero: numMesa.toString(),
+      };
+      editarMesa(dados);
+    } else if (abaSelecionada == 'Mesas' && numMesa <= 0) {
       Swal.fire('Preencha todos os campos.', 'O número não pode ser menor ou igual a zero.', 'error');
     } else if (abaSelecionada == 'Mesas') {
-      alert('Número da nova mesa: ' + numMesa);
+      const dados = {
+        numero: numMesa.toString(),
+      };
+      criarMesa(dados);
     }
 
-    if (abaSelecionada == 'Cartões' && numCart <= 0) {
+    if (abaSelecionada == 'Cartões' && editar && id != '') {
+      const dados = {
+        id,
+        numero: numCart.toString(),
+      };
+      editarCartao(dados);
+    } else if (abaSelecionada == 'Cartões' && numCart <= 0) {
       Swal.fire('Preencha todos os campos.', 'O número não pode ser menor ou igual a zero.', 'error');
     } else if (abaSelecionada == 'Cartões') {
-      alert('Número do novo cartão: ' + numCart);
+      const dados = {
+        numero: numCart.toString(),
+      };
+      criarCartao(dados);
     }
 
-    if (abaSelecionada == 'Comidas/Bebidas' && nomeItem == '') {
+    if (abaSelecionada == 'Comidas/Bebidas' && editar && id != '') {
+      const dados = {
+        id,
+        nome: nomeItem,
+        preco: precoItem,
+        bebida: bebidaSimOuNao,
+      };
+      editarItem(dados);
+    } else if (abaSelecionada == 'Comidas/Bebidas' && (nomeItem == '' || precoItem == 0)) {
       Swal.fire('Preencha todos os campos.', '', 'error');
     } else if (abaSelecionada == 'Comidas/Bebidas') {
       const dados = {
         nome: nomeItem,
+        preco: precoItem,
         bebida: bebidaSimOuNao,
       };
 
-      alert(dados.nome + ', ' + dados.bebida);
+      criarItem(dados);
     }
 
-    if (
-      abaSelecionada == 'Usuários' &&
-      editar == false &&
-      (nomeUsuario == '' || permissao == '' || senha == '' || confirmaSenha == '')
-    ) {
-      Swal.fire('Preencha todos os campos.', '', 'error');
-    } else if (abaSelecionada == 'Usuários' && senha == confirmaSenha) {
+    if (abaSelecionada == 'Usuários' && editar && id != '') {
       const novosDados = {
         id: id,
         nome: nomeUsuario,
         permissao: permissao,
         senha: senha,
       };
+      editarUsuario(novosDados);
+    } else if (
+      abaSelecionada == 'Usuários' &&
+      (nomeUsuario == '' || permissao == '' || senha == '' || confirmaSenha == '')
+    ) {
+      Swal.fire('Preencha todos os campos.', '', 'error');
+    } else if (abaSelecionada == 'Usuários' && senha == confirmaSenha) {
+      const novosDados = {
+        nome: nomeUsuario,
+        permissao: permissao,
+        senha: senha,
+      };
 
-      if (editar && id != '') {
-        editarUsuario(novosDados);
-      } else {
-        criarUsuario(novosDados);
-      }
+      criarUsuario(novosDados);
     } else if (abaSelecionada == 'Usuários') {
       Swal.fire('As senhas precisam ser iguais.', '', 'error');
     }
@@ -134,6 +262,7 @@ export default function FormularioCadastro({
 
     if (abaSelecionada == 'Comidas/Bebidas') {
       setNomeItem('');
+      setPrecoItem(0);
       setBebidaSimOuNao(false);
     }
 
@@ -191,6 +320,18 @@ export default function FormularioCadastro({
               type="text"
               className="form-control"
               placeholder="Nome da comida/bebida"
+            />
+          </div>
+
+          <div>
+            <label className="form-label">Preço (R$)</label>
+            <input
+              value={precoItem}
+              onChange={e => setPrecoItem(Number(e.currentTarget.value))}
+              type="number"
+              min={0}
+              className="form-control"
+              placeholder="Preçco do item"
             />
           </div>
           <div className="mt-4 d-flex gap-2">

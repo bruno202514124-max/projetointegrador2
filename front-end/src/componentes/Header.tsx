@@ -1,6 +1,8 @@
+import styles from '@/css/base.module.css';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import styles from '@/css/base.module.css';
+import logo from '../../public/img/logo-bulldog.png';
 
 const links = [
   { href: '/mesas', label: 'Mesas' },
@@ -16,7 +18,7 @@ export default function Header() {
     <nav className={`navbar navbar-expand-lg navbar-dark ${styles.navbarCustom}`}>
       <div className="container-fluid px-4">
         <Link className="navbar-brand d-flex align-items-center" href="/">
-          <img src="/img/logo-bulldog.png" alt="Logo Bulldog Brewer" className={styles.logoImg} />
+          <Image src={logo} alt="Logo Bulldog Brewer" className={styles.logoImg} />
 
           <div className={styles.brandText}>
             <strong>Bulldog Brewer</strong>

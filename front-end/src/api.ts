@@ -7,15 +7,15 @@ export const api = axios.create({
   baseURL: baseURL,
 });
 
-// api.interceptors.request.use(config => {
-//   const token = localStorage.getItem('token');
+api.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
 
-//   if (token) {
-//     if (config.headers) config.headers.Authorization = 'Bearer ' + token;
-//   }
+  if (token) {
+    if (config.headers) config.headers.Authorization = 'Bearer ' + token;
+  }
 
-//   return config;
-// });
+  return config;
+});
 
 export const routerUrlObject = {
   pathname: '/',

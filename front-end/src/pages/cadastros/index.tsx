@@ -1,15 +1,37 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import FormularioCadastro from '@/componentes/cadastros/FormularioCadastro';
 import Lista from '@/componentes/cadastros/Lista';
 import LayoutBase from '@/componentes/LayoutBase';
 import estiloBase from '@/css/base.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export type AbasCadastros = 'Mesas' | 'Cartões' | 'Comidas/Bebidas' | 'Usuários';
 const abas: AbasCadastros[] = ['Mesas', 'Cartões', 'Comidas/Bebidas', 'Usuários'];
 
 export default function Cadastros() {
   const [abaSelecionada, setAbaSelecionada] = useState<AbasCadastros>('Mesas');
+  const [titulo, setTitulo] = useState('Nova mesa');
   const [renderLista, setRenderLista] = useState(false);
+
+  useEffect(() => {
+    switch (abaSelecionada) {
+      case 'Mesas':
+        setTitulo('Nova mesa');
+        break;
+      case 'Cartões':
+        setTitulo('Novo cartão');
+        break;
+      case 'Comidas/Bebidas':
+        setTitulo('Nova item');
+        break;
+      case 'Usuários':
+        setTitulo('Novo usuário');
+        break;
+
+      default:
+        break;
+    }
+  }, [abaSelecionada]);
 
   return (
     <LayoutBase
@@ -34,34 +56,11 @@ export default function Cadastros() {
         </div>
 
         <div className={`card d-flex flex-lg-row gap-2 ${estiloBase.cardBase}`}>
-          {abaSelecionada == 'Mesas' && (
-            <FormularioCadastro
-              abaSelecionada="Mesas"
-              setRenderLista={setRenderLista}
-              titulo="Nova mesa"
-            />
-          )}
-          {abaSelecionada == 'Cartões' && (
-            <FormularioCadastro
-              abaSelecionada="Cartões"
-              setRenderLista={setRenderLista}
-              titulo="Novo cartão"
-            />
-          )}
-          {abaSelecionada == 'Comidas/Bebidas' && (
-            <FormularioCadastro
-              abaSelecionada="Comidas/Bebidas"
-              setRenderLista={setRenderLista}
-              titulo="Novo item"
-            />
-          )}
-          {abaSelecionada == 'Usuários' && (
-            <FormularioCadastro
-              abaSelecionada="Usuários"
-              setRenderLista={setRenderLista}
-              titulo="Novo usuário"
-            />
-          )}
+          <FormularioCadastro
+            abaSelecionada={abaSelecionada}
+            setRenderLista={setRenderLista}
+            titulo={titulo}
+          />
 
           <Lista
             abaSelecionada={abaSelecionada}
