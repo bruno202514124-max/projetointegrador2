@@ -34,12 +34,17 @@ export default function FormularioCadastro({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function tratarErro(error: any) {
-    if (error instanceof AxiosError) {
-      exibirMensagemDeErro(error.message);
-    } else if (error.response.data.auth === false) {
-      localStorage.clear();
-      router.push(routerUrlObject, '/');
+    if (error instanceof AxiosError && error.response?.data.autent === false) {
+      Swal.fire(error.response?.data.erro, 'Redirecionando para tela de login...', 'error').then(
+        result => {
+          if (result.isConfirmed) {
+            localStorage.clear();
+            router.push(routerUrlObject, '/');
+          }
+        }
+      );
     } else if (error.response.data) {
+      console.log('erro => ', error);
       exibirMensagemDeErro(error.response.data.erro);
     } else {
       console.log('erro => ', error);

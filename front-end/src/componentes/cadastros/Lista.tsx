@@ -85,12 +85,17 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
         setItens(res.data);
       })
       .catch(error => {
-        if (error instanceof AxiosError) {
+        if (error instanceof AxiosError && error.response?.data.autent === false) {
           setItens([]);
-          exibirMensagemDeErro(error.message);
-        } else if (error.response.data.auth === false) {
-          localStorage.clear();
-          router.push(routerUrlObject, '/');
+
+          Swal.fire(error.response?.data.erro, 'Redirecionando para tela de login...', 'error').then(
+            result => {
+              if (result.isConfirmed) {
+                localStorage.clear();
+                router.push(routerUrlObject, '/');
+              }
+            }
+          );
         } else {
           setItens([]);
           exibirMensagemDeErro(error.response.data.erro);
