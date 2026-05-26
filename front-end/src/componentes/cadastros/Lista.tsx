@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { api, exibirMensagemDeErro, routerUrlObject } from '@/api';
+import { api } from '@/api';
 import estiloBase from '@/css/base.module.css';
 import estiloCadastros from '@/css/cadastros.module.css';
 import { AbasCadastros } from '@/pages/cadastros';
-import { AxiosError } from 'axios';
+import { tratarErro } from '@/utils/tratarErro';
 import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import ReactModal from 'react-modal';
@@ -85,21 +85,8 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
         setItens(res.data);
       })
       .catch(error => {
-        if (error instanceof AxiosError && error.response?.data.autent === false) {
-          setItens([]);
-
-          Swal.fire(error.response?.data.erro, 'Redirecionando para tela de login...', 'error').then(
-            result => {
-              if (result.isConfirmed) {
-                localStorage.clear();
-                router.push(routerUrlObject, '/');
-              }
-            }
-          );
-        } else {
-          setItens([]);
-          exibirMensagemDeErro(error.response.data.erro);
-        }
+        setItens([]);
+        tratarErro(error, router);
       });
   }
 
@@ -148,12 +135,7 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
           .delete(url + item.id)
           .then(preencherLista)
           .catch(error => {
-            if (error.response.data.auth === false) {
-              localStorage.clear();
-              router.push(routerUrlObject, '/');
-            } else {
-              exibirMensagemDeErro(error.response.data.erro);
-            }
+            tratarErro(error, router);
           });
       }
     });
