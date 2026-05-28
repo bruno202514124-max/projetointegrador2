@@ -6,6 +6,6 @@ import { autent } from '../middleware/autent';
 const rotasPedidos = Router();
 
 rotasPedidos.post('/criar', autent, CriarPedido);
-rotasPedidos.get('/', autent, PesquisarTodosPedidos);
+rotasPedidos.post('/', autent, PesquisarTodosPedidos);
 
 export { rotasPedidos };
