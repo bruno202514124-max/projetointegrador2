@@ -81,8 +81,11 @@ class RepositorioPedidos {
     return pedidoComItens;
   }
 
-  async pesquisarTodos(): Promise<PedidoComItens[] | null> {
+  async pesquisarTodos(ativo: boolean): Promise<PedidoComItens[] | null> {
     const pedidoComItens = await prisma.pedidos.findMany({
+      where: {
+        ativo: ativo,
+      },
       include: {
         itens: {
           omit: {
