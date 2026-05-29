@@ -1,5 +1,5 @@
 import prisma from '../../../database/prismaClient';
-import { Usuario } from '../Tipagens/TipagemUsuario';
+import { Usuario } from '../Interfaces/InterfaceUsuario';
 import { IRepositorioUsuarios } from './IRepositorioUsuarios';
 
 class RepositorioUsuarios implements IRepositorioUsuarios {

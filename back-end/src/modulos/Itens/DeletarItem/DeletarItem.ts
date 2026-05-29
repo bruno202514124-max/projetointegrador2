@@ -1,23 +1,23 @@
 import { Request, Response } from 'express';
-import { RepositorioItens } from '../Repositorio/RepositorioItens';
 import { EmitirMensagemErro } from '../../../erros/EmitirMensagemErro';
+import { tratarErro } from '../../../erros/TratarErro';
+import { RepositorioItens } from '../Repositorio/RepositorioItens';
 
 export async function DeletarItem(req: Request, res: Response): Promise<Response> {
-  const reqId = req.params.id;
-  let id = '';
-
-  if (Array.isArray(reqId)) {
-    id = reqId[reqId.length - 1];
-  } else {
-    id = reqId;
-  }
-
-  const repositorioItens = new RepositorioItens();
-
   try {
-    const usuario = await repositorioItens.pesquisarPorId(id);
+    const reqId = req.params.id;
+    let id = '';
 
-    if (!usuario) {
+    if (Array.isArray(reqId)) {
+      id = reqId[reqId.length - 1];
+    } else {
+      id = reqId;
+    }
+
+    const repositorioItens = new RepositorioItens();
+    const item = await repositorioItens.pesquisarPorId(id);
+
+    if (!item) {
       throw new EmitirMensagemErro('Item não encontrado.');
     }
 
@@ -25,6 +25,7 @@ export async function DeletarItem(req: Request, res: Response): Promise<Response
 
     return res.json('Item deletado.');
   } catch (err) {
-    return res.json(err);
+    const resposta = tratarErro({ res, err });
+    return resposta;
   }
 }

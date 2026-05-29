@@ -22,8 +22,9 @@ Otimizar o processo de pedidos e atendimento ao cliente por meio da individualiz
 
 - HTML
 - CSS
-- JavaScript
 - Bootstrap
+- JavaScript / Typescript
+- React / Next
 
 ## Solução Proposta
 
@@ -41,15 +42,6 @@ A solução consiste no desenvolvimento de um sistema web que permita:
 - Organização do fluxo de atendimento
 - Redução de erros em eventos
 - Dashboard com indicadores de desempenho
-
-## Estrutura do Projeto
-
-projeto-integrador-bulldog
-
-- README.md
-- docs/
-- sistema/
-- evidencias/
 
 ## Integrantes do Grupo
 
@@ -80,7 +72,7 @@ Para rodar o backend, faça o seguinte:
 
 - Vá até a pasta do back e abra um terminal.
 - Rode "npm i" para instalar as dependências do projeto.
-- Rode "npm run migrate" e "npm run generate" para cria o banco de dados e a conexão com ele
+- Rode "npm run migrate" e "npm run generate" para criar o banco de dados e a conexão com ele.
 - Rode "npm run dev" para iniciar o backend no port 2000.
 
 Pronto! O back está rodando! Agora é só fazer as requisições!
@@ -89,7 +81,29 @@ Pronto! O back está rodando! Agora é só fazer as requisições!
 
 - Usuários
   - GET /usuarios/ - retorna todos os usuários.
-  - POST /usuarios/login { nome, senha } - realiza o login e retorna um token de acesso.
-  - POST /usuarios/criar { nome, senha, permissao } - cria o usuário e retorna os dados do usuário criado.
-  - PATCH /usuarios/atualizar { id, nome, senha, permissao } - atualiza os dados do usuário e retorna os dados atualizados.
+  - POST /usuarios/login { nome: string, senha: string } - realiza o login e retorna um token de acesso.
+  - POST /usuarios/criar { nome: string, senha: string, permissao: string } - cria o usuário e retorna os dados do usuário criado.
+  - PATCH /usuarios/atualizar { id: string, nome: string, senha: string, permissao: string } - atualiza os dados do usuário e retorna os dados atualizados.
   - DELETE /usuarios/deletar/:id - apaga o usuário.
+
+- Itens
+  - GET /itens/ - retorna todos os itens.
+  - POST /itens/criar { nome: string, preco: number, bebida: boolean } - cria o item e retorna os dados do item criado.
+  - PATCH /itens/atualizar { id: string, nome: string, preco: number, bebida: boolean } - atualiza os dados do item e retorna os dados atualizados.
+  - DELETE /itens/deletar/:id - apaga o item.
+
+- Pedidos
+  - POST /pedidos/ { ativo: boolean } - retorna todos os pedidos ativos ou inativos, dependendo da propriedade 'ativo'. Cada pedido já é retornado com seus itens.
+  - POST /pedidos/criar { cliente: string, pessoas: number, itens: { id: string, qtd: number }[], idCartao: string} - cria o pedido e retorna os dados do pedido criado.
+
+- Cartões
+  - GET /cartoes/ - retorna todos os cartões.
+  - POST /cartoes/criar { numero: string } - cria o cartão e retorna os dados do cartão criado.
+  - PATCH /cartoes/atualizar { id: string, numero: string } - atualiza os dados do cartão e retorna os dados atualizados.
+  - DELETE /cartoes/deletar/:id - apaga o cartão.
+
+- Mesas
+  - GET /mesas/ - retorna todas as mesas.
+  - POST /mesas/criar { numero: string } - cria a mesa e retorna os dados da mesa criada.
+  - PATCH /mesas/atualizar { id: string, numero: string } - atualiza os dados da mesa e retorna os dados atualizados.
+  - DELETE /mesas/deletar/:id - apaga a mesa.

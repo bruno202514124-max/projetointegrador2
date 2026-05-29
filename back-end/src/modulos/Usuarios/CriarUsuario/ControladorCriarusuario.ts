@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { tratarErro } from '../../../erros/TratarErro';
 import { RepositorioUsuarios } from '../Repositorio/RepositorioUsuarios';
 import { CasoDeUsoCriarUsuario } from './CasoDeUsoCriarUsuario';
 
@@ -18,7 +19,8 @@ class ControladorCriarUsuario {
 
       return res.json(novoUsuario);
     } catch (err) {
-      return res.json(err);
+      const resposta = tratarErro({ res, err });
+      return resposta;
     }
   }
 }

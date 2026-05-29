@@ -1,8 +1,8 @@
 import prisma from '../../../database/prismaClient';
-import { Item } from '../../Usuarios/Tipagens/TipagemItens';
+import { CriarItem, Item } from '../Interfaces/InterfaceItens';
 
 class RepositorioItens {
-  async criarItem(nome: string, preco: number, bebida: boolean): Promise<Item | null> {
+  async criarItem({ nome, preco, bebida }: CriarItem): Promise<Item | null> {
     return await prisma.itens.create({ data: { nome, preco, bebida } });
   }
 
@@ -12,13 +12,17 @@ class RepositorioItens {
     });
   }
 
-  async pesquisarPorNome(nome: string): Promise<Item | null> {
+  async pesquisarPorNome(texto: string): Promise<Item | null> {
     return await prisma.itens.findFirst({
-      where: { nome },
+      where: {
+        nome: {
+          contains: texto,
+        },
+      },
     });
   }
 
-  async pesquisarItens(): Promise<Item[]> {
+  async pesquisarTodos(): Promise<Item[]> {
     const itens = prisma.itens.findMany({
       orderBy: {
         nome: 'asc',
@@ -27,7 +31,7 @@ class RepositorioItens {
     return itens;
   }
 
-  async atualizarItem(id: string, nome: string, preco: number, bebida: boolean): Promise<Item | null> {
+  async atualizarItem({ id, nome, preco, bebida }: Item): Promise<Item | null> {
     return await prisma.itens.update({
       where: {
         id,
