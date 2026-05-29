@@ -72,7 +72,7 @@ Para rodar o backend, faça o seguinte:
 
 - Vá até a pasta do back e abra um terminal.
 - Rode "npm i" para instalar as dependências do projeto.
-- Crie um arquivo .env na pasta raiz do backend e, dentro deste arquivo, escreva: DATABASE_URL="file:./prisma/db/pi2.db".
+- Crie um arquivo .env na pasta raiz do backend e, dentro deste arquivo, escreva: DATABASE_URL="file:./prisma/db/pi2.db". Isso serve pra definir a localização do arquivo de banco de dados.
 - Rode "npm run migrate" e "npm run generate" para criar o banco de dados e a conexão com ele.
 - Rode "npm run dev" para iniciar o backend no port 2000.
 
