@@ -15,7 +15,7 @@ class CasoDeUsoAtualizarUsuario {
     const usuario = await this.repositorioUsuarios.pesquisarPorId(id);
 
     if (!usuario) {
-      throw new EmitirMensagemErro('Usuário não existe.');
+      throw new EmitirMensagemErro('Usuário não existe.', 400);
     }
 
     let usuarioAtualizado: Usuario | null = null;
@@ -46,7 +46,7 @@ class CasoDeUsoAtualizarUsuario {
     }
 
     if (!usuarioAtualizado) {
-      throw new EmitirMensagemErro('Usuário não existe.');
+      throw new EmitirMensagemErro('Usuário não existe.', 400);
     }
 
     return usuarioAtualizado;
