@@ -17,7 +17,7 @@ export async function AtualizarCartao(req: Request, res: Response): Promise<Resp
     const cartao = await repositorioCartoes.pesquisarPorId(id);
 
     if (!cartao) {
-      throw new EmitirMensagemErro('Cartao não existe.');
+      throw new EmitirMensagemErro('Cartao não existe.', 400);
     }
 
     let cartaoAtualizado: Cartao | null = null;
