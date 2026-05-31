@@ -17,7 +17,7 @@ export async function AtualizarItem(req: Request, res: Response): Promise<Respon
     const item = await repositorioItens.pesquisarPorId(id);
 
     if (!item) {
-      throw new EmitirMensagemErro('Item não existe.');
+      throw new EmitirMensagemErro('Item não existe.', 400);
     }
 
     let itemAtualizado: Item | null = null;
