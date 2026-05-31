@@ -1,5 +1,5 @@
 import prisma from '../../../database/prismaClient';
-import { CriarPedido, PedidoComItens } from '../Interfaces/InterfacePedido';
+import { CriarPedido, PedidoComItens, RelatorioPedidos } from '../Interfaces/InterfacePedido';
 
 class RepositorioPedidos {
   async criarPedido({
@@ -81,10 +81,10 @@ class RepositorioPedidos {
     return pedidoComItens;
   }
 
-  async pesquisarTodos(ativo: boolean): Promise<PedidoComItens[] | null> {
+  async pesquisarTodos(): Promise<PedidoComItens[] | null> {
     const pedidoComItens = await prisma.pedidos.findMany({
       where: {
-        ativo: ativo,
+        ativo: true,
       },
       include: {
         itens: {
@@ -107,6 +107,40 @@ class RepositorioPedidos {
       },
       omit: {
         cartaoId: true,
+      },
+    });
+
+    return pedidoComItens;
+  }
+
+  async relatorio(dataInicial: Date, dataFinal: Date): Promise<RelatorioPedidos[] | null> {
+    const pedidoComItens = await prisma.pedidos.findMany({
+      where: {
+        ativo: false,
+        dataCriacao: {
+          gte: dataInicial,
+          lte: dataFinal,
+        },
+      },
+      include: {
+        itens: {
+          omit: {
+            pedidoId: true,
+          },
+          include: {
+            item: {
+              omit: {
+                bebida: true,
+                id: true,
+              },
+            },
+          },
+        },
+      },
+      omit: {
+        cartaoId: true,
+        cliente: true,
+        pessoas: true,
       },
     });
 

@@ -35,3 +35,18 @@ export interface CriarPedido {
   idCartao: string;
   idMesa: string;
 }
+
+export interface RelatorioPedidos {
+  id: string;
+  dataCriacao: Date;
+  ativo: boolean;
+  itens: {
+    itemId: string;
+    valorItem: number;
+    qtdItem: number;
+    item: {
+      nome: string;
+      preco: number;
+    };
+  }[];
+}
