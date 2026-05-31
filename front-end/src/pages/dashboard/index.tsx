@@ -137,7 +137,7 @@ export default function Dashboard() {
 
         <div className="col-md-3">
           <Card
-            titulo="Venda Mensais"
+            titulo="Vendas Mensais"
             valor={`R$ ${dados.vendasMensais.toLocaleString('pt-BR')}`}
           />
         </div>
@@ -151,13 +151,17 @@ export default function Dashboard() {
       </div>
 
       {/* GRÁFICOS */}
-      <div className="row mt-5">
-        <div className="col-md-6">
+      <div className="row mt-5 g-4">
+        <div className="col-md-6 d-flex flex-column">
+          <div className="h-100 w-100">
           <GraficoVendasSemana />
         </div>
+       </div> 
 
-        <div className="col-md-6">
+        <div className="col-md-6 d-flex flex-column">
+          <div className="h-100 w-100">
           <GraficoLucroMensal />
+          </div>
         </div>
       </div>
 

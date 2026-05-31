@@ -15,12 +15,19 @@ export default function GraficoLucroMensal() {
   const mediaLucro = dados.reduce((acc, curr) => acc + curr.lucro, 0) / dados.length;
 
   return (
-    <div className={styles.cardBase} style={{ padding: '20px' }}>
-      <h5 style={{ color: '#f4b942', fontSize: '1rem', fontWeight: 700, marginBottom: '20px' }}>
-        Evolução de Lucro
-      </h5>
+    <div 
+      className={styles.cardBase} 
+      style={{ 
+        padding: '20px', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        height: '100%' // Força a div a usar toda a altura da coluna do Bootstrap
+      }}
+    >
+      <h5 style={{ color: '#f4b942', fontSize: '1rem', fontWeight: 700, marginBottom: '20px' }}> 
+        </h5>
 
-      <div style={{ width: '100%', height: 280 }}>
+        <div style={{ flex: 1, minHeight: '300px', width: '100%' }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={dados} margin={{ top: 20, right: 10, left: 10, bottom: 10 }}>
             {/* Efeitos Especiais em SVG */}
