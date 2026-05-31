@@ -32,7 +32,7 @@ export default function Dashboard() {
   const dados = {
     lucroMensal: 54840,
     lucroDiario: 14840,
-    despesas: 40000,
+    vendasMensais: 1050,
     vendas: 150,
   };
 
@@ -137,15 +137,14 @@ export default function Dashboard() {
 
         <div className="col-md-3">
           <Card
-            titulo="Despesas"
-            valor={`R$ ${dados.despesas.toLocaleString('pt-BR')}`}
-            cor="text-danger"
+            titulo="Venda Mensais"
+            valor={`R$ ${dados.vendasMensais.toLocaleString('pt-BR')}`}
           />
         </div>
 
         <div className="col-md-3">
           <Card
-            titulo="Vendas"
+            titulo="Vendas do Dia"
             valor={`${dados.vendas}`}
           />
         </div>
