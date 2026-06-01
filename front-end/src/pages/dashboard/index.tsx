@@ -138,14 +138,14 @@ export default function Dashboard() {
         <div className="col-md-3">
           <Card
             titulo="Vendas Mensais"
-            valor={`R$ ${dados.vendasMensais.toLocaleString('pt-BR')}`}
+            valor={`${dados.vendasMensais.toLocaleString('pt-BR')}`}
           />
         </div>
 
         <div className="col-md-3">
           <Card
             titulo="Vendas do Dia"
-            valor={`${dados.vendas}`}
+            valor={`${dados.vendas.toLocaleString('pt-BR')}`}
           />
         </div>
       </div>
