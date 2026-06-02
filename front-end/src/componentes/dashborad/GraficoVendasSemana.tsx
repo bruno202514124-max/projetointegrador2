@@ -1,11 +1,4 @@
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer
-} from 'recharts';
+import {BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
 
 import styles from '@/css/base.module.css';
 
@@ -21,8 +14,20 @@ export default function GraficoVendasSemana() {
   ];
 
   return (
-    <div className={styles.cardBase}>
-      <h5 className={styles.sectionTitle}>Vendas da Semana</h5>
+    <div 
+      className={styles.cardBase} 
+      style={{ 
+        padding: '20px', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        height: '100%' 
+      }}
+    >
+      <h5 className={styles.sectionTitle} style={{ marginBottom: '20px' }}>
+        Vendas da Semana
+      </h5>
+
+      <div style={{ flex: 1, minHeight: '300px', width: '100%' }}>
 
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={dados}>
@@ -39,5 +44,6 @@ export default function GraficoVendasSemana() {
         </BarChart>
       </ResponsiveContainer>
     </div>
+  </div>
   );
 }
