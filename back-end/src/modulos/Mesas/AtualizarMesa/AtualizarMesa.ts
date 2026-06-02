@@ -18,7 +18,7 @@ export async function AtualizarMesa(req: Request, res: Response): Promise<Respon
     const mesa = await repositorioMesas.pesquisarPorId(id);
 
     if (!mesa) {
-      throw new EmitirMensagemErro('Mesa não existe.');
+      throw new EmitirMensagemErro('Mesa não existe.', 400);
     }
 
     let mesaAtualizada: Mesa | null = null;

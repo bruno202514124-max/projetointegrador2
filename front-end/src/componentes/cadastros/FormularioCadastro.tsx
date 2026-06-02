@@ -1,7 +1,7 @@
-import { api, exibirMensagemDeErro, routerUrlObject } from '@/api';
+import { api } from '@/api';
 import estiloCadastros from '@/css/cadastros.module.css';
 import { AbasCadastros } from '@/pages/cadastros';
-import { AxiosError } from 'axios';
+import { tratarErro } from '@/utils/tratarErro';
 import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useState } from 'react';
 import Swal from 'sweetalert2';
@@ -32,20 +32,6 @@ export default function FormularioCadastro({
   const [senha, setSenha] = useState('');
   const [confirmaSenha, setConfirmaSenha] = useState('');
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function tratarErro(error: any) {
-    if (error instanceof AxiosError) {
-      exibirMensagemDeErro(error.message);
-    } else if (error.response.data.auth === false) {
-      localStorage.clear();
-      router.push(routerUrlObject, '/');
-    } else if (error.response.data) {
-      exibirMensagemDeErro(error.response.data.erro);
-    } else {
-      console.log('erro => ', error);
-    }
-  }
-
   function criarMesa(novaMesa: { numero: string }) {
     api
       .post('/mesas/criar', novaMesa)
@@ -58,7 +44,7 @@ export default function FormularioCadastro({
         Swal.fire('Informações salvas com sucesso!', '', 'success');
       })
       .catch(error => {
-        tratarErro(error);
+        tratarErro(error, router);
       });
   }
 
@@ -74,7 +60,7 @@ export default function FormularioCadastro({
         Swal.fire('Informações salvas com sucesso!', '', 'success');
       })
       .catch(error => {
-        tratarErro(error);
+        tratarErro(error, router);
       });
   }
 
@@ -90,7 +76,7 @@ export default function FormularioCadastro({
         Swal.fire('Informações salvas com sucesso!', '', 'success');
       })
       .catch(error => {
-        tratarErro(error);
+        tratarErro(error, router);
       });
   }
 
@@ -106,7 +92,7 @@ export default function FormularioCadastro({
         Swal.fire('Informações salvas com sucesso!', '', 'success');
       })
       .catch(error => {
-        tratarErro(error);
+        tratarErro(error, router);
       });
   }
 
@@ -122,7 +108,7 @@ export default function FormularioCadastro({
         Swal.fire('Informações salvas com sucesso!', '', 'success');
       })
       .catch(error => {
-        tratarErro(error);
+        tratarErro(error, router);
       });
   }
 
@@ -138,7 +124,7 @@ export default function FormularioCadastro({
         Swal.fire('Informações salvas com sucesso!', '', 'success');
       })
       .catch(error => {
-        tratarErro(error);
+        tratarErro(error, router);
       });
   }
 
@@ -154,7 +140,7 @@ export default function FormularioCadastro({
         Swal.fire('Informações salvas com sucesso!', '', 'success');
       })
       .catch(error => {
-        tratarErro(error);
+        tratarErro(error, router);
       });
   }
 
@@ -170,7 +156,7 @@ export default function FormularioCadastro({
         Swal.fire('Informações salvas com sucesso!', '', 'success');
       })
       .catch(error => {
-        tratarErro(error);
+        tratarErro(error, router);
       });
   }
 

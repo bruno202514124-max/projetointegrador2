@@ -1,15 +1,53 @@
+'use client';
+
 /* eslint-disable @next/next/no-img-element */
 
-import { useRouter } from 'next/router';
+import { useState } from 'react';
 import styles from '@/css/base.module.css';
 
 export default function Login() {
-  const router = useRouter();
+  const [nome, setNome] = useState('');
+  const [senha, setSenha] = useState('');
+
+  async function fazerLogin() {
+    try {
+      const resposta = await fetch('http://localhost:2000/usuarios/login', {
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify({
+          nome,
+          senha,
+        }),
+      });
+
+      const dados = await resposta.json();
+
+      if (dados && dados.codigo == 400) {
+        alert(dados.mensagem);
+      }
+
+      if (resposta.ok) {
+        localStorage.setItem('token', dados.token);
+
+        alert('Login realizado com sucesso');
+
+        window.location.href = '/mesas';
+      }
+    } catch (erro) {
+      console.log('erro => ', erro);
+
+      alert('Erro ao conectar com o servidor');
+    }
+  }
 
   return (
     <div className="container-fluid">
       <div className="row vh-100">
-        {/* LADO ESQUERDO - IMAGEM */}
+        {/* LADO ESQUERDO */}
         <div className="col-md-6 d-none d-md-block p-0">
           <img
             src="/img/bulldog-space.png"
@@ -22,7 +60,7 @@ export default function Login() {
           />
         </div>
 
-        {/* LADO DIREITO - LOGIN */}
+        {/* LADO DIREITO */}
         <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
           <div
             className={styles.cardBase}
@@ -49,18 +87,30 @@ export default function Login() {
               Login
             </h2>
 
-            {/* INPUT ID */}
+            {/* INPUT NOME */}
             <div className="mb-3">
-              <input type="text" placeholder="Digite seu ID" className="form-control" />
+              <input
+                type="text"
+                placeholder="Digite seu nome"
+                className="form-control"
+                value={nome}
+                onChange={e => setNome(e.target.value)}
+              />
             </div>
 
             {/* INPUT SENHA */}
             <div className="mb-3">
-              <input type="password" placeholder="Digite sua senha" className="form-control" />
+              <input
+                type="password"
+                placeholder="Digite sua senha"
+                className="form-control"
+                value={senha}
+                onChange={e => setSenha(e.target.value)}
+              />
             </div>
 
             {/* BOTÃO */}
-            <button className="btn btn-warning w-100" onClick={() => router.push('/mesas')}>
+            <button className="btn btn-warning w-100" onClick={fazerLogin}>
               Entrar
             </button>
           </div>
