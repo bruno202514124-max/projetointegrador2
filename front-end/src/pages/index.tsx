@@ -32,6 +32,7 @@ export default function Login() {
 
       if (resposta.ok) {
         localStorage.setItem('token', dados.token);
+        localStorage.setItem('usuario', JSON.stringify({ nome }));
 
         alert('Login realizado com sucesso');
 
