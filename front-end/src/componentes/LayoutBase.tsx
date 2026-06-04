@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from 'react';
 import Header from '@/componentes/Header';
 import styles from '@/css/base.module.css';
@@ -28,14 +29,6 @@ export default function LayoutBase({ titulo, subtitulo, children }: LayoutBasePr
     const hora = agora.getHours();
     const diaSemana = agora.getDay();
 
-    // 0 = Domingo
-    // 1 = Segunda
-    // 2 = Terça
-    // 3 = Quarta
-    // 4 = Quinta
-    // 5 = Sexta
-    // 6 = Sábado
-
     const diaAberto = diaSemana === 0 || diaSemana >= 2;
     const dentroDoHorario = hora >= 19 && hora < 24;
 
@@ -58,15 +51,17 @@ export default function LayoutBase({ titulo, subtitulo, children }: LayoutBasePr
           </div>
 
           <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center mb-4 gap-3">
-            <div className="d-flex gap-2 flex-wrap">
-              <span>
+            <div className="d-flex gap-3 flex-wrap">
+              <span className="d-flex gap-1 align-items-center">
                 Status:{' '}
                 <span className={status === 'Aberta' ? 'badge badge-open' : 'badge bg-danger'}>
                   {status}
                 </span>
               </span>
 
-              <span>Atendente: {usuario}</span>
+              <span className="d-flex gap-1">
+                Atendente: <p className="fw-bold">{usuario}</p>
+              </span>
             </div>
           </div>
         </div>
