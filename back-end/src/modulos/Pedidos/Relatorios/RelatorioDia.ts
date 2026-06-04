@@ -29,8 +29,13 @@ export async function RelatorioDia(req: Request, res: Response): Promise<Respons
       0
     );
 
+    const qtdVendas = relatorioDia.reduce(
+      (acc, pedido) => acc + pedido.itens.reduce((acc2, item) => acc2 + item.qtdItem, 0),
+      0
+    );
+
     const dadosRelatorioDia = {
-      vendas: relatorioDia.length,
+      vendas: qtdVendas,
       lucro: lucroDia,
     };
 

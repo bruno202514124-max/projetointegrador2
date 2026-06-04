@@ -1,5 +1,10 @@
 import prisma from '../../../database/prismaClient';
-import { CriarPedido, PedidoComItens, RelatorioPedidos } from '../Interfaces/InterfacePedido';
+import {
+  CriarPedido,
+  PedidoComItens,
+  PedidoSemItens,
+  RelatorioPedidos,
+} from '../Interfaces/InterfacePedido';
 
 class RepositorioPedidos {
   async criarPedido({
@@ -145,6 +150,19 @@ class RepositorioPedidos {
     });
 
     return pedidoComItens;
+  }
+
+  async desativarPedido(id: string): Promise<PedidoSemItens | null> {
+    const pedidoDesativado = await prisma.pedidos.update({
+      where: {
+        id,
+      },
+      data: {
+        ativo: false,
+      },
+    });
+
+    return pedidoDesativado;
   }
 }
 

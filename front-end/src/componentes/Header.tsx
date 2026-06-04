@@ -15,11 +15,11 @@ export default function Header() {
   const router = useRouter();
 
   function logout() {
-   localStorage.removeItem('token');
-   localStorage.removeItem('usuario');
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
 
-   router.push('/');
- }
+    router.push('/');
+  }
 
   return (
     <nav className={`navbar navbar-expand-lg navbar-dark ${styles.navbarCustom}`}>
@@ -47,11 +47,7 @@ export default function Header() {
               </Link>
             );
           })}
-                    <button
-            type="button"
-            onClick={logout}
-            className={styles.navLogout}
-          >
+          <button type="button" onClick={logout} className={styles.navLogout}>
             Sair
           </button>
         </div>

@@ -1,10 +1,12 @@
 import { Item } from '../../Itens/Interfaces/InterfaceItens';
 
-export interface Pedido {
+export interface PedidoSemItens {
   id: string;
   cliente: string;
+  pessoas: number;
   dataCriacao: Date;
   ativo: boolean;
+  cartaoId: string | null;
 }
 
 export interface PedidoComItens {

@@ -30,35 +30,43 @@ export async function RelatorioMes(req: Request, res: Response): Promise<Respons
       0
     );
 
+    const qtdVendas = relatorioMes.reduce(
+      (acc, pedido) => acc + pedido.itens.reduce((acc2, item) => acc2 + item.qtdItem, 0),
+      0
+    );
+
     const itensMes = relatorioMes.flatMap(pedido => pedido.itens.map(item => item));
     const idsUnicos = itensMes.filter((v, i, a) => a.findIndex(({ itemId }) => v.itemId == itemId) == i);
     const listaIds = Array.from(idsUnicos.map(item => item.itemId).values());
 
-    const rankItensMes = listaIds.map(id => {
-      let dados = {
-        id,
-        qtd: 0,
-        nome: '',
-        preco: 0,
-      };
+    const rankItensMes = listaIds
+      .map(id => {
+        let dados = {
+          id,
+          qtd: 0,
+          nome: '',
+          preco: 0,
+        };
 
-      itensMes?.forEach(item => {
-        if (item.itemId == id) {
-          dados.qtd += item.qtdItem;
+        itensMes?.forEach(item => {
+          if (item.itemId == id) {
+            dados.qtd += item.qtdItem;
 
-          if (dados.nome == '' || dados.preco == 0) {
-            dados.nome = item.item.nome;
-            dados.preco = item.item.preco;
+            if (dados.nome == '' || dados.preco == 0) {
+              dados.nome = item.item.nome;
+              dados.preco = item.item.preco;
+            }
           }
-        }
-      });
+        });
 
-      return dados;
-    });
+        return dados;
+      })
+      .sort((a, b) => b.qtd - a.qtd);
 
     const dadosRelatorioMes = {
-      lucroMes,
-      rankItensMes,
+      vendas: qtdVendas,
+      lucro: lucroMes,
+      rank: rankItensMes,
     };
 
     return res.json(dadosRelatorioMes);
