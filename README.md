@@ -95,9 +95,10 @@ Pronto! O back está rodando! Agora é só fazer as requisições!
 
 - Pedidos
   - GET /pedidos/ - retorna todos os pedidos ativos. Cada pedido já é retornado com seus itens.
-  - POST /pedidos/relatorioMes { mes: number, ano: number } - retorna o lucro do mês e a soma das vendas de cada item. IMPORTANTE: o mês é um número de índice 0. Exemplo: janeiro = 0, fevereiro = 1, março = 2, e assim por diante.
+  - POST /pedidos/relatorioMes { mes: number, ano: number } - retorna o lucro do mês, o número de vendas e o rank de itens mais vendidos. IMPORTANTE: o mês é um número de índice 0. Exemplo: janeiro = 0, fevereiro = 1, março = 2, e assim por diante.
   - POST /pedidos/relatorioDia { diaDoMes: number, mes: number, ano: number } - retorna o número de vendas e o lucro total do dia. IMPORTANTE: o mês é um número de índice 0. Exemplo: janeiro = 0, fevereiro = 1, março = 2, e assim por diante.
   - POST /pedidos/criar { cliente: string, pessoas: number, itens: { id: string, qtd: number }[], idCartao: string} - cria o pedido e retorna os dados do pedido criado.
+  - PATCH /pedidos/desativarPedido { id: string } - desativa o pedido.
 
 - Cartões
   - GET /cartoes/ - retorna todos os cartões.
