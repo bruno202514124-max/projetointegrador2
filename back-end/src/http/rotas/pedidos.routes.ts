@@ -4,14 +4,16 @@ import { DesativarPedido } from '../../modulos/Pedidos/DesativarPedido/Desativar
 import { PesquisarTodosPedidos } from '../../modulos/Pedidos/PesquisarTodosPedidos/PesquisarTodosPedidos';
 import { RelatorioDia } from '../../modulos/Pedidos/Relatorios/RelatorioDia';
 import { RelatorioMes } from '../../modulos/Pedidos/Relatorios/RelatorioMes';
-import { autent } from '../middleware/autent';
+import { autenticar } from '../middleware/autenticar';
+import { validarAutenticacao } from '../middleware/validarAutenticacao';
 
 const rotasPedidos = Router();
+rotasPedidos.use(autenticar, validarAutenticacao);
 
-rotasPedidos.get('/', autent, PesquisarTodosPedidos);
-rotasPedidos.post('/criar', autent, CriarPedido);
-rotasPedidos.post('/relatorioMes', autent, RelatorioMes);
-rotasPedidos.post('/relatorioDia', autent, RelatorioDia);
-rotasPedidos.patch('/desativarPedido', autent, DesativarPedido);
+rotasPedidos.get('/', PesquisarTodosPedidos);
+rotasPedidos.post('/criar', CriarPedido);
+rotasPedidos.post('/relatorioMes', RelatorioMes);
+rotasPedidos.post('/relatorioDia', RelatorioDia);
+rotasPedidos.patch('/desativarPedido', DesativarPedido);
 
 export { rotasPedidos };

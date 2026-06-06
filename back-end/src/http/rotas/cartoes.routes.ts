@@ -3,13 +3,15 @@ import { AtualizarCartao } from '../../modulos/Cartoes/AtualizarCartao/Atualizar
 import { CriarCartao } from '../../modulos/Cartoes/CriarCartao/CriarCartao';
 import { DeletarCartao } from '../../modulos/Cartoes/DeletarCartao/DeletarCartao';
 import { PesquisarTodosCartoes } from '../../modulos/Cartoes/PesquisarTodosCartoes/PesquisarTodosCartoes';
-import { autent } from '../middleware/autent';
+import { autenticar } from '../middleware/autenticar';
+import { validarAutenticacao } from '../middleware/validarAutenticacao';
 
 const rotasCartoes = Router();
+rotasCartoes.use(autenticar, validarAutenticacao);
 
-rotasCartoes.post('/criar', autent, CriarCartao);
-rotasCartoes.get('/', autent, PesquisarTodosCartoes);
-rotasCartoes.patch('/atualizar', autent, AtualizarCartao);
-rotasCartoes.delete('/deletar/:id', autent, DeletarCartao);
+rotasCartoes.post('/criar', CriarCartao);
+rotasCartoes.get('/', PesquisarTodosCartoes);
+rotasCartoes.patch('/atualizar', AtualizarCartao);
+rotasCartoes.delete('/deletar/:id', DeletarCartao);
 
 export { rotasCartoes };

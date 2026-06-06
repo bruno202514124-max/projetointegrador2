@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken';
+import { sign } from 'jsonwebtoken';
 import { EmitirMensagemErro } from '../../../erros/EmitirMensagemErro';
-import { SECRET_KEY } from '../../../http/middleware/autent';
+import { SECRET_KEY } from '../../../http/middleware/autenticar';
 import { validarDados } from '../../../utils/validarDados';
 import { RepositorioUsuarios } from '../Repositorio/RepositorioUsuarios';
 import { ValidacaoLogarUsuario } from '../Validacoes/ValidacaoLogarUsuario';
@@ -27,7 +27,7 @@ class CasoDeUsoAutenticarUsuario {
       throw new EmitirMensagemErro('Usuário ou senha inválidos');
     }
 
-    const token = jwt.sign({ id: usuario.nome.toString() }, SECRET_KEY, {
+    const token = sign({ id: usuario.id.toString() }, SECRET_KEY, {
       expiresIn: '1h',
     });
 
