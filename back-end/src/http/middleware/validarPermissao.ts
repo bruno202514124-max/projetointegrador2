@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { EmitirMensagemErro } from '../../erros/EmitirMensagemErro';
+import { tratarErro } from '../../erros/TratarErro';
 import { RepositorioUsuarios } from '../../modulos/Usuarios/Repositorio/RepositorioUsuarios';
 
 interface TokenUsuario {
@@ -18,15 +19,15 @@ export function validarPermissao(permissoes: Permissoes[]) {
         throw new EmitirMensagemErro('Usuário não autenticado!', 401);
       }
 
-      const temPermisso = await conferirPermissao(usuario, permissoes);
+      const temPermissao = await conferirPermissao(usuario, permissoes);
 
-      if (!temPermisso) {
+      if (!temPermissao) {
         throw new EmitirMensagemErro('Usuário não possui permissão necessária!', 403);
       }
 
       next();
-    } catch (error) {
-      next(error);
+    } catch (err) {
+      tratarErro({ res, err });
     }
   };
 }

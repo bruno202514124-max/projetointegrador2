@@ -1,5 +1,7 @@
-import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
+import { EmitirMensagemErro } from '../../erros/EmitirMensagemErro';
+import { tratarErro } from '../../erros/TratarErro';
 
 export const SECRET_KEY: Secret = 'minhaassinaturaparapoderusarautenticacaoviatoken';
 
@@ -12,7 +14,7 @@ export const autenticar = async (req: Request, res: Response, next: NextFunction
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
     if (!token) {
-      throw new Error('Token inválido');
+      throw new EmitirMensagemErro('Token inválido.', 403);
     }
 
     const decoded = jwt.verify(token, SECRET_KEY);
@@ -20,11 +22,6 @@ export const autenticar = async (req: Request, res: Response, next: NextFunction
 
     next();
   } catch (err) {
-    if (err instanceof Error) {
-      console.log('err => ', err.message);
-      res.status(401).send({ autent: false, erro: err.message });
-    } else {
-      res.status(401).send({ autent: false });
-    }
+    tratarErro({ res, err });
   }
 };

@@ -45,7 +45,7 @@ class RepositorioUsuarios implements IRepositorioUsuarios {
     });
   }
 
-  async pegarUsuarios(): Promise<Usuario[]> {
+  async buscarUsuarios(): Promise<Usuario[]> {
     const usuario = prisma.usuario.findMany({
       orderBy: {
         nome: 'asc',

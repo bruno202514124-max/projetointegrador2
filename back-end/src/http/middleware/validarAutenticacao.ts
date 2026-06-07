@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
+import prisma from '../../database/prismaClient';
 import { EmitirMensagemErro } from '../../erros/EmitirMensagemErro';
 import { SECRET_KEY } from './autenticar';
-import prisma from '../../database/prismaClient';
 
 interface IPayload {
   id: string;
@@ -36,6 +36,7 @@ export async function validarAutenticacao(req: Request, res: Response, next: Nex
     const usuario: IPayload = { id: usuarioExistente.id, permissao: usuarioExistente.permissao };
 
     req.usuario = { ...usuario };
+
     next();
   } catch (error) {
     console.log(error);
