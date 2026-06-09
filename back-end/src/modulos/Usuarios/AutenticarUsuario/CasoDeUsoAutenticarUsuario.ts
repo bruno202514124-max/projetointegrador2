@@ -13,6 +13,10 @@ interface IReq {
 interface IResp {
   autent: boolean;
   token: string;
+  usuario: {
+    nome: string;
+    permissao: string;
+  };
 }
 
 class CasoDeUsoAutenticarUsuario {
@@ -31,7 +35,15 @@ class CasoDeUsoAutenticarUsuario {
       expiresIn: '1h',
     });
 
-    const response = { autent: true, token: token };
+    // 🌟 AGORA ENVIAMOS A PERMISSÃO PARA O FRONT-END!
+    const response: IResp = { 
+      autent: true, 
+      token: token,
+      usuario: {
+        nome: usuario.nome.toString(),
+        permissao: usuario.permissao 
+      }
+    };
 
     return response;
   }

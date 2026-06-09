@@ -32,7 +32,9 @@ export default function Login() {
 
       if (resposta.ok) {
         localStorage.setItem('token', dados.token);
-        localStorage.setItem('usuario', JSON.stringify({ nome }));
+        
+        // 🌟 A MUDANÇA ESTÁ AQUI: Salvamos o objeto inteiro (com a permissão) que veio do back-end!
+        localStorage.setItem('usuario', JSON.stringify(dados.usuario));
 
         alert('Login realizado com sucesso');
 

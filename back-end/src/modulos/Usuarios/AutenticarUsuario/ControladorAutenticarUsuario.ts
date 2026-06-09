@@ -11,12 +11,13 @@ class ControladorAutenticarUsuario {
     const casoDeUsoAutenticarUsuario = new CasoDeUsoAutenticarUsuario(repositorioUsuarios);
 
     try {
-      const token = await casoDeUsoAutenticarUsuario.executar({
+      const resultadoLogin = await casoDeUsoAutenticarUsuario.executar({
         nome,
         senha,
       });
 
-      return res.json(token);
+      // 🌟 DEVOLVE TUDO (Autenticação, Token e Permissão)
+      return res.json(resultadoLogin);
     } catch (err) {
       const resposta = tratarErro({ res, err });
       return resposta;

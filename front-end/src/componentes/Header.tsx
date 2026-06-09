@@ -2,9 +2,10 @@ import styles from '@/css/base.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import logo from '../../public/img/logo-bulldog.png';
 
-const links = [
+const todosOsLinks = [
   { href: '/mesas', label: 'Mesas' },
   { href: '/cadastro-pedidos', label: 'Pedidos' },
   { href: '/cadastros', label: 'Cadastros' },
@@ -13,13 +14,40 @@ const links = [
 
 export default function Header() {
   const router = useRouter();
+  const [permissaoUsuario, setPermissaoUsuario] = useState('');
+
+  useEffect(() => {
+    const usuarioStorage = localStorage.getItem('usuario');
+    if (usuarioStorage) {
+      const usuario = JSON.parse(usuarioStorage);
+      setPermissaoUsuario(usuario.permissao || '');
+    }
+  }, []);
 
   function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
-
     router.push('/');
   }
+
+  // Lógica de filtro de permissões com proteção de maiúsculas/minúsculas
+  const linksPermitidos = todosOsLinks.filter((link) => {
+    // Converte a permissão do banco para letras minúsculas para comparar com segurança
+    const permissaoFormatada = permissaoUsuario.toLowerCase();
+
+    // Nível Máximo: Apenas o Administrador vê o Dashboard
+    if (link.label === 'Dashboard') {
+      return permissaoFormatada === 'administrador';
+    }
+
+    // Nível Médio: Administrador e Retaguarda veem os Cadastros
+    if (link.label === 'Cadastros') {
+      return permissaoFormatada === 'administrador' || permissaoFormatada === 'retaguarda';
+    }
+
+    // Nível Básico: Frente, Retaguarda e Administrador veem Mesas e Pedidos
+    return true; 
+  });
 
   return (
     <nav className={`navbar navbar-expand-lg navbar-dark ${styles.navbarCustom}`}>
@@ -34,7 +62,7 @@ export default function Header() {
         </Link>
 
         <div className="navbar-nav ms-auto d-flex flex-row flex-wrap gap-3">
-          {links.map(link => {
+          {linksPermitidos.map((link) => {
             const ativo = router.pathname === link.href || router.pathname.startsWith(`${link.href}/`);
 
             return (
