@@ -59,20 +59,20 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
 
   function preencherLista() {
     setItens([]);
-    let url = '';
+    let endpoint = '';
 
     switch (abaSelecionada) {
       case 'Mesas':
-        url = 'mesas/';
+        endpoint = 'mesas/';
         break;
       case 'Cartões':
-        url = 'cartoes/';
+        endpoint = 'cartoes/';
         break;
       case 'Comidas/Bebidas':
-        url = 'itens/';
+        endpoint = 'itens/';
         break;
       case 'Usuários':
-        url = 'usuarios/';
+        endpoint = 'usuarios/';
         break;
 
       default:
@@ -80,7 +80,7 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
     }
 
     api
-      .get(url)
+      .get(endpoint)
       .then(res => {
         setItens(res.data);
       })
@@ -96,31 +96,30 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
   }
 
   function deletar(item: Item) {
-    const urlDeletar = '/deletar/';
-    let url = '';
+    let endpoint = '';             
+    //Alterado de let URL pra let endpoint para deixar claro que essa variável é apenas o recurso (mesas, cartoes, itens ou usuarios) 
+    // e não a URL completa que vai ser chamada no api.delete().
     let mesaOuCartao = '';
 
     switch (abaSelecionada) {
       case 'Mesas':
-        url = 'mesas';
+        endpoint = 'mesas';
         mesaOuCartao = 'Mesa';
         break;
       case 'Cartões':
-        url = 'cartoes';
+        endpoint = 'cartoes';
         mesaOuCartao = 'Cartão';
         break;
       case 'Comidas/Bebidas':
-        url = 'itens';
+        endpoint = 'itens';
         break;
       case 'Usuários':
-        url = 'usuarios';
+        endpoint = 'usuarios';
         break;
 
       default:
         return;
     }
-
-    url.concat(urlDeletar);
 
     Swal.fire({
       title: `Apagar ${item.nome || mesaOuCartao + ' ' + item.numero}?`,
@@ -131,9 +130,19 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
       confirmButtonColor: 'red',
     }).then(result => {
       if (result.isConfirmed) {
+
+        const urlCompleta = `/${endpoint}/deletar/${item.id}`;
+
+// Por que essa separação ficou melhor no Lista.tsx?
+/* No código antigo, a variável começava se chamando url = 'mesas'. Depois tentava virar url = 'mesas/deletar/' e no final virava url + item.id. */
+/* Mudar o nome para let endpoint dentro do switch deixa claro para qualquer um do grupo que você está apenas descobrindo qual é o recurso daquela aba (se é mesa, cartão ou produto), 
+  guardando a palavra urlCompleta exclusivamente para o endereço final que vai ser disparado no api.delete(). */
         api
-          .delete(url + item.id)
-          .then(preencherLista)
+          .delete(urlCompleta)
+          .then(() => {
+            Swal.fire('Deletado!', 'Removido com sucesso.', 'success');
+            preencherLista();
+          })
           .catch(error => {
             tratarErro(error, router);
           });
