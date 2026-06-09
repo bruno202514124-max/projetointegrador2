@@ -37,7 +37,14 @@ export default function Dashboard() {
     vendas: 0,
   });
 
-    const [rankProdutos, setRankProdutos] = useState([]);
+    const [rankProdutos, setRankProdutos] = useState<
+      {
+        id: string;
+        nome: string;
+        preco: number;
+        qtd: number;
+      }[]
+    >([]);
 
     const carregarDados = async () => {
   try {
@@ -203,7 +210,7 @@ export default function Dashboard() {
        {/* PRODUTOS MAIS VENDIDOS */}
       <div className="row mt-5">
         <div className="col-md-12">
-          <ProdutosMaisVendidos />
+          <ProdutosMaisVendidos produtos={rankProdutos} />
         </div>
       </div>
       
