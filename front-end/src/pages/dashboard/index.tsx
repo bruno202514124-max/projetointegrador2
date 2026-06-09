@@ -5,7 +5,8 @@ import GraficoLucroMensal from '@/componentes/dashborad/GraficoLucroMensal';
 import ProdutosMaisVendidos from '@/componentes/dashborad/ProdutosMaisVendidos';
 import Botao from '@/componentes/Botao';
 import styles from '@/css/base.module.css';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { api } from '@/api';
 
 export default function Dashboard() {
   const hoje = new Date();
@@ -29,12 +30,46 @@ export default function Dashboard() {
 
   const inputDataRef = useRef<HTMLInputElement>(null);
 
-  const dados = {
-    lucroMensal: 54840,
-    lucroDiario: 14840,
-    vendasMensais: 1050,
-    vendas: 150,
-  };
+    const [dados, setDados] = useState({
+    lucroMensal: 0,
+    lucroDiario: 0,
+    vendasMensais: 0,
+    vendas: 0,
+  });
+
+    const [rankProdutos, setRankProdutos] = useState([]);
+
+    const carregarDados = async () => {
+  try {
+    const [ano, mes, dia] = dataSelecionada.split('-');
+
+    const respostaDia = await api.post('/pedidos/relatorioDia', {
+      diaDoMes: Number(dia),
+      mes: Number(mes) - 1,
+      ano: Number(ano),
+    });
+
+    const respostaMes = await api.post('/pedidos/relatorioMes', {
+      mes: Number(mes) - 1,
+      ano: Number(ano),
+    });
+
+    setDados({
+      lucroMensal: respostaMes.data.lucro ?? 0,
+      lucroDiario: respostaDia.data.lucro ?? 0,
+      vendasMensais: respostaMes.data.vendas ?? 0,
+      vendas: respostaDia.data.vendas ?? 0,
+  });
+
+    setRankProdutos(respostaMes.data.rank);
+  } catch (erro) {
+    console.error('Erro ao carregar dashboard:', erro);
+  }
+};
+
+  useEffect(() => {
+  carregarDados();
+}, [dataSelecionada]);
 
   return (
     <LayoutBase
