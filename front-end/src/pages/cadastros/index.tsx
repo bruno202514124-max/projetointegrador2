@@ -6,12 +6,24 @@ import estiloBase from '@/css/base.module.css';
 import { useEffect, useState } from 'react';
 
 export type AbasCadastros = 'Mesas' | 'Cartões' | 'Comidas/Bebidas' | 'Usuários';
-const abas: AbasCadastros[] = ['Mesas', 'Cartões', 'Comidas/Bebidas', 'Usuários'];
+const todasAsAbas: AbasCadastros[] = ['Mesas', 'Cartões', 'Comidas/Bebidas', 'Usuários'];
 
 export default function Cadastros() {
   const [abaSelecionada, setAbaSelecionada] = useState<AbasCadastros>('Mesas');
   const [titulo, setTitulo] = useState('Nova mesa');
   const [renderLista, setRenderLista] = useState(false);
+  
+  // Estado para armazenar a permissão de quem está usando o sistema
+  const [permissaoUsuario, setPermissaoUsuario] = useState('');
+
+  // Busca o usuário logado no localStorage
+  useEffect(() => {
+    const usuarioStorage = localStorage.getItem('usuario');
+    if (usuarioStorage) {
+      const usuario = JSON.parse(usuarioStorage);
+      setPermissaoUsuario(usuario.permissao || '');
+    }
+  }, []);
 
   useEffect(() => {
     switch (abaSelecionada) {
@@ -33,6 +45,14 @@ export default function Cadastros() {
     }
   }, [abaSelecionada]);
 
+  // 🔒 TRAVA: Só inclui a aba "Usuários" se for administrador
+  const abasPermitidas = todasAsAbas.filter((aba) => {
+    if (aba === 'Usuários') {
+      return permissaoUsuario.toLowerCase() === 'administrador';
+    }
+    return true; 
+  });
+
   return (
     <LayoutBase
       titulo="Central de Cadastros"
@@ -40,7 +60,8 @@ export default function Cadastros() {
     >
       <div>
         <div className="mb-2 d-flex flex-row flex-wrap">
-          {abas.map((aba, index) => {
+          {/* Mapeia apenas as abas que o usuário tem permissão para ver */}
+          {abasPermitidas.map((aba, index) => {
             return (
               <button
                 key={index}

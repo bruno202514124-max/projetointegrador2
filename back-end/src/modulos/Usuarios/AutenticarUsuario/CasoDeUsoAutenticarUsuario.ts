@@ -35,7 +35,7 @@ class CasoDeUsoAutenticarUsuario {
       expiresIn: '1h',
     });
 
-    // 🌟 AGORA ENVIAMOS A PERMISSÃO PARA O FRONT-END!
+    // AGORA ENVIAMOS A PERMISSÃO PARA O FRONT-END!
     const response: IResp = { 
       autent: true, 
       token: token,
