@@ -96,7 +96,6 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
   }
 
   function deletar(item: Item) {
-    const urlDeletar = '/deletar/';
     let url = '';
     let mesaOuCartao = '';
 
@@ -120,7 +119,7 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
         return;
     }
 
-    url.concat(urlDeletar);
+    url = url.concat('/deletar/', item.id);
 
     Swal.fire({
       title: `Apagar ${item.nome || mesaOuCartao + ' ' + item.numero}?`,
@@ -132,8 +131,11 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
     }).then(result => {
       if (result.isConfirmed) {
         api
-          .delete(url + item.id)
-          .then(preencherLista)
+          .delete(url)
+          .then(() => {
+            Swal.fire('Deletado!', 'Removido com sucesso.', 'success');
+            preencherLista();
+          })
           .catch(error => {
             tratarErro(error, router);
           });

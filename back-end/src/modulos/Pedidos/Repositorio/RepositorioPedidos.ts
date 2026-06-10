@@ -7,6 +7,20 @@ import {
 } from '../Interfaces/InterfacePedido';
 
 class RepositorioPedidos {
+  async pesquisarPorId(id: string): Promise<PedidoSemItens | null> {
+    return await prisma.pedidos.findUnique({
+      where: { id },
+    });
+  }
+
+  async apagarPedido(id: string): Promise<PedidoSemItens | null> {
+    return await prisma.pedidos.delete({
+      where: {
+        id,
+      },
+    });
+  }
+
   async criarPedido({
     idMesa,
     idCartao,
@@ -86,7 +100,7 @@ class RepositorioPedidos {
     return pedidoComItens;
   }
 
-  async pesquisarTodos(): Promise<PedidoComItens[] | null> {
+  async buscarTodos(): Promise<PedidoComItens[] | null> {
     const pedidoComItens = await prisma.pedidos.findMany({
       where: {
         ativo: true,

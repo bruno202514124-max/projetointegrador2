@@ -10,7 +10,7 @@ class ControladorBuscarUsuarios {
 
     try {
       const usuarios = await casoDeUsoBuscarUsuarios.executar();
-      return res.status(201).json(usuarios);
+      return res.status(200).json(usuarios);
     } catch (err) {
       const resposta = tratarErro({ res, err });
       return resposta;

@@ -54,7 +54,7 @@ export async function CriarPedido(req: Request, res: Response): Promise<Response
       throw new EmitirMensagemErro('Erro ao criar pedido.');
     }
 
-    return res.json(novoPedido);
+    return res.status(201).json(novoPedido);
   } catch (err) {
     const resposta = tratarErro({ res, err });
     return resposta;

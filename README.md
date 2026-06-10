@@ -99,6 +99,7 @@ Pronto! O back está rodando! Agora é só fazer as requisições!
   - POST /pedidos/relatorioDia { diaDoMes: number, mes: number, ano: number } - retorna o número de vendas e o lucro total do dia. IMPORTANTE: o mês é um número de índice 0. Exemplo: janeiro = 0, fevereiro = 1, março = 2, e assim por diante.
   - POST /pedidos/criar { cliente: string, pessoas: number, itens: { id: string, qtd: number }[], idCartao: string} - cria o pedido e retorna os dados do pedido criado.
   - PATCH /pedidos/desativarPedido { id: string } - desativa o pedido.
+  - DELETE /pedidos/deletarPedido/:id - apaga o pedido.
 
 - Cartões
   - GET /cartoes/ - retorna todos os cartões.

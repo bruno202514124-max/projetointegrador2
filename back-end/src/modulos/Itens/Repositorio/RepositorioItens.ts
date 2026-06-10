@@ -22,7 +22,7 @@ class RepositorioItens {
     });
   }
 
-  async pesquisarTodos(): Promise<Item[]> {
+  async buscarTodos(): Promise<Item[]> {
     const itens = prisma.itens.findMany({
       orderBy: {
         nome: 'asc',

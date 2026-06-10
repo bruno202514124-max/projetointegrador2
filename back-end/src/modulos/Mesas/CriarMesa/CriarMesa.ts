@@ -24,7 +24,7 @@ export async function CriarMesa(req: Request, res: Response): Promise<Response> 
       throw new EmitirMensagemErro('Erro ao criar mesa.');
     }
 
-    return res.json(novaMesa);
+    return res.status(201).json(novaMesa);
   } catch (err) {
     const resposta = tratarErro({ res, err });
     return resposta;
