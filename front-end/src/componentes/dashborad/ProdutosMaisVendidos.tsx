@@ -19,7 +19,7 @@ import { useState } from 'react';
   Refrigerante: '/img/refri.jpg',
 };
 
-export default function ProdutosMaisVendidos({ produtos }: ProdutoProps) {
+export default function ProdutosMaisVendidos({ produtos = [] }: ProdutoProps) {
   '';
   // Estado para rastrear qual card está com o mouse em cima
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);

@@ -202,7 +202,7 @@ export default function Dashboard() {
 
         <div className="col-md-6 d-flex flex-column">
           <div className="h-100 w-100">
-          <GraficoLucroMensal />
+          <GraficoLucroMensal dataSelecionada={dataSelecionada} />
           </div>
         </div>
       </div>

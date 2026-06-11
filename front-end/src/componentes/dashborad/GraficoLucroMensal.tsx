@@ -3,7 +3,11 @@ import styles from '@/css/base.module.css';
 import { api } from '@/api';
 import { useEffect, useState } from 'react';
 
-export default function GraficoLucroMensal() {
+type Props = {
+  dataSelecionada: string;
+};
+
+export default function GraficoLucroMensal({ dataSelecionada }: Props) {
   const [dados, setDados] = useState<any[]>([]);
 
   // Calcula a média automaticamente para desenhar a linha de referência
@@ -14,22 +18,9 @@ export default function GraficoLucroMensal() {
 
 const carregarGrafico = async () => {
   try {
-    const meses = [
-      'Jan',
-      'Fev',
-      'Mar',
-      'Abr',
-      'Mai',
-      'Jun',
-      'Jul',
-      'Ago',
-      'Set',
-      'Out',
-      'Nov',
-      'Dez',
-    ];
+     const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 
-    const anoAtual = new Date().getFullYear();
+    const anoAtual = Number(dataSelecionada.split('-')[0]);
 
     const dadosMeses = [];
 
@@ -60,7 +51,7 @@ const carregarGrafico = async () => {
 
 useEffect(() => {
   carregarGrafico();
-}, []);
+}, [dataSelecionada]);
 
   return (
     <div 
