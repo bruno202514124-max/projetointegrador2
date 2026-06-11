@@ -45,6 +45,7 @@ export default function Dashboard() {
         qtd: number;
       }[]
     >([]);
+    
 
     const carregarDados = async () => {
   try {
