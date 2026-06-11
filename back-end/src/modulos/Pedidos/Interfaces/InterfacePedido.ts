@@ -52,3 +52,10 @@ export interface RelatorioPedidos {
     };
   }[];
 }
+
+export interface IncluirItem {
+  idPedido: string;
+  idItem: string;
+  valorItem: number;
+  qtdItem: number;
+}

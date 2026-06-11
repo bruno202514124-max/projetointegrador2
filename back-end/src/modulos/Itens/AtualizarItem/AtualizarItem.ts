@@ -48,7 +48,7 @@ export async function AtualizarItem(req: Request, res: Response): Promise<Respon
     }
 
     if (!itemAtualizado) {
-      throw new EmitirMensagemErro('Erro ao criar item.');
+      throw new EmitirMensagemErro('Erro ao atualizar item.');
     }
 
     return res.json(itemAtualizado);

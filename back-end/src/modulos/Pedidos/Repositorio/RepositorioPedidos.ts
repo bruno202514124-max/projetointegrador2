@@ -1,12 +1,27 @@
 import prisma from '../../../database/prismaClient';
 import {
   CriarPedido,
+  IncluirItem,
   PedidoComItens,
   PedidoSemItens,
   RelatorioPedidos,
 } from '../Interfaces/InterfacePedido';
 
 class RepositorioPedidos {
+  async pesquisarPorId(id: string): Promise<PedidoSemItens | null> {
+    return await prisma.pedidos.findUnique({
+      where: { id },
+    });
+  }
+
+  async apagarPedido(id: string): Promise<PedidoSemItens | null> {
+    return await prisma.pedidos.delete({
+      where: {
+        id,
+      },
+    });
+  }
+
   async criarPedido({
     idMesa,
     idCartao,
@@ -86,7 +101,7 @@ class RepositorioPedidos {
     return pedidoComItens;
   }
 
-  async pesquisarTodos(): Promise<PedidoComItens[] | null> {
+  async buscarTodos(): Promise<PedidoComItens[] | null> {
     const pedidoComItens = await prisma.pedidos.findMany({
       where: {
         ativo: true,
@@ -163,6 +178,60 @@ class RepositorioPedidos {
     });
 
     return pedidoDesativado;
+  }
+
+  async veificarItemNoPedido(pedidoId: string, itemId: string) {
+    const pedidoComItem = await prisma.pedidosItens.findUnique({
+      where: {
+        pedidoId_itemId: {
+          pedidoId,
+          itemId,
+        },
+      },
+    });
+
+    return pedidoComItem;
+  }
+
+  async incluirItem({
+    idPedido,
+    idItem,
+    valorItem,
+    qtdItem,
+  }: IncluirItem): Promise<PedidoComItens | null> {
+    await prisma.pedidosItens.create({
+      data: { pedidoId: idPedido, itemId: idItem, valorItem, qtdItem },
+    });
+
+    const pedidoComItens = await prisma.pedidos.findUnique({
+      where: {
+        id: idPedido,
+      },
+      include: {
+        itens: {
+          omit: {
+            itemId: true,
+            pedidoId: true,
+          },
+          include: {
+            item: true,
+          },
+        },
+        cartao: {
+          include: {
+            mesa: true,
+          },
+          omit: {
+            mesaId: true,
+          },
+        },
+      },
+      omit: {
+        cartaoId: true,
+      },
+    });
+
+    return pedidoComItens;
   }
 }
 

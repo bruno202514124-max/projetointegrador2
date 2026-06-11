@@ -17,7 +17,7 @@ class ControladorCriarUsuario {
         permissao,
       });
 
-      return res.json(novoUsuario);
+      return res.status(201).json(novoUsuario);
     } catch (err) {
       const resposta = tratarErro({ res, err });
       return resposta;

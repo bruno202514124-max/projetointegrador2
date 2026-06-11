@@ -24,7 +24,7 @@ export async function CriarCartao(req: Request, res: Response): Promise<Response
       throw new EmitirMensagemErro('Erro ao criar cartão.');
     }
 
-    return res.json(novoCartao);
+    return res.status(201).json(novoCartao);
   } catch (err) {
     const resposta = tratarErro({ res, err });
     return resposta;

@@ -1,17 +1,23 @@
 import { Router } from 'express';
+import { BuscarTodosPedidos } from '../../modulos/Pedidos/BuscarTodosPedidos/BuscarTodosPedidos';
 import { CriarPedido } from '../../modulos/Pedidos/CriarPedido/CriarPedido';
+import { DeletarPedido } from '../../modulos/Pedidos/DeletarPedido/DeletarPedido';
 import { DesativarPedido } from '../../modulos/Pedidos/DesativarPedido/DesativarPedido';
-import { PesquisarTodosPedidos } from '../../modulos/Pedidos/PesquisarTodosPedidos/PesquisarTodosPedidos';
+import { IncluirItem } from '../../modulos/Pedidos/IncluirItem/IncluirItem';
 import { RelatorioDia } from '../../modulos/Pedidos/Relatorios/RelatorioDia';
 import { RelatorioMes } from '../../modulos/Pedidos/Relatorios/RelatorioMes';
-import { autent } from '../middleware/autent';
+import { autenticar } from '../middleware/autenticar';
+import { validarAutenticacao } from '../middleware/validarAutenticacao';
 
 const rotasPedidos = Router();
+rotasPedidos.use(autenticar, validarAutenticacao);
 
-rotasPedidos.get('/', autent, PesquisarTodosPedidos);
-rotasPedidos.post('/criar', autent, CriarPedido);
-rotasPedidos.post('/relatorioMes', autent, RelatorioMes);
-rotasPedidos.post('/relatorioDia', autent, RelatorioDia);
-rotasPedidos.patch('/desativarPedido', autent, DesativarPedido);
+rotasPedidos.get('/', BuscarTodosPedidos);
+rotasPedidos.post('/criar', CriarPedido);
+rotasPedidos.post('/relatorioMes', RelatorioMes);
+rotasPedidos.post('/relatorioDia', RelatorioDia);
+rotasPedidos.post('/incluirItem', IncluirItem);
+rotasPedidos.patch('/desativarPedido', DesativarPedido);
+rotasPedidos.delete('/deletarPedido/:id', DeletarPedido);
 
 export { rotasPedidos };

@@ -21,7 +21,7 @@ class RepositorioCartoes {
     });
   }
 
-  async pesquisarTodos(): Promise<Cartao[]> {
+  async buscarTodos(): Promise<Cartao[]> {
     const cartoes = await prisma.cartoes.findMany();
     const cartoesOrdenados = cartoes.sort((a, b) => parseInt(a.numero) - parseInt(b.numero));
     return cartoesOrdenados;
