@@ -1,6 +1,7 @@
 import prisma from '../../../database/prismaClient';
 import {
   CriarPedido,
+  IncluirItem,
   PedidoComItens,
   PedidoSemItens,
   RelatorioPedidos,
@@ -177,6 +178,60 @@ class RepositorioPedidos {
     });
 
     return pedidoDesativado;
+  }
+
+  async veificarItemNoPedido(pedidoId: string, itemId: string) {
+    const pedidoComItem = await prisma.pedidosItens.findUnique({
+      where: {
+        pedidoId_itemId: {
+          pedidoId,
+          itemId,
+        },
+      },
+    });
+
+    return pedidoComItem;
+  }
+
+  async incluirItem({
+    idPedido,
+    idItem,
+    valorItem,
+    qtdItem,
+  }: IncluirItem): Promise<PedidoComItens | null> {
+    await prisma.pedidosItens.create({
+      data: { pedidoId: idPedido, itemId: idItem, valorItem, qtdItem },
+    });
+
+    const pedidoComItens = await prisma.pedidos.findUnique({
+      where: {
+        id: idPedido,
+      },
+      include: {
+        itens: {
+          omit: {
+            itemId: true,
+            pedidoId: true,
+          },
+          include: {
+            item: true,
+          },
+        },
+        cartao: {
+          include: {
+            mesa: true,
+          },
+          omit: {
+            mesaId: true,
+          },
+        },
+      },
+      omit: {
+        cartaoId: true,
+      },
+    });
+
+    return pedidoComItens;
   }
 }
 
