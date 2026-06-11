@@ -1,17 +1,64 @@
 import {BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer} from 'recharts';
-
 import styles from '@/css/base.module.css';
+import { api } from '@/api';
+import { useEffect, useState } from 'react';
 
-export default function GraficoVendasSemana() {
-  const dados = [
-    { dia: 'Seg', vendas: 30 },
-    { dia: 'Ter', vendas: 45 },
-    { dia: 'Qua', vendas: 60 },
-    { dia: 'Qui', vendas: 40 },
-    { dia: 'Sex', vendas: 80 },
-    { dia: 'Sáb', vendas: 95 },
-    { dia: 'Dom', vendas: 70 },
-  ];
+type Props = {
+  dataSelecionada: string;
+};
+
+export default function GraficoVendasSemana({dataSelecionada,}: Props) {
+
+  const [dados, setDados] = useState<any[]>([]);
+
+  const carregarSemana = async () => {
+  try {
+    const [ano, mes, dia] = dataSelecionada.split('-');
+
+const dataBase = new Date(
+  Number(ano),
+  Number(mes) - 1,
+  Number(dia)
+);
+
+   const diaSemana = dataBase.getDay(); // 0 = domingo, 1 = segunda...
+    const diffSegunda = diaSemana === 0 ? -6 : 1 - diaSemana;
+
+    const segundaFeira = new Date(dataBase);
+    segundaFeira.setDate(dataBase.getDate() + diffSegunda);
+
+
+    const diasSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+    const dadosSemana = [];
+
+    for (let i = 0; i < 7; i++) {
+      const data = new Date(segundaFeira);
+      data.setDate(segundaFeira.getDate() + i);
+
+      const resposta = await api.post('/pedidos/relatorioDia', {
+        diaDoMes: data.getDate(),
+        mes: data.getMonth(),
+        ano: data.getFullYear(),
+      });
+
+      dadosSemana.push({
+        dia: diasSemana[data.getDay()],
+        vendas: resposta.data.vendas ?? 0,
+      });
+    }
+
+    console.log('Dados semana:', dadosSemana);
+
+    setDados(dadosSemana);
+  } catch (erro) {
+    console.error('Erro gráfico semana:', erro);
+  }
+};
+
+useEffect(() => {
+  carregarSemana();
+}, [dataSelecionada]);
 
   return (
     <div 

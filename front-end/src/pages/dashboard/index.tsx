@@ -45,7 +45,6 @@ export default function Dashboard() {
         qtd: number;
       }[]
     >([]);
-    
 
     const carregarDados = async () => {
   try {
@@ -197,7 +196,7 @@ export default function Dashboard() {
       <div className="row mt-5 g-4">
         <div className="col-md-6 d-flex flex-column">
           <div className="h-100 w-100">
-          <GraficoVendasSemana />
+          <GraficoVendasSemana dataSelecionada={dataSelecionada} />
         </div>
        </div> 
 
