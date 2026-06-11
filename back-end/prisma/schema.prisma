@@ -1,6 +1,9 @@
-model Usuario {
-  id        String   @id @default(uuid())
-  nome      String   @unique
-  senha     String
-  permissao String   @default("Frente") 
+generator client {
+  provider        = "prisma-client"
+  output          = "../prisma/generated/prisma"
+  previewFeatures = ["strictUndefinedChecks"]
+}
+
+datasource db {
+  provider = "sqlite"
 }
