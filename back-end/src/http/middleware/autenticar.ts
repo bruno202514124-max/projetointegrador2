@@ -14,7 +14,7 @@ export const autenticar = async (req: Request, res: Response, next: NextFunction
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
     if (!token) {
-      throw new EmitirMensagemErro('Token inválido.', 403);
+      throw new EmitirMensagemErro('Token inválido.', 401);
     }
 
     const decoded = jwt.verify(token, SECRET_KEY);

@@ -1,18 +1,57 @@
 import { LineChart, Line, XAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import styles from '@/css/base.module.css';
+import { api } from '@/api';
+import { useEffect, useState } from 'react';
 
-export default function GraficoLucroMensal() {
-  const dados = [
-    { mes: 'Jan', lucro: 12000 },
-    { mes: 'Fev', lucro: 18000 },
-    { mes: 'Mar', lucro: 15000 },
-    { mes: 'Abr', lucro: 22000 },
-    { mes: 'Mai', lucro: 26000 },
-    { mes: 'Jun', lucro: 30000 },
-  ];
+type Props = {
+  dataSelecionada: string;
+};
+
+export default function GraficoLucroMensal({ dataSelecionada }: Props) {
+  const [dados, setDados] = useState<any[]>([]);
 
   // Calcula a média automaticamente para desenhar a linha de referência
-  const mediaLucro = dados.reduce((acc, curr) => acc + curr.lucro, 0) / dados.length;
+  const mediaLucro =
+  dados.length > 0
+    ? dados.reduce((acc, curr) => acc + curr.lucro, 0) / dados.length
+    : 0;
+
+const carregarGrafico = async () => {
+  try {
+     const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+    const anoAtual = Number(dataSelecionada.split('-')[0]);
+
+    const dadosMeses = [];
+
+    for (let i = 0; i < 12; i++) {
+      try {
+        const resposta = await api.post('/pedidos/relatorioMes', {
+          mes: i,
+          ano: anoAtual,
+        });
+
+        dadosMeses.push({
+          mes: meses[i],
+          lucro: resposta.data.lucro || 0,
+        });
+      } catch {
+        dadosMeses.push({
+          mes: meses[i],
+          lucro: 0,
+        });
+      }
+    }
+
+    setDados(dadosMeses);
+  } catch (erro) {
+    console.error('Erro ao carregar gráfico mensal:', erro);
+  }
+};
+
+useEffect(() => {
+  carregarGrafico();
+}, [dataSelecionada]);
 
   return (
     <div 
@@ -24,8 +63,9 @@ export default function GraficoLucroMensal() {
         height: '100%' // Força a div a usar toda a altura da coluna do Bootstrap
       }}
     >
-      <h5 style={{ color: '#f4b942', fontSize: '1rem', fontWeight: 700, marginBottom: '20px' }}> 
-        </h5>
+      <h5 className={styles.sectionTitle} style={{ marginBottom: '20px' }}>
+        Lucro Mensal
+      </h5>
 
         <div style={{ flex: 1, minHeight: '300px', width: '100%' }}>
         <ResponsiveContainer width="100%" height="100%">
