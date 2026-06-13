@@ -5,6 +5,7 @@ model PedidosItens {
     itemId    String
     valorItem Float
     qtdItem   Int
+    status    String  @default("pendente")
 
     @@id([pedidoId, itemId])
 }

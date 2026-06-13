@@ -18,6 +18,7 @@ export interface PedidoComItens {
   itens: {
     valorItem: number;
     qtdItem: number;
+    status: string;
     item: Item;
   }[];
   cartao: {
