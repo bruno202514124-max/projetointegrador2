@@ -193,6 +193,22 @@ class RepositorioPedidos {
     return pedidoComItem;
   }
 
+  async alterarStatus(pedidoId: string, itemId: string, status: string) {
+    const pedidoComItem = await prisma.pedidosItens.update({
+      where: {
+        pedidoId_itemId: {
+          pedidoId,
+          itemId,
+        },
+      },
+      data: {
+        status,
+      },
+    });
+
+    return pedidoComItem;
+  }
+
   async incluirItem({
     idPedido,
     idItem,
