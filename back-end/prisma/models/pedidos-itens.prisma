@@ -1,10 +1,11 @@
 model PedidosItens {
-    pedido    Pedidos @relation(fields: [pedidoId], references: [id])
+    pedido    Pedidos @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
     pedidoId  String
     item      Itens   @relation(fields: [itemId], references: [id])
     itemId    String
     valorItem Float
     qtdItem   Int
+    status    String  @default("pendente")
 
     @@id([pedidoId, itemId])
 }

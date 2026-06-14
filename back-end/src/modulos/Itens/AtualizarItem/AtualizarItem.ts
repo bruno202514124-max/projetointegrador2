@@ -10,10 +10,10 @@ import { ValidacaoCriarItem } from '../Validacoes/ValidacaoCriarItem';
 export async function AtualizarItem(req: Request, res: Response): Promise<Response> {
   try {
     const { id, nome, preco, bebida }: Item = req.body;
-    const repositorioItens = new RepositorioItens();
 
     validarDados(ValidacaoId, { id });
 
+    const repositorioItens = new RepositorioItens();
     const item = await repositorioItens.pesquisarPorId(id);
 
     if (!item) {
@@ -48,7 +48,7 @@ export async function AtualizarItem(req: Request, res: Response): Promise<Respon
     }
 
     if (!itemAtualizado) {
-      throw new EmitirMensagemErro('Erro ao criar item.');
+      throw new EmitirMensagemErro('Erro ao atualizar item.');
     }
 
     return res.json(itemAtualizado);

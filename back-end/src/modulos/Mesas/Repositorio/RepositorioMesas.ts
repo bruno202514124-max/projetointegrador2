@@ -21,7 +21,7 @@ export class RepositorioMesas {
     });
   }
 
-  async pesquisarTodas(): Promise<Mesa[]> {
+  async buscarTodas(): Promise<Mesa[]> {
     const mesas = await prisma.mesas.findMany();
     const mesasOrdenadas = mesas.sort((a, b) => parseInt(a.numero) - parseInt(b.numero));
     return mesasOrdenadas;

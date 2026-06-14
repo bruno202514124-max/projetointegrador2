@@ -1,11 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/set-state-in-effect */
+import { api } from '@/api';
+import Botao from '@/componentes/Botao';
 import LayoutBase from '@/componentes/LayoutBase';
 import Card from '@/componentes/dashborad/Cards';
-import GraficoVendasSemana from '@/componentes/dashborad/GraficoVendasSemana';
 import GraficoLucroMensal from '@/componentes/dashborad/GraficoLucroMensal';
+import GraficoVendasSemana from '@/componentes/dashborad/GraficoVendasSemana';
 import ProdutosMaisVendidos from '@/componentes/dashborad/ProdutosMaisVendidos';
-import Botao from '@/componentes/Botao';
-import styles from '@/css/base.module.css';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Dashboard() {
   const hoje = new Date();
@@ -29,46 +31,83 @@ export default function Dashboard() {
 
   const inputDataRef = useRef<HTMLInputElement>(null);
 
-  const dados = {
-    lucroMensal: 54840,
-    lucroDiario: 14840,
-    vendasMensais: 1050,
-    vendas: 150,
+  const [dados, setDados] = useState({
+    lucroMensal: 0,
+    lucroDiario: 0,
+    vendasMensais: 0,
+    vendas: 0,
+  });
+
+  const [rankProdutos, setRankProdutos] = useState<
+    {
+      id: string;
+      nome: string;
+      preco: number;
+      qtd: number;
+    }[]
+  >([]);
+
+  const carregarDados = async () => {
+    try {
+      const [ano, mes, dia] = dataSelecionada.split('-');
+
+      const respostaDia = await api.post('/pedidos/relatorioDia', {
+        diaDoMes: Number(dia),
+        mes: Number(mes) - 1,
+        ano: Number(ano),
+      });
+
+      const respostaMes = await api.post('/pedidos/relatorioMes', {
+        mes: Number(mes) - 1,
+        ano: Number(ano),
+      });
+
+      setDados({
+        lucroMensal: respostaMes.data.lucro ?? 0,
+        lucroDiario: respostaDia.data.lucro ?? 0,
+        vendasMensais: respostaMes.data.vendas ?? 0,
+        vendas: respostaDia.data.vendas ?? 0,
+      });
+
+      setRankProdutos(respostaMes.data.rank);
+    } catch (erro) {
+      console.error('Erro ao carregar dashboard:', erro);
+    }
   };
 
+  useEffect(() => {
+    carregarDados();
+  }, [dataSelecionada]);
+
   return (
-    <LayoutBase
-      titulo="Dashboard"
-      subtitulo="Visão geral do sistema"
-    >
+    <LayoutBase titulo="Dashboard" subtitulo="Visão geral do sistema">
       {/* TOPO */}
       <div className="d-flex justify-content-between align-items-center mb-4 gap-3">
-  
-      {/* ESQUERDA */}
-      <div>
-        <h3
-          style={{
-            fontWeight: 800,
-            marginBottom: '4px',
-            fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
-          }}
-        >
-          Bulldog Brewer
-        </h3>
+        {/* ESQUERDA */}
+        <div>
+          <h3
+            style={{
+              fontWeight: 800,
+              marginBottom: '4px',
+              fontSize: 'clamp(1.2rem, 3vw, 1.8rem)',
+            }}
+          >
+            Bulldog Brewer
+          </h3>
 
-        <p
-          style={{
-            color: '#bdbdbd',
-            marginBottom: 0,
-            fontSize: 'clamp(0.8rem, 2vw, 1rem)',
-          }}
-        >
-          Dados referentes a {dataFormatada}
-        </p>
-      </div>
+          <p
+            style={{
+              color: '#bdbdbd',
+              marginBottom: 0,
+              fontSize: 'clamp(0.8rem, 2vw, 1rem)',
+            }}
+          >
+            Dados referentes a {dataFormatada}
+          </p>
+        </div>
 
-      {/* DIREITA */}
-      <Botao
+        {/* DIREITA */}
+        <Botao
           onClick={() => inputDataRef.current?.showPicker()}
           className="d-flex align-items-center gap-3"
         >
@@ -90,12 +129,7 @@ export default function Dashboard() {
               position: 'relative',
             }}
           >
-            <span>
-              {dataSelecionada
-                .split('-')
-                .reverse()
-                .join('/')}
-            </span>
+            <span>{dataSelecionada.split('-').reverse().join('/')}</span>
 
             <span>📅</span>
 
@@ -103,9 +137,7 @@ export default function Dashboard() {
               ref={inputDataRef}
               type="date"
               value={dataSelecionada}
-              onChange={(e) =>
-                setDataSelecionada(e.target.value)
-              }
+              onChange={e => setDataSelecionada(e.target.value)}
               style={{
                 position: 'absolute',
                 opacity: 0,
@@ -115,12 +147,11 @@ export default function Dashboard() {
           </div>
         </Botao>
       </div>
-      
+
       {/* CARDS */}
       <div className="row g-4">
-
-  <div className="col-md-3">
-    <Card
+        <div className="col-md-3">
+          <Card
             titulo="Lucro Mensal"
             valor={`R$ ${dados.lucroMensal.toLocaleString('pt-BR')}`}
             cor="text-success"
@@ -136,17 +167,11 @@ export default function Dashboard() {
         </div>
 
         <div className="col-md-3">
-          <Card
-            titulo="Vendas Mensais"
-            valor={`${dados.vendasMensais.toLocaleString('pt-BR')}`}
-          />
+          <Card titulo="Vendas Mensais" valor={`${dados.vendasMensais.toLocaleString('pt-BR')}`} />
         </div>
 
         <div className="col-md-3">
-          <Card
-            titulo="Vendas do Dia"
-            valor={`${dados.vendas.toLocaleString('pt-BR')}`}
-          />
+          <Card titulo="Vendas do Dia" valor={`${dados.vendas.toLocaleString('pt-BR')}`} />
         </div>
       </div>
 
@@ -154,24 +179,23 @@ export default function Dashboard() {
       <div className="row mt-5 g-4">
         <div className="col-md-6 d-flex flex-column">
           <div className="h-100 w-100">
-          <GraficoVendasSemana />
+            <GraficoVendasSemana dataSelecionada={dataSelecionada} />
+          </div>
         </div>
-       </div> 
 
         <div className="col-md-6 d-flex flex-column">
           <div className="h-100 w-100">
-          <GraficoLucroMensal />
+            <GraficoLucroMensal dataSelecionada={dataSelecionada} />
           </div>
         </div>
       </div>
 
-       {/* PRODUTOS MAIS VENDIDOS */}
+      {/* PRODUTOS MAIS VENDIDOS */}
       <div className="row mt-5">
         <div className="col-md-12">
-          <ProdutosMaisVendidos />
+          <ProdutosMaisVendidos produtos={rankProdutos} />
         </div>
       </div>
-      
     </LayoutBase>
   );
 }

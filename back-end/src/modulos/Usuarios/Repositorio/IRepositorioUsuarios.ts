@@ -6,7 +6,7 @@ interface IRepositorioUsuarios {
   criarUsuario(nome: string, senha: string, permissao: string): Promise<Usuario | null>;
   atualizarUsuario(id: string, nome: string, senha: string, permissao: string): Promise<Usuario | null>;
   apagarUsuario(nome: string): Promise<Usuario | null>;
-  pegarUsuarios(): Promise<Usuario[]>;
+  buscarUsuarios(): Promise<Usuario[]>;
 }
 
 export { IRepositorioUsuarios };

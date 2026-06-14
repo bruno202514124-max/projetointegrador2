@@ -18,6 +18,7 @@ export interface PedidoComItens {
   itens: {
     valorItem: number;
     qtdItem: number;
+    status: string;
     item: Item;
   }[];
   cartao: {
@@ -51,4 +52,11 @@ export interface RelatorioPedidos {
       preco: number;
     };
   }[];
+}
+
+export interface IncluirItem {
+  idPedido: string;
+  idItem: string;
+  valorItem: number;
+  qtdItem: number;
 }
