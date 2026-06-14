@@ -22,7 +22,7 @@ export default function Cadastros() {
         setTitulo('Novo cartão');
         break;
       case 'Comidas/Bebidas':
-        setTitulo('Nova item');
+        setTitulo('Novo item');
         break;
       case 'Usuários':
         setTitulo('Novo usuário');

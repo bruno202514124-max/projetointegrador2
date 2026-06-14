@@ -9,7 +9,9 @@ export default function Login() {
   const [nome, setNome] = useState('');
   const [senha, setSenha] = useState('');
 
-  async function fazerLogin() {
+  async function fazerLogin(e: React.SubmitEvent<HTMLFormElement>) {
+    e.preventDefault();
+
     try {
       const resposta = await fetch('http://localhost:2000/usuarios/login', {
         method: 'POST',
@@ -46,7 +48,7 @@ export default function Login() {
   }
 
   return (
-    <div className="container-fluid">
+    <form className="container-fluid" onSubmit={fazerLogin}>
       <div className="row vh-100">
         {/* LADO ESQUERDO */}
         <div className="col-md-6 d-none d-md-block p-0">
@@ -111,12 +113,12 @@ export default function Login() {
             </div>
 
             {/* BOTÃO */}
-            <button className="btn btn-warning w-100" onClick={fazerLogin}>
+            <button className="btn btn-warning w-100" type="submit">
               Entrar
             </button>
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 }

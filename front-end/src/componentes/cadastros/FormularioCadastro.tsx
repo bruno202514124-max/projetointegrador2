@@ -160,7 +160,9 @@ export default function FormularioCadastro({
       });
   }
 
-  function salvar() {
+  function salvar(e: React.SubmitEvent<HTMLFormElement>) {
+    e.preventDefault();
+
     if (abaSelecionada == 'Mesas' && editar && id != '') {
       const dados = {
         id,
@@ -261,7 +263,7 @@ export default function FormularioCadastro({
   }
 
   return (
-    <div className="card-body">
+    <form className="card-body" onSubmit={salvar}>
       <h5>{titulo}</h5>
 
       {abaSelecionada == 'Mesas' && (
@@ -382,13 +384,13 @@ export default function FormularioCadastro({
       )}
 
       <div className="d-grid gap-2">
-        <button className="btn btn-warning fw-bold mt-4" onClick={salvar}>
+        <button className="btn btn-warning fw-bold mt-4" type="submit">
           Salvar
         </button>
         <button className={`btn ${estiloCadastros.btnOutlineYellow}`} onClick={limparCampos}>
           Limpar Campos
         </button>
       </div>
-    </div>
+    </form>
   );
 }
