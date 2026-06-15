@@ -13,7 +13,7 @@ import { useState } from 'react';
 
 export default function ProdutosMaisVendidos({ produtos = [] }: ProdutoProps) {
   '';
-  // Estado para rastrear qual card está com o mouse em cima
+
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
   return (
@@ -21,9 +21,8 @@ export default function ProdutosMaisVendidos({ produtos = [] }: ProdutoProps) {
       <h5 className={styles.sectionTitle}>Queridinhos do Mês</h5>
       <div className="d-flex gap-3 overflow-auto pb-3"
         style={{paddingTop: '8px', }}>
-          
+
         {produtos.map((p, i) => {
-          // Verifica se o mouse está exatamente sobre este card
           const isHovered = hoverIndex === i;
 
           return (
@@ -36,8 +35,6 @@ export default function ProdutosMaisVendidos({ produtos = [] }: ProdutoProps) {
                 borderRadius: '15px',
                 overflow: 'hidden',
                 backgroundColor: '#1a1a1a',
-
-                // --- ANIMAÇÕES DO CARD ---
                 border: isHovered ? '1px solid #f4b942' : '1px solid #333',
                 transform: isHovered ? 'translateY(-6px)' : 'translateY(0)',
                 boxShadow: isHovered ? '0 8px 20px rgba(244, 185, 66, 0.15)' : 'none',

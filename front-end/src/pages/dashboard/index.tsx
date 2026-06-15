@@ -10,6 +10,8 @@ import ProdutosMaisVendidos from '@/componentes/dashborad/ProdutosMaisVendidos';
 import { useEffect, useRef, useState } from 'react';
 
 export default function Dashboard() {
+
+  {/* DATA */}
   const hoje = new Date();
 
   const ano = hoje.getFullYear();
@@ -31,6 +33,7 @@ export default function Dashboard() {
 
   const inputDataRef = useRef<HTMLInputElement>(null);
 
+  {/* INTEGRAÇÃO COM BACK */}
   const [dados, setDados] = useState({
     lucroMensal: 0,
     lucroDiario: 0,
