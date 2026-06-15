@@ -10,10 +10,10 @@ import { ValidacaoCriarItem } from '../Validacoes/ValidacaoCriarItem';
 export async function AtualizarItem(req: Request, res: Response): Promise<Response> {
   try {
     const { id, nome, preco, bebida }: Item = req.body;
-    const repositorioItens = new RepositorioItens();
 
     validarDados(ValidacaoId, { id });
 
+    const repositorioItens = new RepositorioItens();
     const item = await repositorioItens.pesquisarPorId(id);
 
     if (!item) {

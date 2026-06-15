@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { AlterarStatus } from '../../modulos/Pedidos/AlterarStatus/AlterarStatus';
 import { BuscarTodosPedidos } from '../../modulos/Pedidos/BuscarTodosPedidos/BuscarTodosPedidos';
 import { CriarPedido } from '../../modulos/Pedidos/CriarPedido/CriarPedido';
 import { DeletarPedido } from '../../modulos/Pedidos/DeletarPedido/DeletarPedido';
@@ -18,6 +19,7 @@ rotasPedidos.post('/relatorioMes', RelatorioMes);
 rotasPedidos.post('/relatorioDia', RelatorioDia);
 rotasPedidos.post('/incluirItem', IncluirItem);
 rotasPedidos.patch('/desativarPedido', DesativarPedido);
+rotasPedidos.patch('/alterarStatus', AlterarStatus);
 rotasPedidos.delete('/deletarPedido/:id', DeletarPedido);
 
 export { rotasPedidos };

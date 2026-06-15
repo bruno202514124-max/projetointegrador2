@@ -2,18 +2,27 @@
 import styles from '@/css/base.module.css';
 import { useState } from 'react';
 
-export default function ProdutosMaisVendidos() {
+  type ProdutoProps = {
+    produtos: {
+      id: string;
+      nome: string;
+      preco: number;
+      qtd: number;
+    }[];
+  };
+
+  const imagens: Record<string, string> = {
+  'Chopp Pilsen': '/img/chopp-pilsen.jpg',
+  'Hambúrguer Bulldog': '/img/hamburguer.jpg',
+  'Batata Frita': '/img/batata.jpg',
+  'Chopp IPA': '/img/chopp-ipa.jpg',
+  Refrigerante: '/img/refri.jpg',
+};
+
+export default function ProdutosMaisVendidos({ produtos = [] }: ProdutoProps) {
   '';
   // Estado para rastrear qual card está com o mouse em cima
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-
-  const produtos = [
-    { nome: 'Chopp Pilsen', preco: 12, imagem: '/img/chopp-pilsen.jpg', quantidade: 120 },
-    { nome: 'Hambúrguer Bulldog', preco: 32, imagem: '/img/hamburguer.jpg', quantidade: 95 },
-    { nome: 'Batata Frita', preco: 22, imagem: '/img/batata.jpg', quantidade: 80 },
-    { nome: 'Chopp IPA', preco: 16, imagem: '/img/chopp-ipa.jpg', quantidade: 65 },
-    { nome: 'Refrigerante', preco: 7, imagem: '/img/refri.jpg', quantidade: 45 },
-  ];
 
   return (
     <div className={styles.cardBase}>
@@ -45,7 +54,7 @@ export default function ProdutosMaisVendidos() {
               {/* O overflow: 'hidden' aqui garante que a imagem com zoom não vaze */}
               <div style={{ position: 'relative', overflow: 'hidden' }}>
                 <img
-                  src={p.imagem}
+                  src={imagens[p.nome] || '/img/default.jpg'}
                   alt={p.nome}
                   style={{
                     width: '100%',
@@ -79,7 +88,7 @@ export default function ProdutosMaisVendidos() {
                   {p.nome}
                 </h6>
                 <div className="d-flex justify-content-between align-items-center mt-2">
-                  <small style={{ color: '#888' }}>{p.quantidade} vendas</small>
+                  <small style={{ color: '#888' }}>{p.qtd} vendas </small>
                   <span style={{ color: '#f4b942', fontWeight: 800 }}>R$ {p.preco}</span>
                 </div>
               </div>

@@ -24,8 +24,29 @@ rotasUsuarios.get(
 );
 
 rotasUsuarios.post('/login', controladorAutenticarUsuario.iniciar);
-rotasUsuarios.post('/criar', autenticar, controladorCriarUsuario.iniciar);
-rotasUsuarios.patch('/atualizar', autenticar, controladorAtualizarUsuario.iniciar);
-rotasUsuarios.delete('/deletar/:id', autenticar, controladorDeletarUsuario.iniciar);
+
+rotasUsuarios.post(
+  '/criar',
+  autenticar,
+  validarAutenticacao,
+  validarPermissao(['Administrador']),
+  controladorCriarUsuario.iniciar
+);
+
+rotasUsuarios.patch(
+  '/atualizar',
+  autenticar,
+  validarAutenticacao,
+  validarPermissao(['Administrador']),
+  controladorAtualizarUsuario.iniciar
+);
+
+rotasUsuarios.delete(
+  '/deletar/:id',
+  autenticar,
+  validarAutenticacao,
+  validarPermissao(['Administrador']),
+  controladorDeletarUsuario.iniciar
+);
 
 export { rotasUsuarios };
