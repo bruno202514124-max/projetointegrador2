@@ -11,14 +11,6 @@ import { useState } from 'react';
     }[];
   };
 
-  const imagens: Record<string, string> = {
-  'Chopp Pilsen': '/img/chopp-pilsen.jpg',
-  'Hambúrguer Bulldog': '/img/hamburguer.jpg',
-  'Batata Frita': '/img/batata.jpg',
-  'Chopp IPA': '/img/chopp-ipa.jpg',
-  Refrigerante: '/img/refri.jpg',
-};
-
 export default function ProdutosMaisVendidos({ produtos = [] }: ProdutoProps) {
   '';
   // Estado para rastrear qual card está com o mouse em cima
@@ -27,7 +19,9 @@ export default function ProdutosMaisVendidos({ produtos = [] }: ProdutoProps) {
   return (
     <div className={styles.cardBase}>
       <h5 className={styles.sectionTitle}>Queridinhos do Mês</h5>
-      <div className="d-flex gap-3 overflow-auto pb-3">
+      <div className="d-flex gap-3 overflow-auto pb-3"
+        style={{paddingTop: '8px', }}>
+          
         {produtos.map((p, i) => {
           // Verifica se o mouse está exatamente sobre este card
           const isHovered = hoverIndex === i;
@@ -51,39 +45,22 @@ export default function ProdutosMaisVendidos({ produtos = [] }: ProdutoProps) {
                 cursor: 'pointer',
               }}
             >
-              {/* O overflow: 'hidden' aqui garante que a imagem com zoom não vaze */}
-              <div style={{ position: 'relative', overflow: 'hidden' }}>
-                <img
-                  src={imagens[p.nome] || '/img/default.jpg'}
-                  alt={p.nome}
-                  style={{
-                    width: '100%',
-                    height: '160px',
-                    objectFit: 'cover',
 
-                    // --- ANIMAÇÃO DE ZOOM NA IMAGEM ---
-                    transform: isHovered ? 'scale(1.1)' : 'scale(1)',
-                    transition: 'transform 0.4s ease',
-                  }}
-                />
+              <div className="p-3">
                 <div
                   style={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px',
                     backgroundColor: '#f4b942',
                     color: '#000',
-                    padding: '2px 10px',
+                    padding: '4px 12px',
                     borderRadius: '20px',
                     fontWeight: 'bold',
                     fontSize: '0.8rem',
-                    boxShadow: '0 2px 5px rgba(0,0,0,0.5)',
+                    display: 'inline-block',
+                    marginBottom: '12px',
                   }}
                 >
                   #{i + 1}
                 </div>
-              </div>
-              <div className="p-3">
                 <h6 className="m-0" style={{ color: '#fff', fontWeight: 700 }}>
                   {p.nome}
                 </h6>
