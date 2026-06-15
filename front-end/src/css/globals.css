@@ -22,3 +22,12 @@ h5 {
 p {
   margin: 0;
 }
+/* Tamanho personalizado para mesas ficar mais simétrico no desktop  */
+@media (min-width: 1200px) {
+  .col-xl-custom {
+    flex: 0 0 10% !important;
+    width: 10% !important;
+    max-width: 10% !important;
+    display: block !important;
+  }
+}
