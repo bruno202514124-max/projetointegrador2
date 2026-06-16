@@ -27,7 +27,7 @@ export async function AlterarStatus(req: Request, res: Response): Promise<Respon
       throw new EmitirMensagemErro('Item não existe.', 400);
     }
 
-    const itemNoPedido = await repositorioPedidos.veificarItemNoPedido(idPedido, idItem);
+    const itemNoPedido = await repositorioPedidos.verificarItemNoPedido(idPedido, idItem);
 
     if (!itemNoPedido) {
       throw new EmitirMensagemErro('O item não está no pedido.', 400);

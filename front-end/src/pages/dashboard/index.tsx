@@ -7,9 +7,12 @@ import Card from '@/componentes/dashborad/Cards';
 import GraficoLucroMensal from '@/componentes/dashborad/GraficoLucroMensal';
 import GraficoVendasSemana from '@/componentes/dashborad/GraficoVendasSemana';
 import ProdutosMaisVendidos from '@/componentes/dashborad/ProdutosMaisVendidos';
+import { tratarErro } from '@/utils/tratarErro';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
 export default function Dashboard() {
+  const router = useRouter();
   const hoje = new Date();
 
   const ano = hoje.getFullYear();
@@ -71,7 +74,7 @@ export default function Dashboard() {
 
       setRankProdutos(respostaMes.data.rank);
     } catch (erro) {
-      console.error('Erro ao carregar dashboard:', erro);
+      tratarErro(erro, router);
     }
   };
 

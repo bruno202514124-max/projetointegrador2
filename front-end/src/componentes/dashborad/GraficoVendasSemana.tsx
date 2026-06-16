@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/set-state-in-effect */
 import { api } from '@/api';
 import styles from '@/css/base.module.css';
+import { tratarErro } from '@/utils/tratarErro';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
@@ -10,6 +13,7 @@ type Props = {
 };
 
 export default function GraficoVendasSemana({ dataSelecionada }: Props) {
+  const router = useRouter();
   const [dados, setDados] = useState<any[]>([]);
 
   const carregarSemana = async () => {
@@ -46,7 +50,7 @@ export default function GraficoVendasSemana({ dataSelecionada }: Props) {
 
       setDados(dadosSemana);
     } catch (erro) {
-      console.error('Erro gráfico semana:', erro);
+      tratarErro(erro, router);
     }
   };
 
