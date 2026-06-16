@@ -10,7 +10,6 @@ type Props = {
 export default function GraficoLucroMensal({ dataSelecionada }: Props) {
   const [dados, setDados] = useState<any[]>([]);
 
-  // Calcula a média automaticamente para desenhar a linha de referência
   const mediaLucro =
   dados.length > 0
     ? dados.reduce((acc, curr) => acc + curr.lucro, 0) / dados.length
@@ -60,7 +59,7 @@ useEffect(() => {
         padding: '20px', 
         display: 'flex', 
         flexDirection: 'column', 
-        height: '100%' // Força a div a usar toda a altura da coluna do Bootstrap
+        height: '100%'
       }}
     >
       <h5 className={styles.sectionTitle} style={{ marginBottom: '20px' }}>
@@ -70,7 +69,7 @@ useEffect(() => {
         <div style={{ flex: 1, minHeight: '300px', width: '100%' }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={dados} margin={{ top: 20, right: 10, left: 10, bottom: 10 }}>
-            {/* Efeitos Especiais em SVG */}
+
             <defs>
               <linearGradient id="linhaGradiente" x1="0" y1="0" x2="1" y2="0">
                 <stop offset="0%" stopColor="#f4b942" />
@@ -81,7 +80,6 @@ useEffect(() => {
               </filter>
             </defs>
 
-            {/* Linha Analítica de Média */}
             <ReferenceLine
               y={mediaLucro}
               stroke="rgba(255,255,255,0.15)"
@@ -122,13 +120,12 @@ useEffect(() => {
               }}
             />
 
-            {/* Linha principal com gradiente e neon */}
             <Line
               type="linear"
               dataKey="lucro"
               stroke="url(#linhaGradiente)"
               strokeWidth={4}
-              style={{ filter: 'url(#glow)' }} /* Aplica a sombra neon */
+              style={{ filter: 'url(#glow)' }}
               dot={{ r: 5, fill: '#1a1a1a', stroke: 'url(#linhaGradiente)', strokeWidth: 2 }}
               activeDot={{ r: 8, fill: '#4ade80', stroke: '#1a1a1a', strokeWidth: 3 }}
             />

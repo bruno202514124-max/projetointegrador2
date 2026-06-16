@@ -84,9 +84,7 @@ export default function Dashboard() {
 
   return (
     <LayoutBase titulo="Dashboard" subtitulo="Visão geral do sistema">
-      {/* TOPO */}
       <div className="d-flex justify-content-between align-items-center mb-4 gap-3">
-        {/* ESQUERDA */}
         <div>
           <h3
             style={{
@@ -109,7 +107,6 @@ export default function Dashboard() {
           </p>
         </div>
 
-        {/* DIREITA */}
         <Botao
           onClick={() => inputDataRef.current?.showPicker()}
           className="d-flex align-items-center gap-3"
@@ -151,7 +148,6 @@ export default function Dashboard() {
         </Botao>
       </div>
 
-      {/* CARDS */}
       <div className="row g-4">
         <div className="col-md-3">
           <Card
@@ -178,7 +174,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* GRÁFICOS */}
       <div className="row mt-5 g-4">
         <div className="col-md-6 d-flex flex-column">
           <div className="h-100 w-100">
@@ -193,7 +188,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* PRODUTOS MAIS VENDIDOS */}
       <div className="row mt-5">
         <div className="col-md-12">
           <ProdutosMaisVendidos produtos={rankProdutos} />

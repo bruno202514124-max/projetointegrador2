@@ -8,10 +8,8 @@ type CardProps = {
 };
 
 export default function Card({ titulo, valor, cor }: CardProps) {
-  // Estado para controlar se o mouse está em cima do card
   const [hover, setHover] = useState(false);
 
-  // Define a cor da borda superior com base na prop 'cor'
   const corBorda = cor === 'text-success' ? '#4ade80' : cor === 'text-danger' ? '#ff5f5f' : '#f4b942';
 
   return (
@@ -22,10 +20,10 @@ export default function Card({ titulo, valor, cor }: CardProps) {
       style={{ 
         borderTop: `4px solid ${corBorda}`,
         
-        // --- A MÁGICA DA ANIMAÇÃO ACONTECE AQUI ---
-        transform: hover ? 'translateY(-8px)' : 'translateY(0)', // Sobe 8 pixels no hover
-        boxShadow: hover ? '0 12px 24px rgba(0,0,0,0.4)' : '0 4px 10px rgba(0,0,0,0.1)', // Sombra aumenta
-        transition: 'all 0.3s ease-in-out', // Deixa a transição suave (0.3 segundos)
+
+        transform: hover ? 'translateY(-8px)' : 'translateY(0)', 
+        boxShadow: hover ? '0 12px 24px rgba(0,0,0,0.4)' : '0 4px 10px rgba(0,0,0,0.1)', 
+        transition: 'all 0.3s ease-in-out', 
         cursor: 'default'
       }}
     >
