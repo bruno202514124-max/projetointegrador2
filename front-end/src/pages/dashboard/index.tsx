@@ -34,6 +34,9 @@ export default function Dashboard() {
 
   const inputDataRef = useRef<HTMLInputElement>(null);
 
+  // Controle de permissões de acesso da página
+  const [carregando, setCarregando] = useState(true);
+
   const [dados, setDados] = useState({
     lucroMensal: 0,
     lucroDiario: 0,
@@ -49,6 +52,33 @@ export default function Dashboard() {
       qtd: number;
     }[]
   >([]);
+
+  // Validação do nível de acesso do usuário autenticado
+  useEffect(() => {
+    const usuarioStorage = localStorage.getItem('usuario');
+    const token = localStorage.getItem('token');
+
+    if (!token || !usuarioStorage || usuarioStorage === 'undefined') {
+      window.location.href = '/';
+      return;
+    }
+
+    try {
+      const usuario = JSON.parse(usuarioStorage);
+      const cargo = usuario.permissao || '';
+
+      if (cargo.toLowerCase() !== 'administrador') {
+        alert('Acesso negado! Apenas administradores possuem acesso ao Dashboard.');
+        window.location.href = '/mesas';
+        return;
+      }
+
+      setCarregando(false);
+    } catch (erro) {
+      console.error("Erro ao validar credenciais:", erro);
+      window.location.href = '/';
+    }
+  }, []);
 
   const carregarDados = async () => {
     try {
@@ -79,8 +109,18 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    carregarDados();
-  }, [dataSelecionada]);
+    if (!carregando) {
+      carregarDados();
+    }
+  }, [dataSelecionada, carregando]);
+
+  if (carregando) {
+    return (
+      <div className="vh-100 d-flex justify-content-center align-items-center bg-dark text-light">
+        <h5>Verificando credenciais de acesso...</h5>
+      </div>
+    );
+  }
 
   return (
     <LayoutBase titulo="Dashboard" subtitulo="Visão geral do sistema">
@@ -145,7 +185,7 @@ export default function Dashboard() {
                 position: 'absolute',
                 opacity: 0,
                 pointerEvents: 'none',
-              }}
+                }}
             />
           </div>
         </Botao>

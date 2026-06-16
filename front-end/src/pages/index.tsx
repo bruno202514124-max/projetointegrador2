@@ -9,17 +9,15 @@ export default function Login() {
   const [nome, setNome] = useState('');
   const [senha, setSenha] = useState('');
 
-  async function fazerLogin(e: React.SubmitEvent<HTMLFormElement>) {
+  async function fazerLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     try {
       const resposta = await fetch('http://localhost:2000/usuarios/login', {
         method: 'POST',
-
         headers: {
           'Content-Type': 'application/json',
         },
-
         body: JSON.stringify({
           nome,
           senha,
@@ -30,11 +28,19 @@ export default function Login() {
 
       if (dados && dados.codigo == 400) {
         alert(dados.mensagem);
+        return; // Para a execução se houver erro nas credenciais
       }
 
       if (resposta.ok) {
         localStorage.setItem('token', dados.token);
-        localStorage.setItem('usuario', JSON.stringify({ nome }));
+        
+        // 🌟 MUDANÇA AQUI: Passamos a salvar o objeto inteiro que o back já envia (com o cargo incluso)
+        if (dados.usuario) {
+          localStorage.setItem('usuario', JSON.stringify(dados.usuario));
+        } else {
+          // Fallback de segurança para não salvar vazio caso venha fora do padrão
+          localStorage.setItem('usuario', JSON.stringify({ nome, permissao: 'Frente' }));
+        }
 
         alert('Login realizado com sucesso');
 
@@ -42,7 +48,6 @@ export default function Login() {
       }
     } catch (erro) {
       console.log('erro => ', erro);
-
       alert('Erro ao conectar com o servidor');
     }
   }

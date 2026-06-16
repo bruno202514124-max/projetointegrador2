@@ -2,6 +2,7 @@ import styles from '@/css/base.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import logo from '../../public/img/logo-bulldog.png';
 
 const links = [
@@ -13,6 +14,19 @@ const links = [
 
 export default function Header() {
   const router = useRouter();
+  const [permissaoUsuario, setPermissaoUsuario] = useState('');
+
+  useEffect(() => {
+    const usuarioStorage = localStorage.getItem('usuario');
+    if (!usuarioStorage || usuarioStorage === 'undefined') return;
+
+    try {
+      const usuario = JSON.parse(usuarioStorage);
+      setPermissaoUsuario(usuario.permissao || '');
+    } catch (erro) {
+      console.error("Erro ao ler credenciais no header:", erro);
+    }
+  }, []);
 
   function logout() {
     localStorage.removeItem('token');
@@ -20,6 +34,20 @@ export default function Header() {
 
     router.push('/');
   }
+
+  const linksPermitidos = links.filter(link => {
+    const cargo = permissaoUsuario.toLowerCase();
+
+    if (cargo === 'frente') {
+      return link.href !== '/cadastros' && link.href !== '/dashboard';
+    }
+
+    if (cargo === 'retaguarda') {
+      return link.href !== '/dashboard';
+    }
+
+    return true;
+  });
 
   return (
     <nav className={`navbar navbar-expand-lg navbar-dark ${styles.navbarCustom}`}>
@@ -34,7 +62,7 @@ export default function Header() {
         </Link>
 
         <div className="navbar-nav ms-auto d-flex flex-row flex-wrap gap-3">
-          {links.map(link => {
+          {linksPermitidos.map(link => {
             const ativo = router.pathname === link.href || router.pathname.startsWith(`${link.href}/`);
 
             return (
