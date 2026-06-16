@@ -34,13 +34,8 @@ export default function Login() {
       if (resposta.ok) {
         localStorage.setItem('token', dados.token);
         
-        // 🌟 MUDANÇA AQUI: Passamos a salvar o objeto inteiro que o back já envia (com o cargo incluso)
-        if (dados.usuario) {
-          localStorage.setItem('usuario', JSON.stringify(dados.usuario));
-        } else {
-          // Fallback de segurança para não salvar vazio caso venha fora do padrão
-          localStorage.setItem('usuario', JSON.stringify({ nome, permissao: 'Frente' }));
-        }
+        // 🌟 A MUDANÇA ESTÁ AQUI: Salvamos o objeto inteiro (com a permissão) que veio do back-end!
+        localStorage.setItem('usuario', JSON.stringify(dados.usuario));
 
         alert('Login realizado com sucesso');
 
