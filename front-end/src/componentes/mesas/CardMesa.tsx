@@ -1,4 +1,4 @@
-import React from 'react';
+/* eslint-disable @next/next/no-img-element */
 import Botao from '@/componentes/Botao';
 
 interface CardMesaProps {
@@ -9,48 +9,49 @@ interface CardMesaProps {
 
 export default function CardMesa({ numero, status, onClick }: CardMesaProps) {
   const estaOcupada = status === 'ocupada';
-
-  // Cores de fundo do Bootstrap
   const classeCor = estaOcupada ? 'bg-danger' : 'bg-success';
 
   return (
     <div
       className="position-relative overflow-hidden rounded-3"
-      style={{ 
+      style={{
         minHeight: '110px',
         boxShadow: '0 4px 6px rgba(0,0,0,0.15)',
-        transition: 'transform 0.2s ease'
+        transition: 'transform 0.2s ease',
       }}
     >
       <Botao
         onClick={onClick}
         className={`w-100 h-100 d-flex flex-column align-items-center justify-content-center p-4 text-white border-0 fw-bold ${classeCor}`}
       >
-
-        {/* IMAGEM COMPORTANDO-SE COMO FUNDO DO BOTÃO */}
-        <img 
+        <img
           src="/img/Icone_mesa.jpg"
           alt="Ícone da Mesa"
           style={{
             position: 'absolute',
-            width: '60px',       // Ajuste o tamanho
+            width: '60px',
             height: '60px',
-            bottom: '5px',      // Controla o quanto ela fica "cortada" no canto
+            bottom: '5px',
             right: '10px',
-            opacity: 0.40,       // Transparência para não sumir com o texto
+            opacity: 0.4,
             pointerEvents: 'none',
-            objectFit: 'contain'
+            objectFit: 'contain',
           }}
         />
 
-        {/* TEXTOS DO BOTÃO */}
-        <span style={{ fontSize: '0.75rem', opacity: 0.85, textTransform: 'uppercase', letterSpacing: '0.5px', zIndex: 1 }}>
+        <span
+          style={{
+            fontSize: '0.75rem',
+            opacity: 0.85,
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
+            zIndex: 1,
+          }}
+        >
           {estaOcupada ? 'Ocupada' : 'Disponível'}
         </span>
-        
-        <span style={{ fontSize: '1.3rem', marginTop: '4px', zIndex: 1 }}>
-          Mesa {numero}
-        </span>
+
+        <span style={{ fontSize: '1.3rem', marginTop: '4px', zIndex: 1 }}>Mesa {numero}</span>
       </Botao>
     </div>
   );
