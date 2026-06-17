@@ -3,6 +3,7 @@ import { ValidacaoId } from '../../ValidacaoId';
 import { validarDados } from '../../../utils/validarDados';
 import { RepositorioPedidos } from '../Repositorio/RepositorioPedidos';
 import { tratarErro } from '../../../erros/TratarErro';
+import { RepositorioCartoes } from '../../Cartoes/Repositorio/RepositorioCartoes';
 
 export async function DesativarPedido(req: Request, res: Response): Promise<Response> {
   try {
@@ -11,7 +12,13 @@ export async function DesativarPedido(req: Request, res: Response): Promise<Resp
     validarDados(ValidacaoId, { id });
 
     const repositorioPedidos = new RepositorioPedidos();
+    const repositorioCartoes = new RepositorioCartoes();
+
     const pedidoDesativado = await repositorioPedidos.desativarPedido(id);
+
+    if (pedidoDesativado?.cartaoId) {
+      const cartaoLiberado = await repositorioCartoes.liberarCartao(pedidoDesativado?.cartaoId);
+    }
 
     return res.json(pedidoDesativado);
   } catch (err) {

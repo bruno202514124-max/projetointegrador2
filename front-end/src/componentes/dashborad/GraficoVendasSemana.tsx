@@ -22,7 +22,7 @@ export default function GraficoVendasSemana({ dataSelecionada }: Props) {
 
       const dataBase = new Date(Number(ano), Number(mes) - 1, Number(dia));
 
-      const diaSemana = dataBase.getDay(); // 0 = domingo, 1 = segunda...
+      const diaSemana = dataBase.getDay(); 
       const diffSegunda = diaSemana === 0 ? -6 : 1 - diaSemana;
 
       const segundaFeira = new Date(dataBase);

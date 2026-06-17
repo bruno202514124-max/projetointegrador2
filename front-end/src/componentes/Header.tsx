@@ -9,6 +9,7 @@ import logo from '../../public/img/logo-bulldog.png';
 const links = [
   { href: '/mesas', label: 'Mesas' },
   { href: '/cadastro-pedidos', label: 'Pedidos' },
+  { href: '/cozinha', label: 'Cozinha/Bar' },
   { href: '/cadastros', label: 'Cadastros' },
   { href: '/dashboard', label: 'Dashboard' },
 ];
