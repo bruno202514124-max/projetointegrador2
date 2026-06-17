@@ -28,13 +28,11 @@ export default function Login() {
 
       if (dados && dados.codigo == 400) {
         alert(dados.mensagem);
-        return; // Para a execução se houver erro nas credenciais
+        return;
       }
 
       if (resposta.ok) {
         localStorage.setItem('token', dados.token);
-        
-        // 🌟 A MUDANÇA ESTÁ AQUI: Salvamos o objeto inteiro (com a permissão) que veio do back-end!
         localStorage.setItem('usuario', JSON.stringify(dados.usuario));
 
         alert('Login realizado com sucesso');
@@ -50,7 +48,6 @@ export default function Login() {
   return (
     <form className="container-fluid" onSubmit={fazerLogin}>
       <div className="row vh-100">
-        {/* LADO ESQUERDO */}
         <div className="col-md-6 d-none d-md-block p-0">
           <img
             src="/img/bulldog-space.png"
@@ -63,7 +60,6 @@ export default function Login() {
           />
         </div>
 
-        {/* LADO DIREITO */}
         <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
           <div
             className={styles.cardBase}
@@ -72,7 +68,6 @@ export default function Login() {
               width: '100%',
             }}
           >
-            {/* LOGO */}
             <div className="text-center mb-0" style={{ marginTop: '20px' }}>
               <img
                 src="/img/logo-sem-fundo.png"
@@ -85,12 +80,10 @@ export default function Login() {
               />
             </div>
 
-            {/* TITULO */}
             <h2 className={`${styles.sectionTitle} text-center`} style={{ fontSize: '30px' }}>
               Login
             </h2>
 
-            {/* INPUT NOME */}
             <div className="mb-3">
               <input
                 type="text"
@@ -101,7 +94,6 @@ export default function Login() {
               />
             </div>
 
-            {/* INPUT SENHA */}
             <div className="mb-3">
               <input
                 type="password"
@@ -112,7 +104,6 @@ export default function Login() {
               />
             </div>
 
-            {/* BOTÃO */}
             <button className="btn btn-warning w-100" type="submit">
               Entrar
             </button>

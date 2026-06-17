@@ -12,12 +12,10 @@ export default function Cadastros() {
   const [abaSelecionada, setAbaSelecionada] = useState<AbasCadastros>('Mesas');
   const [titulo, setTitulo] = useState('Nova mesa');
   const [renderLista, setRenderLista] = useState(false);
-  
-  // Controle de permissões do usuário e estado de carregamento da página
+
   const [permissaoUsuario, setPermissaoUsuario] = useState('');
   const [carregando, setCarregando] = useState(true);
 
-  // Validação do token de autenticação e nível de acesso do usuário
   useEffect(() => {
     const usuarioStorage = localStorage.getItem('usuario');
     const token = localStorage.getItem('token');
@@ -40,7 +38,7 @@ export default function Cadastros() {
       setPermissaoUsuario(cargo);
       setCarregando(false);
     } catch (erro) {
-      console.error("Erro ao validar credenciais:", erro);
+      console.error('Erro ao validar credenciais:', erro);
       window.location.href = '/';
     }
   }, []);
@@ -65,12 +63,11 @@ export default function Cadastros() {
     }
   }, [abaSelecionada]);
 
-  // Filtragem das abas disponíveis com base no nível de acesso do usuário logado
-  const abasPermitidas = abas.filter((aba) => {
+  const abasPermitidas = abas.filter(aba => {
     if (aba === 'Usuários') {
       return permissaoUsuario.toLowerCase() === 'administrador';
     }
-    return true; 
+    return true;
   });
 
   if (carregando) {

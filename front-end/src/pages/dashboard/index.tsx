@@ -21,29 +21,7 @@ export default function Dashboard() {
 
   const dataAtualString = `${ano}-${mes}-${dia}`;
   const [dataSelecionada, setDataSelecionada] = useState(dataAtualString);
-
   const [anoSelecionado, mesSelecionado, diaSelecionado] = dataSelecionada.split('-');
-
-  const dataFormatada = `${diaSelecionado} de ${new Date(
-    Number(anoSelecionado),
-    Number(mesSelecionado) - 1,
-    Number(diaSelecionado)
-  ).toLocaleString('pt-BR', {
-    month: 'long',
-  })} de ${anoSelecionado}`;
-
-  const inputDataRef = useRef<HTMLInputElement>(null);
-
-  // Controle de permissões de acesso da página
-  const [carregando, setCarregando] = useState(true);
-
-  const [dados, setDados] = useState({
-    lucroMensal: 0,
-    lucroDiario: 0,
-    vendasMensais: 0,
-    vendas: 0,
-  });
-
   const [rankProdutos, setRankProdutos] = useState<
     {
       id: string;
@@ -53,7 +31,27 @@ export default function Dashboard() {
     }[]
   >([]);
 
-  // Validação do nível de acesso do usuário autenticado
+  const [carregando, setCarregando] = useState(true);
+  const [dados, setDados] = useState({
+    lucroMensal: 0,
+    lucroDiario: 0,
+    vendasMensais: 0,
+    vendas: 0,
+  });
+  const inputDataRef = useRef<HTMLInputElement>(null);
+
+  function retornaDataFormatada() {
+    const dataFormatada = `${diaSelecionado} de ${new Date(
+      Number(anoSelecionado),
+      Number(mesSelecionado) - 1,
+      Number(diaSelecionado)
+    ).toLocaleString('pt-BR', {
+      month: 'long',
+    })} de ${anoSelecionado}`;
+
+    return dataFormatada;
+  }
+
   useEffect(() => {
     const usuarioStorage = localStorage.getItem('usuario');
     const token = localStorage.getItem('token');
@@ -75,7 +73,7 @@ export default function Dashboard() {
 
       setCarregando(false);
     } catch (erro) {
-      console.error("Erro ao validar credenciais:", erro);
+      console.error('Erro ao validar credenciais:', erro);
       window.location.href = '/';
     }
   }, []);
@@ -124,9 +122,7 @@ export default function Dashboard() {
 
   return (
     <LayoutBase titulo="Dashboard" subtitulo="Visão geral do sistema">
-      {/* TOPO */}
       <div className="d-flex justify-content-between align-items-center mb-4 gap-3">
-        {/* ESQUERDA */}
         <div>
           <h3
             style={{
@@ -145,11 +141,10 @@ export default function Dashboard() {
               fontSize: 'clamp(0.8rem, 2vw, 1rem)',
             }}
           >
-            Dados referentes a {dataFormatada}
+            Dados referentes a {retornaDataFormatada()}
           </p>
         </div>
 
-        {/* DIREITA */}
         <Botao
           onClick={() => inputDataRef.current?.showPicker()}
           className="d-flex align-items-center gap-3"
@@ -185,13 +180,12 @@ export default function Dashboard() {
                 position: 'absolute',
                 opacity: 0,
                 pointerEvents: 'none',
-                }}
+              }}
             />
           </div>
         </Botao>
       </div>
 
-      {/* CARDS */}
       <div className="row g-4">
         <div className="col-md-3">
           <Card
@@ -218,7 +212,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* GRÁFICOS */}
       <div className="row mt-5 g-4">
         <div className="col-md-6 d-flex flex-column">
           <div className="h-100 w-100">
@@ -233,7 +226,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* PRODUTOS MAIS VENDIDOS */}
       <div className="row mt-5">
         <div className="col-md-12">
           <ProdutosMaisVendidos produtos={rankProdutos} />

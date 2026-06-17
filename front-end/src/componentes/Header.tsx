@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import styles from '@/css/base.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -24,7 +25,7 @@ export default function Header() {
       const usuario = JSON.parse(usuarioStorage);
       setPermissaoUsuario(usuario.permissao || '');
     } catch (erro) {
-      console.error("Erro ao ler credenciais no header:", erro);
+      console.error('Erro ao ler credenciais.', erro);
     }
   }, []);
 
@@ -64,7 +65,6 @@ export default function Header() {
         <div className="navbar-nav ms-auto d-flex flex-row flex-wrap gap-3">
           {linksPermitidos.map(link => {
             const ativo = router.pathname === link.href || router.pathname.startsWith(`${link.href}/`);
-
             return (
               <Link
                 key={link.href}
