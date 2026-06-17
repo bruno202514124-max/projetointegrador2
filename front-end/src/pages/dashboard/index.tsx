@@ -21,26 +21,7 @@ export default function Dashboard() {
 
   const dataAtualString = `${ano}-${mes}-${dia}`;
   const [dataSelecionada, setDataSelecionada] = useState(dataAtualString);
-
   const [anoSelecionado, mesSelecionado, diaSelecionado] = dataSelecionada.split('-');
-
-  const dataFormatada = `${diaSelecionado} de ${new Date(
-    Number(anoSelecionado),
-    Number(mesSelecionado) - 1,
-    Number(diaSelecionado)
-  ).toLocaleString('pt-BR', {
-    month: 'long',
-  })} de ${anoSelecionado}`;
-
-  const inputDataRef = useRef<HTMLInputElement>(null);
-
-  const [dados, setDados] = useState({
-    lucroMensal: 0,
-    lucroDiario: 0,
-    vendasMensais: 0,
-    vendas: 0,
-  });
-
   const [rankProdutos, setRankProdutos] = useState<
     {
       id: string;
@@ -49,6 +30,53 @@ export default function Dashboard() {
       qtd: number;
     }[]
   >([]);
+
+  const [carregando, setCarregando] = useState(true);
+  const [dados, setDados] = useState({
+    lucroMensal: 0,
+    lucroDiario: 0,
+    vendasMensais: 0,
+    vendas: 0,
+  });
+  const inputDataRef = useRef<HTMLInputElement>(null);
+
+  function retornaDataFormatada() {
+    const dataFormatada = `${diaSelecionado} de ${new Date(
+      Number(anoSelecionado),
+      Number(mesSelecionado) - 1,
+      Number(diaSelecionado)
+    ).toLocaleString('pt-BR', {
+      month: 'long',
+    })} de ${anoSelecionado}`;
+
+    return dataFormatada;
+  }
+
+  useEffect(() => {
+    const usuarioStorage = localStorage.getItem('usuario');
+    const token = localStorage.getItem('token');
+
+    if (!token || !usuarioStorage || usuarioStorage === 'undefined') {
+      window.location.href = '/';
+      return;
+    }
+
+    try {
+      const usuario = JSON.parse(usuarioStorage);
+      const cargo = usuario.permissao || '';
+
+      if (cargo.toLowerCase() !== 'administrador') {
+        alert('Acesso negado! Apenas administradores possuem acesso ao Dashboard.');
+        window.location.href = '/mesas';
+        return;
+      }
+
+      setCarregando(false);
+    } catch (erro) {
+      console.error('Erro ao validar credenciais:', erro);
+      window.location.href = '/';
+    }
+  }, []);
 
   const carregarDados = async () => {
     try {
@@ -79,8 +107,18 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    carregarDados();
-  }, [dataSelecionada]);
+    if (!carregando) {
+      carregarDados();
+    }
+  }, [dataSelecionada, carregando]);
+
+  if (carregando) {
+    return (
+      <div className="vh-100 d-flex justify-content-center align-items-center bg-dark text-light">
+        <h5>Verificando credenciais de acesso...</h5>
+      </div>
+    );
+  }
 
   return (
     <LayoutBase titulo="Dashboard" subtitulo="Visão geral do sistema">
@@ -103,7 +141,7 @@ export default function Dashboard() {
               fontSize: 'clamp(0.8rem, 2vw, 1rem)',
             }}
           >
-            Dados referentes a {dataFormatada}
+            Dados referentes a {retornaDataFormatada()}
           </p>
         </div>
 

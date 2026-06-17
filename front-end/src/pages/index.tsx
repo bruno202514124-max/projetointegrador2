@@ -9,17 +9,15 @@ export default function Login() {
   const [nome, setNome] = useState('');
   const [senha, setSenha] = useState('');
 
-  async function fazerLogin(e: React.SubmitEvent<HTMLFormElement>) {
+  async function fazerLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     try {
       const resposta = await fetch('http://localhost:2000/usuarios/login', {
         method: 'POST',
-
         headers: {
           'Content-Type': 'application/json',
         },
-
         body: JSON.stringify({
           nome,
           senha,
@@ -30,11 +28,12 @@ export default function Login() {
 
       if (dados && dados.codigo == 400) {
         alert(dados.mensagem);
+        return;
       }
 
       if (resposta.ok) {
         localStorage.setItem('token', dados.token);
-        localStorage.setItem('usuario', JSON.stringify({ nome }));
+        localStorage.setItem('usuario', JSON.stringify(dados.usuario));
 
         alert('Login realizado com sucesso');
 
@@ -42,7 +41,6 @@ export default function Login() {
       }
     } catch (erro) {
       console.log('erro => ', erro);
-
       alert('Erro ao conectar com o servidor');
     }
   }

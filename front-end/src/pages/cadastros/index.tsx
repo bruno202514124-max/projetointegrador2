@@ -13,6 +13,36 @@ export default function Cadastros() {
   const [titulo, setTitulo] = useState('Nova mesa');
   const [renderLista, setRenderLista] = useState(false);
 
+  const [permissaoUsuario, setPermissaoUsuario] = useState('');
+  const [carregando, setCarregando] = useState(true);
+
+  useEffect(() => {
+    const usuarioStorage = localStorage.getItem('usuario');
+    const token = localStorage.getItem('token');
+
+    if (!token || !usuarioStorage || usuarioStorage === 'undefined') {
+      window.location.href = '/';
+      return;
+    }
+
+    try {
+      const usuario = JSON.parse(usuarioStorage);
+      const cargo = usuario.permissao || '';
+
+      if (cargo.toLowerCase() === 'frente') {
+        alert('Acesso negado! Funcionários de Frente não possuem permissão para realizar cadastros.');
+        window.location.href = '/mesas';
+        return;
+      }
+
+      setPermissaoUsuario(cargo);
+      setCarregando(false);
+    } catch (erro) {
+      console.error('Erro ao validar credenciais:', erro);
+      window.location.href = '/';
+    }
+  }, []);
+
   useEffect(() => {
     switch (abaSelecionada) {
       case 'Mesas':
@@ -33,6 +63,21 @@ export default function Cadastros() {
     }
   }, [abaSelecionada]);
 
+  const abasPermitidas = abas.filter(aba => {
+    if (aba === 'Usuários') {
+      return permissaoUsuario.toLowerCase() === 'administrador';
+    }
+    return true;
+  });
+
+  if (carregando) {
+    return (
+      <div className="vh-100 d-flex justify-content-center align-items-center bg-dark text-light">
+        <h5>Verificando credenciais de acesso...</h5>
+      </div>
+    );
+  }
+
   return (
     <LayoutBase
       titulo="Central de Cadastros"
@@ -40,7 +85,7 @@ export default function Cadastros() {
     >
       <div>
         <div className="mb-2 d-flex flex-row flex-wrap">
-          {abas.map((aba, index) => {
+          {abasPermitidas.map((aba, index) => {
             return (
               <button
                 key={index}
