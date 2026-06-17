@@ -20,25 +20,38 @@ export async function CriarPedido(req: Request, res: Response): Promise<Response
     const repositorioItens = new RepositorioItens();
     const repositorioPedidos = new RepositorioPedidos();
 
-    const mesa = repositorioMesas.pesquisarPorId(idMesa);
+    const mesa = await repositorioMesas.pesquisarPorId(idMesa);
 
     if (!mesa) {
       throw new EmitirMensagemErro('Mesa não existe.', 400);
     }
 
-    const cartao = repositorioCartoes.pesquisarPorId(idCartao);
+    const cartao = await repositorioCartoes.pesquisarPorId(idCartao);
 
     if (!cartao) {
       throw new EmitirMensagemErro('Cartão não existe.', 400);
     }
 
-    itens.forEach(item => {
-      const itemAntigo = repositorioItens.pesquisarPorId(item.id);
+    if (cartao.mesa) {
+      throw new EmitirMensagemErro(
+        `Cartão ${cartao.numero} está em uso na mesa ${cartao.mesa.numero}.`,
+        400
+      );
+    }
+
+    async function pesquisarItem(id: string) {
+      const itemAntigo = await repositorioItens.pesquisarPorId(id);
 
       if (!itemAntigo) {
         throw new EmitirMensagemErro('Item não existe.', 400);
       }
-    });
+    }
+
+    await Promise.all(
+      itens.map(async item => {
+        pesquisarItem(item.id);
+      })
+    );
 
     const dadosPedido: CriarPedido = {
       idMesa,
