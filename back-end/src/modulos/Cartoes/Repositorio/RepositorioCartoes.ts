@@ -1,5 +1,5 @@
 import prisma from '../../../database/prismaClient';
-import { Cartao } from '../Interfaces/InterfaceCartoes';
+import { Cartao, CartaoComMesa } from '../Interfaces/InterfaceCartoes';
 
 class RepositorioCartoes {
   async criarCartao(numero: string): Promise<Cartao | null> {
@@ -7,9 +7,12 @@ class RepositorioCartoes {
     return novoCartao;
   }
 
-  async pesquisarPorId(id: string): Promise<Cartao | null> {
+  async pesquisarPorId(id: string): Promise<CartaoComMesa | null> {
     return await prisma.cartoes.findUnique({
       where: { id },
+      include: {
+        mesa: true,
+      },
     });
   }
 
@@ -34,6 +37,17 @@ class RepositorioCartoes {
       },
       data: {
         numero,
+      },
+    });
+  }
+
+  async liberarCartao(id: string): Promise<Cartao | null> {
+    return await prisma.cartoes.update({
+      where: {
+        id,
+      },
+      data: {
+        mesaId: null,
       },
     });
   }
