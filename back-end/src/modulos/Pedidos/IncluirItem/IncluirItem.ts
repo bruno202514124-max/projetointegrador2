@@ -28,7 +28,7 @@ export async function IncluirItem(req: Request, res: Response): Promise<Response
       throw new EmitirMensagemErro('Item não existe.', 400);
     }
 
-    const itemNoPedido = await repositorioPedidos.veificarItemNoPedido(idPedido, idItem);
+    const itemNoPedido = await repositorioPedidos.verificarItemNoPedido(idPedido, idItem);
 
     if (itemNoPedido) {
       throw new EmitirMensagemErro('O item já está no pedido.', 400);

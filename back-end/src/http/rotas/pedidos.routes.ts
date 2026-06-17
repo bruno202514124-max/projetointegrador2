@@ -7,6 +7,7 @@ import { DesativarPedido } from '../../modulos/Pedidos/DesativarPedido/Desativar
 import { IncluirItem } from '../../modulos/Pedidos/IncluirItem/IncluirItem';
 import { RelatorioDia } from '../../modulos/Pedidos/Relatorios/RelatorioDia';
 import { RelatorioMes } from '../../modulos/Pedidos/Relatorios/RelatorioMes';
+import { RemoverItem } from '../../modulos/Pedidos/RemoverItem/RemoverItem';
 import { autenticar } from '../middleware/autenticar';
 import { validarAutenticacao } from '../middleware/validarAutenticacao';
 
@@ -21,5 +22,6 @@ rotasPedidos.post('/incluirItem', IncluirItem);
 rotasPedidos.patch('/desativarPedido', DesativarPedido);
 rotasPedidos.patch('/alterarStatus', AlterarStatus);
 rotasPedidos.delete('/deletarPedido/:id', DeletarPedido);
+rotasPedidos.delete('/removerItem/:idPedido/:idItem', RemoverItem);
 
 export { rotasPedidos };
