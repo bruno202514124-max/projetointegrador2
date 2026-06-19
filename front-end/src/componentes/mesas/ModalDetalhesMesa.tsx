@@ -1,6 +1,7 @@
 import { api } from '@/api';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
+import { BotaoComanda } from '@/componentes/mesas/BotaoComanda';
 
 interface ModalDetalhesMesaProps {
   mesaSelecionada: any;
@@ -12,6 +13,7 @@ interface ModalDetalhesMesaProps {
   carregarDados: () => void;
   tratarErro: (erro: any, router: any) => void;
   router: any;
+  podeEncerrar: boolean;
 }
 
 export default function ModalDetalhesMesa({
@@ -24,6 +26,7 @@ export default function ModalDetalhesMesa({
   carregarDados,
   tratarErro,
   router,
+  podeEncerrar,
 }: ModalDetalhesMesaProps) {
   const [abaCriarSecundaria, setAbaCriarSecundaria] = useState(false);
   const [nomeCliente, setNomeCliente] = useState('');
@@ -74,8 +77,8 @@ export default function ModalDetalhesMesa({
   };
 
   const adicionarAoCarrinhoEdicao = () => {
-    const produto = produtos.find(p => p.id === idProdutoEdicao);
-    if (!produto) return;
+    const prod = produtos.find(p => p.id === idProdutoEdicao);
+    if (!prod) return;
 
     const itemJaExiste = itensCarrinhoEdicao.find(item => item.id === idProdutoEdicao);
     if (itemJaExiste) {
@@ -85,7 +88,7 @@ export default function ModalDetalhesMesa({
         )
       );
     } else {
-      setItensCarrinhoEdicao([...itensCarrinhoEdicao, { ...produto, qtd: qtdProdutoEdicao }]);
+      setItensCarrinhoEdicao([...itensCarrinhoEdicao, { ...prod, qtd: qtdProdutoEdicao }]);
     }
     setIdProdutoEdicao('');
     setQtdProdutoEdicao(1);
@@ -201,6 +204,40 @@ export default function ModalDetalhesMesa({
     }
   };
 
+  const handleRemoverItem = async (pedidoId: string, itemId: string, nomeItem: string) => {
+    try {
+      const resultado = await Swal.fire({
+        title: 'Remover Item?',
+        text: `Deseja realmente retirar "${nomeItem}" desta comanda?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sim, remover',
+        cancelButtonText: 'Cancelar',
+        background: '#212529',
+        color: '#fff'
+      });
+
+      if (!resultado.isConfirmed) return;
+
+      await api.delete(`/pedidos/removerItem/${pedidoId}/${itemId}`);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Item removido!',
+        timer: 1500,
+        showConfirmButton: false,
+        background: '#212529',
+        color: '#fff'
+      });
+
+      carregarDados();
+    } catch (erro) {
+      tratarErro(erro, router);
+    }
+  };
+
   return (
     <div className="modal d-block bg-dark bg-opacity-50" tabIndex={-1}>
       <div className="modal-dialog modal-dialog-centered">
@@ -310,7 +347,7 @@ export default function ModalDetalhesMesa({
                             <span className="text-warning fw-bold">{item.qtd}x</span> {item.nome}
                           </span>
                           <div className="d-flex align-items-center gap-2">
-                            <span className="text-muted" style={{ fontSize: '0.75rem' }}>
+                            <span className="text-white" style={{ fontSize: '0.75rem' }}>
                               {formatarReal.format(item.preco * item.qtd)}
                             </span>
                             <button
@@ -359,16 +396,16 @@ export default function ModalDetalhesMesa({
               <div>
                 <div className="d-flex justify-content-between align-items-center mb-2">
                   <span className="small text-white">Comandas ativas:</span>
-                  <button
-                    className="btn btn-sm btn-outline-warning py-0 px-2 fw-bold"
-                    style={{ fontSize: '0.75rem' }}
+                  <BotaoComanda 
+                    variant="warning" 
+                    style={{ height: '32px', fontSize: '0.8rem' }}
                     onClick={() => {
                       setAbaCriarSecundaria(true);
                       limparFormularioEdicao();
                     }}
                   >
                     ➕ Nova Comanda
-                  </button>
+                  </BotaoComanda>
                 </div>
 
                 {mesaSelecionada.pedidos?.map((pedido: any) => {
@@ -389,7 +426,7 @@ export default function ModalDetalhesMesa({
                       </div>
                       <div
                         className="my-2 border-top border-secondary pt-1"
-                        style={{ maxHeight: '80px', overflowY: 'auto' }}
+                        style={{ maxHeight: '110px', overflowY: 'auto' }}
                       >
                         {pedido.itens.length === 0 ? (
                           <p className="text-white text-center m-0" style={{ fontSize: '0.7rem' }}>
@@ -399,13 +436,24 @@ export default function ModalDetalhesMesa({
                           pedido.itens.map((it: any, idx: number) => (
                             <div
                               key={idx}
-                              className="d-flex justify-content-between text-white"
-                              style={{ fontSize: '0.75rem' }}
+                              className="d-flex justify-content-between align-items-center text-white mb-2 p-2 rounded bg-dark bg-opacity-25 border border-secondary border-opacity-20"
+                              style={{ fontSize: '0.9rem' }}
                             >
                               <span>
-                                {it.qtdItem}x {it.item.nome}
+                                <strong className="text-warning">{it.qtdItem}x</strong> {it.item.nome}
                               </span>
-                              <span>{formatarReal.format(it.valorItem * it.qtdItem)}</span>
+                              <div className="d-flex align-items-center gap-3">
+                                <span>{formatarReal.format(it.valorItem * it.qtdItem)}</span>
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center p-2 rounded-3"
+                                  title="Remover item da comanda"
+                                  style={{ width: '36px', height: '36px', fontSize: '1.1rem', borderWidth: '1px', flexShrink: 0}}
+                                  onClick={() => handleRemoverItem(pedido.id, it.item.id, it.item.nome)}
+                                >
+                                  🗑️
+                                </button>
+                              </div>
                             </div>
                           ))
                         )}
@@ -444,14 +492,13 @@ export default function ModalDetalhesMesa({
                               />
                             </div>
                           </div>
-                          <button
-                            type="button"
-                            className="btn btn-warning btn-sm w-100 py-0 fw-bold mb-2 text-dark"
-                            style={{ fontSize: '0.75rem' }}
+                          <BotaoComanda
+                            variant="warning"
+                            className="w-100 mb-3"
                             onClick={adicionarAoCarrinhoEdicao}
                           >
                             ➕ Inserir na Lista
-                          </button>
+                          </BotaoComanda>
 
                           {itensCarrinhoEdicao.map((item, idx) => (
                             <div
@@ -473,56 +520,56 @@ export default function ModalDetalhesMesa({
                             </div>
                           ))}
 
-                          <div className="d-flex gap-1 mt-2">
-                            <button
-                              type="button"
-                              className="btn btn-outline-light btn-sm w-50 py-0"
-                              style={{ fontSize: '0.75rem' }}
+                          <div className="d-flex gap-2 mt-2">
+                            <BotaoComanda 
+                              variant="outline-light" 
+                              className="w-50" 
                               onClick={limparFormularioEdicao}
                             >
                               Cancelar
-                            </button>
-                            <button
-                              type="button"
-                              className="btn btn-success btn-sm w-50 py-0 fw-bold"
-                              style={{ fontSize: '0.75rem' }}
+                            </BotaoComanda>
+                            
+                            <BotaoComanda 
+                              variant="success" 
+                              className="w-50"
                               disabled={enviando || itensCarrinhoEdicao.length === 0}
                               onClick={() => handleSalvarNovosItens(pedido.id)}
                             >
                               {enviando ? 'Salvando...' : '💾 Salvar'}
-                            </button>
+                            </BotaoComanda>
                           </div>
                         </div>
                       )}
 
-                      <div className="d-flex flex-column gap-2 pt-1 border-top border-secondary">
-                        <div className="d-flex justify-content-between align-items-center">
-                          <span className="small text-white fw-bold">
-                            Total: {formatarReal.format(totalDoCliente)}
-                          </span>
+                      <div className="d-flex justify-content-between align-items-center pt-2 border-top border-secondary">
+                        <span className="small text-white fw-bold" style={{ fontSize: '0.95rem' }}>
+                          Total: {formatarReal.format(totalDoCliente)}
+                        </span>
+                      </div>
 
-                          {!estaEditando && (
-                            <button
-                              className="btn btn-warning btn-sm py-0 px-2 fw-bold text-dark"
-                              style={{ fontSize: '0.75rem' }}
-                              onClick={() => {
-                                setPedidoIdSendoEditado(pedido.id);
-                                setItensCarrinhoEdicao([]);
-                              }}
-                            >
-                              ➕ Adicionar novo item
-                            </button>
-                          )}
-                        </div>
-
+                      <div className="d-flex flex-column gap-2 mt-2">
                         {!estaEditando && (
-                          <button
-                            className="btn btn-danger btn-sm py-1 fw-bold w-100 mt-1"
-                            style={{ fontSize: '0.75rem' }}
+                          <BotaoComanda
+                            variant="warning"
+                            className="w-100"
+                            onClick={() => {
+                              setPedidoIdSendoEditado(pedido.id);
+                              setItensCarrinhoEdicao([]);
+                            }}
+                          >
+                            ➕ Adicionar novo item
+                          </BotaoComanda>
+                        )}
+
+                        {!estaEditando && podeEncerrar && (
+                          <BotaoComanda
+                            type="button"
+                            variant="danger"
+                            className="w-100"
                             onClick={() => handlePagarComanda(pedido.id)}
                           >
                             💵 Pagar e Encerrar Conta
-                          </button>
+                          </BotaoComanda>
                         )}
                       </div>
                     </div>

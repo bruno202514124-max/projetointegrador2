@@ -57,8 +57,30 @@ export default function Mesas() {
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [mesaSelecionada, setMesaSelecionada] = useState<Mesa | null>(null);
+  const [podeEncerrar, setPodeEncerrar] = useState(false);
 
   useEffect(() => {
+    const usuarioStorage = localStorage.getItem('usuario');
+    const token = localStorage.getItem('token');
+
+    // Se não houver token ou usuário cadastrado, redireciona para o login
+    if (!token || !usuarioStorage || usuarioStorage === 'undefined') {
+      window.location.href = '/';
+      return;
+    }
+
+    try {
+      const usuario = JSON.parse(usuarioStorage);
+      const cargo = usuario.permissao || '';
+
+      // Se a permissão NÃO for frente, este usuário GANHA permissão de encerramento
+      if (cargo.toLowerCase() !== 'frente') {
+        setPodeEncerrar(true);
+      }
+    } catch (erro) {
+      console.error('Erro ao mapear permissões do usuário:', erro);
+    }
+
     carregarDados();
   }, []);
 
@@ -68,9 +90,9 @@ export default function Mesas() {
 
       const [resMesas, resCartoes, resPedidos, resProdutos] = await Promise.all([
         api.get('mesas'),
-        api.get('cartoes/'),
-        api.get('pedidos/'),
-        api.get('itens/'),
+        api.get('cartoes'),
+        api.get('pedidos'),
+        api.get('itens'),
       ]);
 
       setProdutos(resProdutos.data || []);
@@ -87,9 +109,10 @@ export default function Mesas() {
         };
       });
 
-      const mesasOrdenadas = mesasFormatadas.sort(
+      const mesasOrdenadas = [...mesasFormatadas].sort(
         (a: Mesa, b: Mesa) => Number(a.numero) - Number(b.numero)
       );
+      
       setMesas(mesasOrdenadas);
       setCartoesLivres(resCartoes.data || []);
 
@@ -138,6 +161,7 @@ export default function Mesas() {
           carregarDados={carregarDados}
           tratarErro={tratarErro}
           router={router}
+          podeEncerrar={podeEncerrar}
         />
       )}
     </LayoutBase>
