@@ -1,5 +1,5 @@
 import prisma from '../../../database/prismaClient';
-import { Mesa } from '../Interfaces/InterfaceMesas';
+import { Mesa, MesaComCartoes } from '../Interfaces/InterfaceMesas';
 
 export class RepositorioMesas {
   async criarMesa(numero: string): Promise<Mesa | null> {
@@ -7,9 +7,16 @@ export class RepositorioMesas {
     return novaMesa;
   }
 
-  async pesquisarPorId(id: string): Promise<Mesa | null> {
+  async pesquisarPorId(id: string): Promise<MesaComCartoes | null> {
     return await prisma.mesas.findUnique({
       where: { id },
+      include: {
+        cartoes: {
+          omit: {
+            mesaId: true,
+          },
+        },
+      },
     });
   }
 

@@ -17,7 +17,7 @@ export async function DesativarPedido(req: Request, res: Response): Promise<Resp
     const pedidoDesativado = await repositorioPedidos.desativarPedido(id);
 
     if (pedidoDesativado?.cartaoId) {
-      const cartaoLiberado = await repositorioCartoes.liberarCartao(pedidoDesativado?.cartaoId);
+      const cartaoLiberado = await repositorioCartoes.liberarCartaoDaMesa(pedidoDesativado?.cartaoId);
     }
 
     return res.json(pedidoDesativado);

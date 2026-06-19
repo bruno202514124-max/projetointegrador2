@@ -96,7 +96,7 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
   }
 
   function deletar(item: Item) {
-    let url = '';
+    let endpoint = '';
     let mesaOuCartao = '';
 
     switch (abaSelecionada) {
@@ -119,7 +119,7 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
         return;
     }
 
-    url = url.concat('/deletar/', item.id);
+    const url = endpoint.concat('/deletar/', item.id);
 
     Swal.fire({
       title: `Apagar ${item.nome || mesaOuCartao + ' ' + item.numero}?`,

@@ -21,6 +21,12 @@ export async function DeletarMesa(req: Request, res: Response): Promise<Response
       throw new EmitirMensagemErro('Mesa não encontrada.');
     }
 
+    if (mesa.cartoes.length > 0) {
+      throw new EmitirMensagemErro(
+        'Esta mesa ainda tem comandas ativas. Finalize todos os pedidos desta mesa antes de deletar.'
+      );
+    }
+
     await repositorioMesas.apagarMesa(id);
 
     return res.json('Mesa deletada.');

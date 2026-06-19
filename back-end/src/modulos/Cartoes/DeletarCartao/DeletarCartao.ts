@@ -21,6 +21,12 @@ export async function DeletarCartao(req: Request, res: Response): Promise<Respon
       throw new EmitirMensagemErro('Cartao não encontrado.');
     }
 
+    if (cartao.pedidos.some(pedido => pedido.ativo == true)) {
+      throw new EmitirMensagemErro(
+        'Este cartão ainda tem pedidos ativos. Finalize todos os pedidos deste cartão antes de deletar.'
+      );
+    }
+
     await repositorioCartoes.apagarCartao(id);
 
     return res.json('Cartao deletado.');
