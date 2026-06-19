@@ -59,20 +59,20 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
 
   function preencherLista() {
     setItens([]);
-    let url = '';
+    let endpoint = '';
 
     switch (abaSelecionada) {
       case 'Mesas':
-        url = 'mesas/';
+        endpoint = 'mesas/';
         break;
       case 'Cartões':
-        url = 'cartoes/';
+        endpoint = 'cartoes/';
         break;
       case 'Comidas/Bebidas':
-        url = 'itens/';
+        endpoint = 'itens/';
         break;
       case 'Usuários':
-        url = 'usuarios/';
+        endpoint = 'usuarios/';
         break;
 
       default:
@@ -80,7 +80,7 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
     }
 
     api
-      .get(url)
+      .get(endpoint)
       .then(res => {
         setItens(res.data);
       })
@@ -101,18 +101,18 @@ export default function Lista({ abaSelecionada, renderLista, setRenderLista }: L
 
     switch (abaSelecionada) {
       case 'Mesas':
-        url = 'mesas';
+        endpoint = 'mesas';
         mesaOuCartao = 'Mesa';
         break;
       case 'Cartões':
-        url = 'cartoes';
+        endpoint = 'cartoes';
         mesaOuCartao = 'Cartão';
         break;
       case 'Comidas/Bebidas':
-        url = 'itens';
+        endpoint = 'itens';
         break;
       case 'Usuários':
-        url = 'usuarios';
+        endpoint = 'usuarios';
         break;
 
       default:
