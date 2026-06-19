@@ -2,6 +2,7 @@ import prisma from '../../../database/prismaClient';
 import {
   CriarPedido,
   IncluirItem,
+  ItemNoPedido,
   PedidoComItens,
   PedidoSemItens,
   RelatorioPedidos,
@@ -180,7 +181,7 @@ class RepositorioPedidos {
     return pedidoDesativado;
   }
 
-  async veificarItemNoPedido(pedidoId: string, itemId: string) {
+  async verificarItemNoPedido(pedidoId: string, itemId: string) {
     const pedidoComItem = await prisma.pedidosItens.findUnique({
       where: {
         pedidoId_itemId: {
@@ -248,6 +249,17 @@ class RepositorioPedidos {
     });
 
     return pedidoComItens;
+  }
+
+  async removerItem(pedidoId: string, itemId: string): Promise<ItemNoPedido | null> {
+    return await prisma.pedidosItens.delete({
+      where: {
+        pedidoId_itemId: {
+          pedidoId,
+          itemId,
+        },
+      },
+    });
   }
 }
 

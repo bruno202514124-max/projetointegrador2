@@ -7,9 +7,12 @@ import Card from '@/componentes/dashborad/Cards';
 import GraficoLucroMensal from '@/componentes/dashborad/GraficoLucroMensal';
 import GraficoVendasSemana from '@/componentes/dashborad/GraficoVendasSemana';
 import ProdutosMaisVendidos from '@/componentes/dashborad/ProdutosMaisVendidos';
+import { tratarErro } from '@/utils/tratarErro';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
 export default function Dashboard() {
+  const router = useRouter();
   const hoje = new Date();
 
   const ano = hoje.getFullYear();
@@ -18,26 +21,7 @@ export default function Dashboard() {
 
   const dataAtualString = `${ano}-${mes}-${dia}`;
   const [dataSelecionada, setDataSelecionada] = useState(dataAtualString);
-
   const [anoSelecionado, mesSelecionado, diaSelecionado] = dataSelecionada.split('-');
-
-  const dataFormatada = `${diaSelecionado} de ${new Date(
-    Number(anoSelecionado),
-    Number(mesSelecionado) - 1,
-    Number(diaSelecionado)
-  ).toLocaleString('pt-BR', {
-    month: 'long',
-  })} de ${anoSelecionado}`;
-
-  const inputDataRef = useRef<HTMLInputElement>(null);
-
-  const [dados, setDados] = useState({
-    lucroMensal: 0,
-    lucroDiario: 0,
-    vendasMensais: 0,
-    vendas: 0,
-  });
-
   const [rankProdutos, setRankProdutos] = useState<
     {
       id: string;
@@ -46,6 +30,53 @@ export default function Dashboard() {
       qtd: number;
     }[]
   >([]);
+
+  const [carregando, setCarregando] = useState(true);
+  const [dados, setDados] = useState({
+    lucroMensal: 0,
+    lucroDiario: 0,
+    vendasMensais: 0,
+    vendas: 0,
+  });
+  const inputDataRef = useRef<HTMLInputElement>(null);
+
+  function retornaDataFormatada() {
+    const dataFormatada = `${diaSelecionado} de ${new Date(
+      Number(anoSelecionado),
+      Number(mesSelecionado) - 1,
+      Number(diaSelecionado)
+    ).toLocaleString('pt-BR', {
+      month: 'long',
+    })} de ${anoSelecionado}`;
+
+    return dataFormatada;
+  }
+
+  useEffect(() => {
+    const usuarioStorage = localStorage.getItem('usuario');
+    const token = localStorage.getItem('token');
+
+    if (!token || !usuarioStorage || usuarioStorage === 'undefined') {
+      window.location.href = '/';
+      return;
+    }
+
+    try {
+      const usuario = JSON.parse(usuarioStorage);
+      const cargo = usuario.permissao || '';
+
+      if (cargo.toLowerCase() !== 'administrador') {
+        alert('Acesso negado! Apenas administradores possuem acesso ao Dashboard.');
+        window.location.href = '/mesas';
+        return;
+      }
+
+      setCarregando(false);
+    } catch (erro) {
+      console.error('Erro ao validar credenciais:', erro);
+      window.location.href = '/';
+    }
+  }, []);
 
   const carregarDados = async () => {
     try {
@@ -71,19 +102,27 @@ export default function Dashboard() {
 
       setRankProdutos(respostaMes.data.rank);
     } catch (erro) {
-      console.error('Erro ao carregar dashboard:', erro);
+      tratarErro(erro, router);
     }
   };
 
   useEffect(() => {
-    carregarDados();
-  }, [dataSelecionada]);
+    if (!carregando) {
+      carregarDados();
+    }
+  }, [dataSelecionada, carregando]);
+
+  if (carregando) {
+    return (
+      <div className="vh-100 d-flex justify-content-center align-items-center bg-dark text-light">
+        <h5>Verificando credenciais de acesso...</h5>
+      </div>
+    );
+  }
 
   return (
     <LayoutBase titulo="Dashboard" subtitulo="Visão geral do sistema">
-      {/* TOPO */}
       <div className="d-flex justify-content-between align-items-center mb-4 gap-3">
-        {/* ESQUERDA */}
         <div>
           <h3
             style={{
@@ -102,11 +141,10 @@ export default function Dashboard() {
               fontSize: 'clamp(0.8rem, 2vw, 1rem)',
             }}
           >
-            Dados referentes a {dataFormatada}
+            Dados referentes a {retornaDataFormatada()}
           </p>
         </div>
 
-        {/* DIREITA */}
         <Botao
           onClick={() => inputDataRef.current?.showPicker()}
           className="d-flex align-items-center gap-3"
@@ -148,7 +186,6 @@ export default function Dashboard() {
         </Botao>
       </div>
 
-      {/* CARDS */}
       <div className="row g-4">
         <div className="col-md-3">
           <Card
@@ -175,7 +212,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* GRÁFICOS */}
       <div className="row mt-5 g-4">
         <div className="col-md-6 d-flex flex-column">
           <div className="h-100 w-100">
@@ -190,7 +226,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* PRODUTOS MAIS VENDIDOS */}
       <div className="row mt-5">
         <div className="col-md-12">
           <ProdutosMaisVendidos produtos={rankProdutos} />

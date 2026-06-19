@@ -101,6 +101,7 @@ Pronto! O back está rodando! Agora é só fazer as requisições!
   - POST /pedidos/incluirItem { idPedido: string, idItem: string, valorItem: number, qtdItem: number} - adiciona um item em um pedido já criado.
   - PATCH /pedidos/desativarPedido { id: string } - desativa o pedido.
   - PATCH /pedidos/alterarStatus { idPedido: string, idItem: string, status: string } - altera o status de um item em um determinado pedido.
+  - DELETE /pedidos/removerItem/:idPedido/:idItem - remove o item do pedido.
   - DELETE /pedidos/deletarPedido/:id - apaga o pedido.
 
 - Cartões

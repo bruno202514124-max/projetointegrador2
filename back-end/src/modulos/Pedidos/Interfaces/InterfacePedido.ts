@@ -60,3 +60,11 @@ export interface IncluirItem {
   valorItem: number;
   qtdItem: number;
 }
+
+export interface ItemNoPedido {
+  pedidoId: string;
+  itemId: string;
+  valorItem: number;
+  qtdItem: number;
+  status: string;
+}
