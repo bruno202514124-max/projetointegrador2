@@ -10,17 +10,18 @@ import { RelatorioMes } from '../../modulos/Pedidos/Relatorios/RelatorioMes';
 import { RemoverItem } from '../../modulos/Pedidos/RemoverItem/RemoverItem';
 import { autenticar } from '../middleware/autenticar';
 import { validarAutenticacao } from '../middleware/validarAutenticacao';
+import { validarPermissao } from '../middleware/validarPermissao';
 
 const rotasPedidos = Router();
 rotasPedidos.use(autenticar, validarAutenticacao);
 
 rotasPedidos.get('/', BuscarTodosPedidos);
 rotasPedidos.post('/criar', CriarPedido);
-rotasPedidos.post('/relatorioMes', RelatorioMes);
-rotasPedidos.post('/relatorioDia', RelatorioDia);
+rotasPedidos.post('/relatorioMes', RelatorioMes, validarPermissao(['Administrador']));
+rotasPedidos.post('/relatorioDia', RelatorioDia, validarPermissao(['Administrador']));
 rotasPedidos.post('/incluirItem', IncluirItem);
 rotasPedidos.patch('/desativarPedido', DesativarPedido);
-rotasPedidos.patch('/alterarStatus', AlterarStatus);
+rotasPedidos.patch('/alterarStatus', AlterarStatus, validarPermissao(['Administrador', 'Retaguarda']));
 rotasPedidos.delete('/deletarPedido/:id', DeletarPedido);
 rotasPedidos.delete('/removerItem/:idPedido/:idItem', RemoverItem);
 
