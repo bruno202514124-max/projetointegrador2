@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { api } from '@/api';
+import { useState } from 'react';
 import Swal from 'sweetalert2';
 
 interface ModalDetalhesMesaProps {
@@ -23,7 +23,7 @@ export default function ModalDetalhesMesa({
   fecharModal,
   carregarDados,
   tratarErro,
-  router
+  router,
 }: ModalDetalhesMesaProps) {
   const [abaCriarSecundaria, setAbaCriarSecundaria] = useState(false);
   const [nomeCliente, setNomeCliente] = useState('');
@@ -34,7 +34,6 @@ export default function ModalDetalhesMesa({
   const [itensCarrinho, setItensCarrinho] = useState<any[]>([]);
   const [enviando, setEnviando] = useState(false);
 
-  // Gerenciamento da inclusão de itens em comanda já aberta
   const [pedidoIdSendoEditado, setPedidoIdSendoEditado] = useState<string | null>(null);
   const [idProdutoEdicao, setIdProdutoEdicao] = useState('');
   const [qtdProdutoEdicao, setQtdProdutoEdicao] = useState(1);
@@ -74,7 +73,6 @@ export default function ModalDetalhesMesa({
     setQtdProduto(1);
   };
 
-  // Adiciona itens à lista temporária da comanda em edição (Trata duplicados)
   const adicionarAoCarrinhoEdicao = () => {
     const produto = produtos.find(p => p.id === idProdutoEdicao);
     if (!produto) return;
@@ -102,8 +100,6 @@ export default function ModalDetalhesMesa({
 
     try {
       setEnviando(true);
-      const token = localStorage.getItem('token');
-      const config = { headers: { Authorization: `Bearer ${token}` } };
 
       await api.post('/pedidos/criar', {
         cliente: nomeCliente,
@@ -111,8 +107,8 @@ export default function ModalDetalhesMesa({
         pessoas: qtdPessoas,
         idMesa: mesaSelecionada.id,
         idCartao: idCartaoSelecionado,
-        itens: itensCarrinho.map(i => ({ id: i.id, qtd: i.qtd }))
-      }, config);
+        itens: itensCarrinho.map(i => ({ id: i.id, qtd: i.qtd })),
+      });
 
       await Swal.fire({
         icon: 'success',
@@ -121,7 +117,7 @@ export default function ModalDetalhesMesa({
         timer: 2000,
         showConfirmButton: false,
         background: '#212529',
-        color: '#fff'
+        color: '#fff',
       });
 
       setAbaCriarSecundaria(false);
@@ -143,16 +139,14 @@ export default function ModalDetalhesMesa({
 
     try {
       setEnviando(true);
-      const token = localStorage.getItem('token');
-      const config = { headers: { Authorization: `Bearer ${token}` } };
-      
+
       const requisicoes = itensCarrinhoEdicao.map(item => {
         return api.post('/pedidos/incluirItem', {
-            idPedido: pedidoId,
-            idItem: item.id,
-            valorItem: item.preco,
-            qtdItem: item.qtd
-        }, config);
+          idPedido: pedidoId,
+          idItem: item.id,
+          valorItem: item.preco,
+          qtdItem: item.qtd,
+        });
       });
       await Promise.all(requisicoes);
 
@@ -162,11 +156,11 @@ export default function ModalDetalhesMesa({
         timer: 1500,
         showConfirmButton: false,
         background: '#212529',
-        color: '#fff'
+        color: '#fff',
       });
 
       limparFormularioEdicao();
-      carregarDados(); 
+      carregarDados();
     } catch (erro) {
       tratarErro(erro, router);
     } finally {
@@ -186,16 +180,20 @@ export default function ModalDetalhesMesa({
         confirmButtonText: 'Sim, pagar',
         cancelButtonText: 'Cancelar',
         background: '#212529',
-        color: '#fff'
+        color: '#fff',
       });
 
       if (!resultado.isConfirmed) return;
 
-      const token = localStorage.getItem('token');
-      const config = { headers: { Authorization: `Bearer ${token}` } };
-      await api.patch('/pedidos/desativarPedido', { id: idPedido }, config);
+      await api.patch('/pedidos/desativarPedido', { id: idPedido });
 
-      Swal.fire({ title: 'Pago!', text: 'A comanda foi encerrada com sucesso.', icon: 'success', background: '#212529', color: '#fff' });
+      Swal.fire({
+        title: 'Pago!',
+        text: 'A comanda foi encerrada com sucesso.',
+        icon: 'success',
+        background: '#212529',
+        color: '#fff',
+      });
       fecharModal();
       carregarDados();
     } catch (erro) {
@@ -220,15 +218,21 @@ export default function ModalDetalhesMesa({
                 </h6>
                 <div className="mb-3">
                   <label className="form-label small mb-1 text-white fw-bold">Nome do Cliente</label>
-                  <input type="text" className="form-control form-control-sm bg-dark text-white border-secondary" required value={nomeCliente} onChange={e => setNomeCliente(e.target.value)} />
+                  <input
+                    type="text"
+                    className="form-control form-control-sm bg-dark text-white border-secondary"
+                    required
+                    value={nomeCliente}
+                    onChange={e => setNomeCliente(e.target.value)}
+                  />
                 </div>
                 <div className="row g-2 mb-3">
                   <div className="col-6">
                     <label className="form-label small mb-1 text-white fw-bold">Cartão</label>
-                    <select 
-                      className="form-select form-select-sm bg-dark text-white border-secondary" 
-                      required 
-                      value={idCartaoSelecionado} 
+                    <select
+                      className="form-select form-select-sm bg-dark text-white border-secondary"
+                      required
+                      value={idCartaoSelecionado}
                       onChange={e => setIdCartaoSelecionado(e.target.value)}
                     >
                       <option value="">Escolha...</option>
@@ -240,120 +244,251 @@ export default function ModalDetalhesMesa({
                           return !cartaoEmUso;
                         })
                         .map(c => (
-                          <option key={c.id} value={c.id}>Cartão {c.numero}</option>
-                        ))
-                      }
+                          <option key={c.id} value={c.id}>
+                            Cartão {c.numero}
+                          </option>
+                        ))}
                     </select>
                   </div>
                   <div className="col-6">
                     <label className="form-label small mb-1 text-white fw-bold">Pessoas</label>
-                    <input type="number" className="form-control form-control-sm bg-dark text-white border-secondary" min="1" value={qtdPessoas} onChange={e => setQtdPessoas(Number(e.target.value))} />
+                    <input
+                      type="number"
+                      className="form-control form-control-sm bg-dark text-white border-secondary"
+                      min="1"
+                      value={qtdPessoas}
+                      onChange={e => setQtdPessoas(Number(e.target.value))}
+                    />
                   </div>
                 </div>
 
                 <div className="border border-secondary rounded p-2 mb-3 bg-secondary bg-opacity-10">
-                  <label className="form-label small text-white fw-bold">Adicionar Itens à Comanda</label>
+                  <label className="form-label small text-white fw-bold">
+                    Adicionar Itens à Comanda
+                  </label>
                   <div className="row g-1 mb-2">
                     <div className="col-8">
-                      <select className="form-select form-select-sm bg-dark text-white border-secondary" value={idProdutoSelecionado} onChange={e => setIdProdutoSelecionado(e.target.value)}>
+                      <select
+                        className="form-select form-select-sm bg-dark text-white border-secondary"
+                        value={idProdutoSelecionado}
+                        onChange={e => setIdProdutoSelecionado(e.target.value)}
+                      >
                         <option value="">Produto...</option>
-                        {produtos.map(p => <option key={p.id} value={p.id}>{p.nome} - {formatarReal.format(p.preco)}</option>)}
+                        {produtos.map(p => (
+                          <option key={p.id} value={p.id}>
+                            {p.nome} - {formatarReal.format(p.preco)}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     <div className="col-4">
-                      <input type="number" className="form-control form-control-sm bg-dark text-white border-secondary" min="1" value={qtdProduto} onChange={e => setQtdProduto(Number(e.target.value))} />
+                      <input
+                        type="number"
+                        className="form-control form-control-sm bg-dark text-white border-secondary"
+                        min="1"
+                        value={qtdProduto}
+                        onChange={e => setQtdProduto(Number(e.target.value))}
+                      />
                     </div>
                   </div>
-                  <button type="button" className="btn btn-warning btn-sm w-100 fw-bold text-dark" onClick={adicionarAoCarrinho}>➕ Adicionar Item</button>
+                  <button
+                    type="button"
+                    className="btn btn-warning btn-sm w-100 fw-bold text-dark"
+                    onClick={adicionarAoCarrinho}
+                  >
+                    ➕ Adicionar Item
+                  </button>
 
                   {itensCarrinho.length > 0 && (
                     <div className="mt-2 border-top border-secondary pt-2">
                       {itensCarrinho.map((item, index) => (
-                        <div key={index} className="d-flex justify-content-between align-items-center text-white small py-1">
-                          <span><span className="text-warning fw-bold">{item.qtd}x</span> {item.nome}</span>
+                        <div
+                          key={index}
+                          className="d-flex justify-content-between align-items-center text-white small py-1"
+                        >
+                          <span>
+                            <span className="text-warning fw-bold">{item.qtd}x</span> {item.nome}
+                          </span>
                           <div className="d-flex align-items-center gap-2">
-                            <span className="text-muted" style={{ fontSize: '0.75rem' }}>{formatarReal.format(item.preco * item.qtd)}</span>
-                            <button type="button" className="btn-close btn-close-white btn-sm" style={{ fontSize: '0.5rem' }} onClick={() => setItensCarrinho(itensCarrinho.filter((_, i) => i !== index))} />
+                            <span className="text-muted" style={{ fontSize: '0.75rem' }}>
+                              {formatarReal.format(item.preco * item.qtd)}
+                            </span>
+                            <button
+                              type="button"
+                              className="btn-close btn-close-white btn-sm"
+                              style={{ fontSize: '0.5rem' }}
+                              onClick={() =>
+                                setItensCarrinho(itensCarrinho.filter((_, i) => i !== index))
+                              }
+                            />
                           </div>
                         </div>
                       ))}
                       <div className="d-flex justify-content-between text-warning fw-bold small mt-2 pt-2 border-top border-secondary">
                         <span>Total do Pedido:</span>
-                        <span>{formatarReal.format(itensCarrinho.reduce((acc, item) => acc + (item.preco * item.qtd), 0))}</span>
+                        <span>
+                          {formatarReal.format(
+                            itensCarrinho.reduce((acc, item) => acc + item.preco * item.qtd, 0)
+                          )}
+                        </span>
                       </div>
                     </div>
                   )}
                 </div>
 
                 <div className="d-flex gap-2">
-                  {abaCriarSecundaria && <button type="button" className="btn btn-outline-light btn-sm w-50" onClick={() => setAbaCriarSecundaria(false)}>Voltar</button>}
-                  <button type="submit" className={`btn btn-success btn-sm fw-bold ${abaCriarSecundaria ? 'w-50' : 'w-100'}`} disabled={enviando}>{enviando ? 'Gravando...' : 'Confirmar Abertura'}</button>
+                  {abaCriarSecundaria && (
+                    <button
+                      type="button"
+                      className="btn btn-outline-light btn-sm w-50"
+                      onClick={() => setAbaCriarSecundaria(false)}
+                    >
+                      Voltar
+                    </button>
+                  )}
+                  <button
+                    type="submit"
+                    className={`btn btn-success btn-sm fw-bold ${abaCriarSecundaria ? 'w-50' : 'w-100'}`}
+                    disabled={enviando}
+                  >
+                    {enviando ? 'Gravando...' : 'Confirmar Abertura'}
+                  </button>
                 </div>
               </form>
             ) : (
               <div>
                 <div className="d-flex justify-content-between align-items-center mb-2">
                   <span className="small text-white">Comandas ativas:</span>
-                  <button className="btn btn-sm btn-outline-warning py-0 px-2 fw-bold" style={{ fontSize: '0.75rem' }} onClick={() => { setAbaCriarSecundaria(true); limparFormularioEdicao(); }}>➕ Nova Comanda</button>
+                  <button
+                    className="btn btn-sm btn-outline-warning py-0 px-2 fw-bold"
+                    style={{ fontSize: '0.75rem' }}
+                    onClick={() => {
+                      setAbaCriarSecundaria(true);
+                      limparFormularioEdicao();
+                    }}
+                  >
+                    ➕ Nova Comanda
+                  </button>
                 </div>
 
                 {mesaSelecionada.pedidos?.map((pedido: any) => {
-                  const totalDoCliente = pedido.itens.reduce((acc: number, it: any) => acc + (it.valorItem * it.qtdItem), 0);
+                  const totalDoCliente = pedido.itens.reduce(
+                    (acc: number, it: any) => acc + it.valorItem * it.qtdItem,
+                    0
+                  );
                   const estaEditando = pedidoIdSendoEditado === pedido.id;
-                  
+
                   return (
-                    <div key={pedido.id} className="bg-secondary bg-opacity-25 rounded p-2 mb-3 border border-secondary">
+                    <div
+                      key={pedido.id}
+                      className="bg-secondary bg-opacity-25 rounded p-2 mb-3 border border-secondary"
+                    >
                       <div className="d-flex justify-content-between align-items-start small fw-bold text-warning">
                         <span>{pedido.cliente}</span>
                         <span>Cartão: {pedido.cartao?.numero || '-'}</span>
                       </div>
-                      <div className="my-2 border-top border-secondary pt-1" style={{ maxHeight: '80px', overflowY: 'auto' }}>
+                      <div
+                        className="my-2 border-top border-secondary pt-1"
+                        style={{ maxHeight: '80px', overflowY: 'auto' }}
+                      >
                         {pedido.itens.length === 0 ? (
-                          <p className="text-white text-center m-0" style={{ fontSize: '0.7rem' }}>Nenhum item lançado.</p>
+                          <p className="text-white text-center m-0" style={{ fontSize: '0.7rem' }}>
+                            Nenhum item lançado.
+                          </p>
                         ) : (
                           pedido.itens.map((it: any, idx: number) => (
-                            <div key={idx} className="d-flex justify-content-between text-white" style={{ fontSize: '0.75rem' }}>
-                              <span>{it.qtdItem}x {it.item.nome}</span>
+                            <div
+                              key={idx}
+                              className="d-flex justify-content-between text-white"
+                              style={{ fontSize: '0.75rem' }}
+                            >
+                              <span>
+                                {it.qtdItem}x {it.item.nome}
+                              </span>
                               <span>{formatarReal.format(it.valorItem * it.qtdItem)}</span>
                             </div>
                           ))
                         )}
                       </div>
 
-                      {/* FORMULÁRIO INTERNO EMBUTIDO: Abre dinamicamente abaixo da lista de itens lançados */}
                       {estaEditando && (
                         <div className="mt-2 p-2 border border-warning rounded bg-dark mb-2">
-                          <label className="form-label text-warning small fw-bold m-0 mb-1" style={{ fontSize: '0.75rem' }}>Lançar novos itens:</label>
+                          <label
+                            className="form-label text-warning small fw-bold m-0 mb-1"
+                            style={{ fontSize: '0.75rem' }}
+                          >
+                            Lançar novos itens:
+                          </label>
                           <div className="row g-1 mb-2">
                             <div className="col-8">
-                              <select 
+                              <select
                                 className="form-select form-select-sm bg-secondary text-white border-secondary"
                                 value={idProdutoEdicao}
                                 onChange={e => setIdProdutoEdicao(e.target.value)}
                               >
                                 <option value="">Produto...</option>
                                 {produtos.map(p => (
-                                  <option key={p.id} value={p.id}>{p.nome}</option>
+                                  <option key={p.id} value={p.id}>
+                                    {p.nome}
+                                  </option>
                                 ))}
                               </select>
                             </div>
                             <div className="col-4">
-                              <input type="number" className="form-control form-control-sm bg-secondary text-white border-secondary" min="1" value={qtdProdutoEdicao} onChange={e => setQtdProdutoEdicao(Number(e.target.value))} />
+                              <input
+                                type="number"
+                                className="form-control form-control-sm bg-secondary text-white border-secondary"
+                                min="1"
+                                value={qtdProdutoEdicao}
+                                onChange={e => setQtdProdutoEdicao(Number(e.target.value))}
+                              />
                             </div>
                           </div>
-                          <button type="button" className="btn btn-warning btn-sm w-100 py-0 fw-bold mb-2 text-dark" style={{ fontSize: '0.75rem' }} onClick={adicionarAoCarrinhoEdicao}>➕ Inserir na Lista</button>
-                          
-                          {/* Pré-visualização dos itens acumulados no carrinho de edição antes de submeter */}
+                          <button
+                            type="button"
+                            className="btn btn-warning btn-sm w-100 py-0 fw-bold mb-2 text-dark"
+                            style={{ fontSize: '0.75rem' }}
+                            onClick={adicionarAoCarrinhoEdicao}
+                          >
+                            ➕ Inserir na Lista
+                          </button>
+
                           {itensCarrinhoEdicao.map((item, idx) => (
-                            <div key={idx} className="text-white d-flex justify-content-between align-items-center bg-secondary bg-opacity-25 px-1 py-0.5 rounded mb-1" style={{ fontSize: '0.7rem' }}>
-                              <span><span className="text-warning fw-bold">{item.qtd}x</span> {item.nome}</span>
-                              <button type="button" className="btn-close btn-close-white" style={{ fontSize: '0.4rem', padding: '0.2rem' }} onClick={() => setItensCarrinhoEdicao(itensCarrinhoEdicao.filter((_, i) => i !== idx))} />
+                            <div
+                              key={idx}
+                              className="text-white d-flex justify-content-between align-items-center bg-secondary bg-opacity-25 px-1 py-0.5 rounded mb-1"
+                              style={{ fontSize: '0.7rem' }}
+                            >
+                              <span>
+                                <span className="text-warning fw-bold">{item.qtd}x</span> {item.nome}
+                              </span>
+                              <button
+                                type="button"
+                                className="btn-close btn-close-white"
+                                style={{ fontSize: '0.4rem', padding: '0.2rem' }}
+                                onClick={() =>
+                                  setItensCarrinhoEdicao(itensCarrinhoEdicao.filter((_, i) => i !== idx))
+                                }
+                              />
                             </div>
                           ))}
 
                           <div className="d-flex gap-1 mt-2">
-                            <button type="button" className="btn btn-outline-light btn-sm w-50 py-0" style={{ fontSize: '0.75rem' }} onClick={limparFormularioEdicao}>Cancelar</button>
-                            <button type="button" className="btn btn-success btn-sm w-50 py-0 fw-bold" style={{ fontSize: '0.75rem' }} disabled={enviando || itensCarrinhoEdicao.length === 0} onClick={() => handleSalvarNovosItens(pedido.id)}>
+                            <button
+                              type="button"
+                              className="btn btn-outline-light btn-sm w-50 py-0"
+                              style={{ fontSize: '0.75rem' }}
+                              onClick={limparFormularioEdicao}
+                            >
+                              Cancelar
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-success btn-sm w-50 py-0 fw-bold"
+                              style={{ fontSize: '0.75rem' }}
+                              disabled={enviando || itensCarrinhoEdicao.length === 0}
+                              onClick={() => handleSalvarNovosItens(pedido.id)}
+                            >
                               {enviando ? 'Salvando...' : '💾 Salvar'}
                             </button>
                           </div>
@@ -362,13 +497,18 @@ export default function ModalDetalhesMesa({
 
                       <div className="d-flex flex-column gap-2 pt-1 border-top border-secondary">
                         <div className="d-flex justify-content-between align-items-center">
-                          <span className="small text-white fw-bold">Total: {formatarReal.format(totalDoCliente)}</span>
-                          
+                          <span className="small text-white fw-bold">
+                            Total: {formatarReal.format(totalDoCliente)}
+                          </span>
+
                           {!estaEditando && (
-                            <button 
-                              className="btn btn-warning btn-sm py-0 px-2 fw-bold text-dark" 
-                              style={{ fontSize: '0.75rem' }} 
-                              onClick={() => { setPedidoIdSendoEditado(pedido.id); setItensCarrinhoEdicao([]); }}
+                            <button
+                              className="btn btn-warning btn-sm py-0 px-2 fw-bold text-dark"
+                              style={{ fontSize: '0.75rem' }}
+                              onClick={() => {
+                                setPedidoIdSendoEditado(pedido.id);
+                                setItensCarrinhoEdicao([]);
+                              }}
                             >
                               ➕ Adicionar novo item
                             </button>
@@ -376,9 +516,9 @@ export default function ModalDetalhesMesa({
                         </div>
 
                         {!estaEditando && (
-                          <button 
-                            className="btn btn-danger btn-sm py-1 fw-bold w-100 mt-1" 
-                            style={{ fontSize: '0.75rem' }} 
+                          <button
+                            className="btn btn-danger btn-sm py-1 fw-bold w-100 mt-1"
+                            style={{ fontSize: '0.75rem' }}
                             onClick={() => handlePagarComanda(pedido.id)}
                           >
                             💵 Pagar e Encerrar Conta

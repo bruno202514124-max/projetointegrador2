@@ -22,7 +22,7 @@ h5 {
 p {
   margin: 0;
 }
-/* Tamanho personalizado para mesas ficar mais simétrico no desktop  */
+
 @media (min-width: 1200px) {
   .col-xl-custom {
     flex: 0 0 10% !important;
