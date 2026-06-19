@@ -66,6 +66,20 @@ Bulldog Brewer – Terra de Areia/RS
 
 Este projeto tem caráter acadêmico e será desenvolvido como parte do Projeto Integrador II, com foco em análise de processos e proposição de melhorias baseadas em dados.
 
+## Preparando para rodar o projeto
+
+Clone ou baixe o projeto em uma pasta de sua escolha.
+
+## Frontend
+
+Para rodar o frontend, faça o seguinte:
+
+- Vá até a pasta do front e abra um terminal.
+- Rode "npm i" para instalar as dependências do projeto.
+- Rode "npm run dev" para iniciar o backend no port 3000.
+
+Pronto! O front está rodando!
+
 ## Backend
 
 Para rodar o backend, faça o seguinte:
